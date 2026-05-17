@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Edit, Trash2, LogOut, ArrowLeft, Save, Sparkles } from "lucide-react";
+import { Plus, Edit, Trash2, LogOut, ArrowLeft, Save, Sparkles, Upload } from "lucide-react";
 import { getPlants, addPlant, updatePlant, deletePlant } from "../../lib/db";
 import { Plant } from "../../lib/data";
 import Link from "next/link";
@@ -36,6 +36,7 @@ export default function AdminPage() {
   const [environment, setEnvironment] = useState("");
 
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "admin123";
 
@@ -101,6 +102,40 @@ export default function AdminPage() {
       } catch (err) {
         alert("Failed to delete plant");
       }
+    }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const apiKey = process.env.NEXT_PUBLIC_IMGBB_API_KEY || "1421a9d660059426977d35dad31197d0";
+
+    try {
+      const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const result = await response.json();
+      if (result.success && result.data?.url) {
+        setImageUrl(result.data.url);
+      } else {
+        throw new Error(result.error?.message || "Upload failed");
+      }
+    } catch (err: any) {
+      console.error(err);
+      alert(err.message || "Failed to upload image. Please try again.");
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -291,7 +326,7 @@ export default function AdminPage() {
                   className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 sticky top-6"
                 >
                   <h2 className="font-playfair text-2xl font-bold mb-6">
-                    {editingPlant ? "Edit Plant details" : "Add New Plant"}
+                    {editingPlant ? "Edit Plant Details" : "Add New Plant"}
                   </h2>
                   <form onSubmit={handleSave} className="space-y-6">
                     <div>
@@ -327,9 +362,41 @@ export default function AdminPage() {
                       />
                     </div>
 
+                    {/* Image Upload Input */}
+                    <div>
+                      <label className="block text-sm font-semibold mb-2">Upload Custom Image</label>
+                      <div className="flex items-center gap-4 mb-4">
+                        <label className="flex-1 flex flex-col items-center justify-center px-4 py-5 bg-[#f4f7f4]/50 hover:bg-[#e2e8e4]/50 text-gray-500 rounded-xl border border-dashed border-gray-300 cursor-pointer transition-colors relative min-h-[80px]">
+                          {uploading ? (
+                            <div className="flex flex-col items-center gap-2">
+                              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#1a4a28]"></div>
+                              <span className="text-[10px]">Uploading to ImgBB...</span>
+                            </div>
+                          ) : (
+                            <div className="flex flex-col items-center gap-1">
+                              <Upload className="w-5 h-5 text-gray-400" />
+                              <span className="text-xs font-semibold">Click to upload photo</span>
+                            </div>
+                          )}
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            disabled={uploading}
+                            className="hidden"
+                          />
+                        </label>
+                        {imageUrl && (
+                          <div className="w-20 h-20 rounded-2xl overflow-hidden border border-gray-200 flex-shrink-0">
+                            <img src={imageUrl} className="w-full h-full object-cover" />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
                     {/* Preset Image Selectors */}
                     <div>
-                      <label className="block text-sm font-semibold mb-2">Choose Image or enter URL *</label>
+                      <label className="block text-sm font-semibold mb-2">Or Choose from Presets</label>
                       <div className="grid grid-cols-4 gap-2 mb-3">
                         {PRESET_IMAGES.map((img, idx) => (
                           <button
@@ -348,7 +415,7 @@ export default function AdminPage() {
                         type="url"
                         value={imageUrl}
                         onChange={(e) => setImageUrl(e.target.value)}
-                        placeholder="Enter custom image URL..."
+                        placeholder="Or paste direct image URL..."
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#3b8554] text-xs"
                       />
                     </div>
