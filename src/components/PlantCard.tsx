@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "react-emotion";
-import { motion as motionFramer, AnimatePresence as AnimatePresenceFramer } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Sun, Droplets, ThermometerSun } from "lucide-react";
 import { Plant } from "../lib/data";
 import { useCart } from "../context/CartContext";
@@ -14,7 +13,7 @@ export const PlantCard = ({ plant, onClick }: { plant: Plant; onClick: () => voi
   const mainImage = plant.images && plant.images.length > 0 ? plant.images[0] : plant.image;
 
   return (
-    <motionFramer.div
+    <motion.div
       onClick={onClick}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -26,7 +25,7 @@ export const PlantCard = ({ plant, onClick }: { plant: Plant; onClick: () => voi
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="relative h-80 w-full overflow-hidden bg-gray-100">
-        <motionFramer.img
+        <motion.img
           animate={{ scale: isHovered ? 1.05 : 1 }}
           transition={{ duration: 0.6 }}
           src={mainImage}
@@ -35,9 +34,9 @@ export const PlantCard = ({ plant, onClick }: { plant: Plant; onClick: () => voi
         />
         
         {/* Care Instructions Overlay */}
-        <AnimatePresenceFramer>
+        <AnimatePresence>
           {isHovered && (
-            <motionFramer.div
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -55,9 +54,9 @@ export const PlantCard = ({ plant, onClick }: { plant: Plant; onClick: () => voi
                 <ThermometerSun className="w-5 h-5 text-orange-300 flex-shrink-0" />
                 <span className="text-sm">{plant.care.environment}</span>
               </div>
-            </motionFramer.div>
+            </motion.div>
           )}
-        </AnimatePresenceFramer>
+        </AnimatePresence>
 
         <button
           onClick={(e) => {
@@ -76,6 +75,6 @@ export const PlantCard = ({ plant, onClick }: { plant: Plant; onClick: () => voi
           <span className="text-lg font-semibold text-[#153b20]">LKR {plant.price.toLocaleString()}</span>
         </div>
       </div>
-    </motionFramer.div>
+    </motion.div>
   );
 };

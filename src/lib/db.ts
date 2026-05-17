@@ -71,7 +71,7 @@ export const getPlants = async (): Promise<Plant[]> => {
         console.log("Cleaning up duplicate plant IDs from Firestore:", duplicatesToDelete);
         duplicatesToDelete.forEach(async (dupId) => {
           try {
-            await deleteDoc(doc(db, "plants", dupId));
+            await deleteDoc(doc(db!, "plants", dupId));
           } catch (e) {
             console.error("Failed to delete duplicate document:", dupId, e);
           }
@@ -95,7 +95,7 @@ export const getPlants = async (): Promise<Plant[]> => {
             if (!migratedNames.has(plantKey)) {
               migratedNames.add(plantKey);
               const { id, ...plantData } = localPlant;
-              await addDoc(collection(db, "plants"), plantData);
+              await addDoc(collection(db!, "plants"), plantData);
             }
           }
 
@@ -132,7 +132,7 @@ export const getPlants = async (): Promise<Plant[]> => {
 export const addPlant = async (plant: Omit<Plant, "id">): Promise<string> => {
   if (isFirebaseConfigured && db) {
     try {
-      const docRef = await addDoc(collection(db, "plants"), plant);
+      const docRef = await addDoc(collection(db!, "plants"), plant);
       return docRef.id;
     } catch (error) {
       console.error("Error adding to Firestore:", error);
@@ -150,7 +150,7 @@ export const addPlant = async (plant: Omit<Plant, "id">): Promise<string> => {
 export const updatePlant = async (id: string, plant: Omit<Plant, "id">): Promise<void> => {
   if (isFirebaseConfigured && db) {
     try {
-      const docRef = doc(db, "plants", id);
+      const docRef = doc(db!, "plants", id);
       await updateDoc(docRef, plant as any);
     } catch (error) {
       console.error("Error updating Firestore:", error);
@@ -166,7 +166,7 @@ export const updatePlant = async (id: string, plant: Omit<Plant, "id">): Promise
 export const deletePlant = async (id: string): Promise<void> => {
   if (isFirebaseConfigured && db) {
     try {
-      const docRef = doc(db, "plants", id);
+      const docRef = doc(db!, "plants", id);
       await deleteDoc(docRef);
     } catch (error) {
       console.error("Error deleting from Firestore:", error);
