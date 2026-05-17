@@ -21,7 +21,6 @@ const getLocalPlants = (): Plant[] => {
     return mockPlants;
   }
   const parsed = JSON.parse(local);
-  // Migrate legacy data structures in localStorage
   return parsed.map((p: any) => ({
     ...p,
     description: p.description || "",
@@ -40,25 +39,48 @@ export const getPlants = async (): Promise<Plant[]> => {
       const q = query(collection(db, "plants"), orderBy("name"));
       const querySnapshot = await getDocs(q);
       const plantsList: Plant[] = [];
+      const seenKeys = new Set<string>();
+      const duplicatesToDelete: string[] = [];
+
       querySnapshot.forEach((docSnap) => {
         const data = docSnap.data();
-        plantsList.push({
-          id: docSnap.id,
-          name: data.name || "",
-          scientificName: data.scientificName || "",
-          description: data.description || "",
-          price: data.price || 0,
-          images: data.images && data.images.length > 0 ? data.images : (data.image ? [data.image] : []),
-          category: data.category || [],
-          care: data.care || { sunlight: "", watering: "", environment: "" },
-        });
+        const name = (data.name || "").trim().toLowerCase();
+        const price = data.price || 0;
+        const key = `${name}_${price}`;
+
+        if (seenKeys.has(key)) {
+          // Duplicate found! Keep track of it so we can delete it from Firestore
+          duplicatesToDelete.push(docSnap.id);
+        } else {
+          seenKeys.add(key);
+          plantsList.push({
+            id: docSnap.id,
+            name: data.name || "",
+            scientificName: data.scientificName || "",
+            description: data.description || "",
+            price: data.price || 0,
+            images: data.images && data.images.length > 0 ? data.images : (data.image ? [data.image] : []),
+            category: data.category || [],
+            care: data.care || { sunlight: "", watering: "", environment: "" },
+          });
+        }
       });
 
+      // Automatically clean up duplicate documents from Firestore in the background
+      if (duplicatesToDelete.length > 0) {
+        console.log("Cleaning up duplicate plant IDs from Firestore:", duplicatesToDelete);
+        duplicatesToDelete.forEach(async (dupId) => {
+          try {
+            await deleteDoc(doc(db, "plants", dupId));
+          } catch (e) {
+            console.error("Failed to delete duplicate document:", dupId, e);
+          }
+        });
+      }
+
       // --- AUTOMATIC FIRST-TIME MIGRATION FROM LOCALSTORAGE TO FIRESTORE ---
-      // If Firestore is empty (just configured) and we have custom plants in local storage, migrate them!
       if (plantsList.length === 0) {
         const localPlants = getLocalPlants();
-        // Check if there are any custom plants (not our initial mock p1, p2)
         const customLocalPlants = localPlants.filter(
           (p) => !p.id.startsWith("p1") && !p.id.startsWith("p2")
         );
@@ -66,13 +88,17 @@ export const getPlants = async (): Promise<Plant[]> => {
         if (customLocalPlants.length > 0) {
           console.log("Found custom plants in LocalStorage. Migrating to Firestore...", customLocalPlants);
           
+          const migratedNames = new Set<string>();
           for (const localPlant of customLocalPlants) {
-            // Destructure to remove the temporary local ID before adding to Firestore
-            const { id, ...plantData } = localPlant;
-            await addDoc(collection(db, "plants"), plantData);
+            const plantKey = localPlant.name.trim().toLowerCase();
+            // Prevent migrating duplicates from local storage during React StrictMode double runs
+            if (!migratedNames.has(plantKey)) {
+              migratedNames.add(plantKey);
+              const { id, ...plantData } = localPlant;
+              await addDoc(collection(db, "plants"), plantData);
+            }
           }
 
-          // Fetch the fresh list from Firestore now that they are uploaded
           const newSnapshot = await getDocs(q);
           const newPlantsList: Plant[] = [];
           newSnapshot.forEach((docSnap) => {

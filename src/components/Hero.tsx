@@ -17,7 +17,6 @@ export const Hero = () => {
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
-  // Start with empty array to prevent Unsplash image flash before DB images load
   const [heroImages, setHeroImages] = useState<string[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -27,8 +26,9 @@ export const Hero = () => {
         const plants = await getPlants();
         let allImages: string[] = [];
         plants.forEach(p => {
+          // Only pull the 1st image of each plant as requested by the user
           if (p.images && p.images.length > 0) {
-            allImages.push(...p.images);
+            allImages.push(p.images[0]);
           } else if ((p as any).image) {
             allImages.push((p as any).image);
           }
@@ -113,7 +113,6 @@ export const Hero = () => {
                 />
               </AnimatePresence>
             ) : (
-              // Soft green pulsing skeleton loader while images are fetching from database
               <div className="absolute inset-0 w-full h-full bg-[#e2e8e4]/60 animate-pulse" />
             )}
           </div>
