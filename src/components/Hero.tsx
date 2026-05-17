@@ -33,17 +33,23 @@ export const Hero = () => {
           }
         });
         
-        // Remove duplicates and get up to 4 images
-        const uniqueImages = Array.from(new Set(allImages));
+        // Remove duplicates and filter out empty or invalid image URLs
+        const uniqueImages = Array.from(new Set(allImages)).filter(
+          (img) => typeof img === "string" && img.trim() !== "" && img.startsWith("http")
+        );
         
-        // If the user has uploaded their own plants, use those images instead!
+        // If the user has uploaded their own plants with valid images, use those instead!
         if (uniqueImages.length > 0) {
           // Shuffle array to make it random
           const shuffled = uniqueImages.sort(() => 0.5 - Math.random());
           setHeroImages(shuffled.slice(0, 4));
+        } else {
+          // Fallback to default unsplash images if no valid images in db
+          setHeroImages(DEFAULT_HERO_IMAGES);
         }
       } catch (e) {
         console.error(e);
+        setHeroImages(DEFAULT_HERO_IMAGES);
       }
     };
     fetchImages();
@@ -58,12 +64,12 @@ export const Hero = () => {
   }, [heroImages]);
 
   return (
-    <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden bg-[#f4f7f4]">
+    <section id="home" className="relative min-h-screen pt-24 lg:pt-0 flex items-center justify-center overflow-hidden bg-[#f4f7f4]">
       {/* Background Floating Elements */}
       <motion.div style={{ y: y1 }} className="absolute top-20 -left-10 w-64 h-64 bg-[#3b8554]/10 rounded-full blur-3xl" />
       <motion.div style={{ y: y2 }} className="absolute bottom-20 -right-10 w-96 h-96 bg-[#1a4a28]/10 rounded-full blur-3xl" />
       
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center z-10 w-full">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center z-10 w-full py-12 lg:py-0">
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -90,11 +96,11 @@ export const Hero = () => {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="relative h-[50vh] lg:h-[70vh] w-full"
+          className="relative h-[45vh] lg:h-[70vh] w-full"
           style={{ perspective: 1200 }} // Added perspective for 3D effect
         >
           {/* Main Hero Image Slider with 3D Flip */}
-          <div className="relative w-full h-full rounded-3xl shadow-2xl overflow-hidden" style={{ transformStyle: "preserve-3d" }}>
+          <div className="relative w-full h-full rounded-3xl shadow-2xl overflow-hidden animate-float" style={{ transformStyle: "preserve-3d" }}>
             <AnimatePresence initial={false} mode="wait">
               <motion.img
                 key={currentImageIndex}
@@ -112,16 +118,16 @@ export const Hero = () => {
           
           {/* Floating Element 1 */}
           <motion.div
-            animate={{ y: [0, 15, 0] }}
+            animate={{ y: [0, 10, 0] }}
             transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
-            className="absolute -bottom-8 -left-8 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-4 z-20"
+            className="absolute -bottom-4 -left-4 bg-white p-3 rounded-2xl shadow-xl flex items-center gap-3 z-20 scale-90 md:scale-100"
           >
-            <div className="w-12 h-12 bg-[#f4f7f4] rounded-full flex items-center justify-center">
-              <span className="text-2xl">🌱</span>
+            <div className="w-10 h-10 bg-[#f4f7f4] rounded-full flex items-center justify-center">
+              <span className="text-xl">🌱</span>
             </div>
             <div>
-              <p className="font-bold text-[#1a4a28]">100% Organic</p>
-              <p className="text-sm text-gray-500">Premium Quality</p>
+              <p className="font-bold text-[#1a4a28] text-sm">100% Organic</p>
+              <p className="text-xs text-gray-500">Premium Quality</p>
             </div>
           </motion.div>
         </motion.div>
