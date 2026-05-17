@@ -36,7 +36,7 @@ export const Hero = () => {
         
         if (uniqueImages.length > 0) {
           const shuffled = uniqueImages.sort(() => 0.5 - Math.random());
-          setHeroImages(shuffled.slice(0, 4));
+          setHeroImages(shuffled.slice(0, 6)); // Keep up to 6 images for the slider
         } else {
           setHeroImages(DEFAULT_HERO_IMAGES);
         }
@@ -49,49 +49,98 @@ export const Hero = () => {
   }, []);
 
   useEffect(() => {
-    if (heroImages.length === 0) return;
+    if (heroImages.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
-    }, 6000); 
+    }, 5000); 
     return () => clearInterval(interval);
   }, [heroImages]);
 
-  return (
-    <section id="home" className="relative min-h-[90vh] md:h-screen flex flex-col justify-end items-center overflow-hidden bg-black">
-      {/* Immersive Image Display with Anti-Crop Technique */}
-      <div className="absolute inset-0 z-0">
-        {heroImages.length > 0 ? (
+  const renderDesktopImages = () => {
+    if (heroImages.length === 1) {
+      return (
+        <div className="w-full h-full relative">
           <AnimatePresence initial={false}>
-            {/* Blurred Background Layer to fill wide screens */}
             <motion.img
-              key={`blur-${currentImageIndex}`}
-              src={heroImages[currentImageIndex]}
-              className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-60 scale-110"
+              key={`d-0-${currentImageIndex}`}
+              src={heroImages[0]}
+              className="absolute inset-0 w-full h-full object-cover object-[center_30%]"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.6 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 1.5 }}
             />
-            
-            {/* Sharp Foreground Image (Contained) to prevent cropping */}
+          </AnimatePresence>
+        </div>
+      );
+    } else if (heroImages.length === 2) {
+      return [0, 1].map((offset) => (
+        <div key={offset} className="w-1/2 h-full relative">
+          <AnimatePresence initial={false}>
             <motion.img
-              key={`sharp-${currentImageIndex}`}
-              src={heroImages[currentImageIndex]}
-              alt={`Urban Leaf Collection`}
-              className="absolute inset-0 w-full h-full object-contain"
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 1, scale: 1 }}
+              key={`d-${offset}-${currentImageIndex}`}
+              src={heroImages[(currentImageIndex + offset) % heroImages.length]}
+              className="absolute inset-0 w-full h-full object-cover object-[center_30%]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 1.5, ease: "easeInOut" }}
+              transition={{ duration: 1.5 }}
             />
           </AnimatePresence>
+        </div>
+      ));
+    } else {
+      return [0, 1, 2].map((offset) => (
+        <div key={offset} className="w-1/3 h-full relative">
+          <AnimatePresence initial={false}>
+            <motion.img
+              key={`d-${offset}-${currentImageIndex}`}
+              src={heroImages[(currentImageIndex + offset) % heroImages.length]}
+              className="absolute inset-0 w-full h-full object-cover object-[center_30%]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.5 }}
+            />
+          </AnimatePresence>
+        </div>
+      ));
+    }
+  };
+
+  return (
+    <section id="home" className="relative min-h-[90vh] md:h-screen flex flex-col justify-end items-center overflow-hidden bg-black">
+      {/* Dynamic Grid Image Display */}
+      <div className="absolute inset-0 z-0 flex">
+        {heroImages.length > 0 ? (
+          <>
+            {/* Mobile View: Always 1 image to save space */}
+            <div className="w-full h-full md:hidden relative">
+              <AnimatePresence initial={false}>
+                <motion.img
+                  key={`mobile-${currentImageIndex}`}
+                  src={heroImages[currentImageIndex]}
+                  className="absolute inset-0 w-full h-full object-cover object-[center_30%]"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 1.5 }}
+                />
+              </AnimatePresence>
+            </div>
+
+            {/* Desktop View: Dynamic columns (1, 2, or 3 images side-by-side) */}
+            <div className="hidden md:flex w-full h-full">
+              {renderDesktopImages()}
+            </div>
+          </>
         ) : (
           <div className="absolute inset-0 w-full h-full bg-[#1a4a28]/20 animate-pulse" />
         )}
         
-        {/* Premium Gradient Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/90 z-10" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/10 to-black/60 z-10" />
+        {/* Premium Gradient Overlays for readable text */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/90 z-10" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/20 to-black/80 z-10" />
       </div>
 
       {/* Hero Text Content - Overlaid at the bottom */}
