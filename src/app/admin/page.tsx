@@ -257,9 +257,8 @@ export default function AdminPage() {
           animate={{ opacity: 1, scale: 1 }}
           className="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md border border-[#1a4a28]/10"
         >
-          <div className="text-center mb-8">
-            <span className="text-4xl">🌿</span>
-            <h1 className="font-playfair text-3xl font-bold text-[#1a4a28] mt-4">Urban Leaf</h1>
+          <div className="text-center mb-8 flex flex-col items-center">
+            <img src="/logo.png" alt="Urban Leaf Logo" className="h-20 w-auto object-contain mb-4" />
             <p className="text-gray-500 mt-2">Admin Dashboard Login</p>
           </div>
 
@@ -300,11 +299,14 @@ export default function AdminPage() {
             <Link href="/" className="p-3 bg-white rounded-full shadow-sm hover:bg-[#e2e8e4] transition-all">
               <ArrowLeft className="w-5 h-5" />
             </Link>
-            <div>
-              <h1 className="font-playfair text-4xl font-bold flex items-center gap-2">
-                Urban Leaf Admin <Sparkles className="w-6 h-6 text-[#3b8554]" />
-              </h1>
-              <p className="text-gray-500 mt-1">Manage your shop inventory, products, and prices.</p>
+            <div className="flex items-center gap-4">
+              <img src="/logo.png" alt="Urban Leaf Logo" className="h-16 w-auto object-contain" />
+              <div>
+                <h1 className="font-playfair text-2xl font-bold text-[#1a4a28] flex items-center gap-2">
+                  Admin Dashboard
+                </h1>
+                <p className="text-gray-500 text-sm mt-0.5">Manage your shop inventory, products, and prices.</p>
+              </div>
             </div>
           </div>
           
