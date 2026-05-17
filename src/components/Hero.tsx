@@ -52,21 +52,33 @@ export const Hero = () => {
     if (heroImages.length === 0) return;
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
-    }, 5000); // 5 seconds for a majestic full screen experience
+    }, 6000); 
     return () => clearInterval(interval);
   }, [heroImages]);
 
   return (
-    <section id="home" className="relative min-h-screen flex flex-col justify-end items-center overflow-hidden bg-black">
-      {/* Full Screen Image Slider */}
+    <section id="home" className="relative min-h-[90vh] md:h-screen flex flex-col justify-end items-center overflow-hidden bg-black">
+      {/* Immersive Image Display with Anti-Crop Technique */}
       <div className="absolute inset-0 z-0">
         {heroImages.length > 0 ? (
           <AnimatePresence initial={false}>
+            {/* Blurred Background Layer to fill wide screens */}
             <motion.img
-              key={currentImageIndex}
+              key={`blur-${currentImageIndex}`}
+              src={heroImages[currentImageIndex]}
+              className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-60 scale-110"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.6 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.5 }}
+            />
+            
+            {/* Sharp Foreground Image (Contained) to prevent cropping */}
+            <motion.img
+              key={`sharp-${currentImageIndex}`}
               src={heroImages[currentImageIndex]}
               alt={`Urban Leaf Collection`}
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-contain"
               initial={{ opacity: 0, scale: 1.05 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
@@ -77,26 +89,27 @@ export const Hero = () => {
           <div className="absolute inset-0 w-full h-full bg-[#1a4a28]/20 animate-pulse" />
         )}
         
-        {/* Premium Gradient Overlay: Dark top for Navbar, dark bottom for Text */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/90 z-10" />
+        {/* Premium Gradient Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/90 z-10" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/10 to-black/60 z-10" />
       </div>
 
       {/* Hero Text Content - Overlaid at the bottom */}
-      <div className="relative z-20 max-w-5xl mx-auto px-6 w-full pb-20 md:pb-32 text-center text-white">
+      <div className="relative z-20 max-w-5xl mx-auto px-6 w-full pb-20 md:pb-28 text-center text-white">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
         >
-          <h1 className="font-playfair text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 drop-shadow-2xl">
+          <h1 className="font-playfair text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 drop-shadow-2xl text-white">
             {t("heroHeadline")}
           </h1>
-          <p className="text-base md:text-xl lg:text-2xl text-gray-200 mb-10 max-w-3xl mx-auto leading-relaxed drop-shadow-lg font-light tracking-wide">
+          <p className="text-base md:text-xl lg:text-2xl text-gray-200 mb-10 max-w-3xl mx-auto leading-relaxed drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] font-light tracking-wide">
             {t("heroSubheadline")}
           </p>
           <a
             href="#collection"
-            className="inline-flex items-center gap-3 bg-white text-[#1a4a28] px-10 py-4 md:py-5 rounded-full font-bold text-base md:text-lg hover:bg-[#3b8554] hover:text-white transition-all transform hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.3)]"
+            className="inline-flex items-center gap-3 bg-white text-[#1a4a28] px-10 py-4 md:py-5 rounded-full font-bold text-base md:text-lg hover:bg-[#3b8554] hover:text-white transition-all transform hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.2)]"
           >
             {t("heroCta")}
             <ArrowRight className="w-5 h-5" />
