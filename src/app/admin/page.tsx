@@ -478,26 +478,7 @@ export default function AdminPage() {
                       )}
                     </div>
 
-                    {/* Categories */}
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">Categories</label>
-                      <div className="flex flex-wrap gap-2">
-                        {["Indoor Spaces", "Low Maintenance", "Office"].map((cat) => (
-                          <button
-                            key={cat}
-                            type="button"
-                            onClick={() => toggleCategory(cat)}
-                            className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                              categories.includes(cat)
-                                ? "bg-[#3b8554]/10 border-[#3b8554] text-[#3b8554]"
-                                : "bg-white border-gray-200 text-gray-500"
-                            }`}
-                          >
-                            {cat}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
+
 
                     {/* Care Details */}
                     <div className="border-t pt-6 space-y-4">

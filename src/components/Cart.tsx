@@ -4,15 +4,17 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Minus, Plus, ShoppingBag } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { useLanguage } from "../context/LanguageContext";
 
 export const Cart = () => {
   const { cart, isCartOpen, setIsCartOpen, updateQuantity, removeFromCart, cartTotal } = useCart();
+  const { t } = useLanguage();
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
 
   const handleCheckout = () => {
     if (!name || !address) {
-      alert("Please enter your name and address.");
+      alert(t("pleaseEnterDetails"));
       return;
     }
 
@@ -22,6 +24,7 @@ export const Cart = () => {
 
     const message = `Hello Urban Leaf! I would like to place an order:%0A%0A*Order Details:*%0A${orderDetails}%0A%0A*Total:* LKR ${cartTotal}%0A%0A*Customer Details:*%0AName: ${name}%0AAddress: ${address}`;
     
+    // Replace with the seller's WhatsApp number
     const whatsappUrl = `https://wa.me/94700000000?text=${message}`;
     window.open(whatsappUrl, "_blank");
   };
@@ -46,7 +49,7 @@ export const Cart = () => {
           >
             <div className="p-6 border-b flex items-center justify-between bg-[#f4f7f4]">
               <h2 className="font-playfair text-2xl font-bold text-[#1a4a28] flex items-center gap-2">
-                <ShoppingBag className="w-6 h-6" /> Your Cart
+                <ShoppingBag className="w-6 h-6" /> {t("cartTitle")}
               </h2>
               <button
                 onClick={() => setIsCartOpen(false)}
@@ -60,39 +63,42 @@ export const Cart = () => {
               {cart.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-gray-500 gap-4">
                   <ShoppingBag className="w-16 h-16 opacity-20" />
-                  <p>Your cart is empty.</p>
+                  <p>{t("cartEmpty")}</p>
                 </div>
               ) : (
                 <div className="space-y-6">
-                  {cart.map((item) => (
-                    <motion.div layout key={item.id} className="flex gap-4 bg-gray-50 p-4 rounded-2xl">
-                      <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded-xl" />
-                      <div className="flex-1">
-                        <div className="flex justify-between items-start">
-                          <h3 className="font-bold text-[#1a4a28]">{item.name}</h3>
-                          <button onClick={() => removeFromCart(item.id)} className="text-gray-400 hover:text-red-500">
-                            <X className="w-4 h-4" />
-                          </button>
+                  {cart.map((item) => {
+                    const itemImg = item.images && item.images.length > 0 ? item.images[0] : (item as any).image;
+                    return (
+                      <motion.div layout key={item.id} className="flex gap-4 bg-gray-50 p-4 rounded-2xl">
+                        <img src={itemImg} alt={item.name} className="w-20 h-20 object-cover rounded-xl" />
+                        <div className="flex-1">
+                          <div className="flex justify-between items-start">
+                            <h3 className="font-bold text-[#1a4a28] uppercase">{item.name}</h3>
+                            <button onClick={() => removeFromCart(item.id)} className="text-gray-400 hover:text-red-500">
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                          <p className="text-[#3b8554] font-semibold mt-1">LKR {item.price.toLocaleString()}</p>
+                          <div className="flex items-center gap-3 mt-3">
+                            <button
+                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                              className="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:bg-gray-100 text-[#1a4a28]"
+                            >
+                              <Minus className="w-3 h-3" />
+                            </button>
+                            <span className="font-medium text-sm">{item.quantity}</span>
+                            <button
+                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                              className="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:bg-gray-100 text-[#1a4a28]"
+                            >
+                              <Plus className="w-3 h-3" />
+                            </button>
+                          </div>
                         </div>
-                        <p className="text-[#3b8554] font-semibold mt-1">LKR {item.price}</p>
-                        <div className="flex items-center gap-3 mt-3">
-                          <button
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                            className="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:bg-gray-100 text-[#1a4a28]"
-                          >
-                            <Minus className="w-3 h-3" />
-                          </button>
-                          <span className="font-medium text-sm">{item.quantity}</span>
-                          <button
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                            className="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:bg-gray-100 text-[#1a4a28]"
-                          >
-                            <Plus className="w-3 h-3" />
-                          </button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
+                      </motion.div>
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -100,32 +106,32 @@ export const Cart = () => {
             {cart.length > 0 && (
               <div className="p-6 border-t bg-gray-50">
                 <div className="flex justify-between items-center mb-6">
-                  <span className="text-gray-600">Total</span>
+                  <span className="text-gray-600 font-medium">{t("total")}</span>
                   <span className="text-2xl font-bold text-[#1a4a28]">LKR {cartTotal.toLocaleString()}</span>
                 </div>
                 
                 <div className="space-y-4 mb-6">
                   <input
                     type="text"
-                    placeholder="Your Name"
+                    placeholder={t("yourName")}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#3b8554] bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#3b8554] bg-white font-medium text-sm"
                   />
                   <textarea
-                    placeholder="Delivery Address"
+                    placeholder={t("deliveryAddress")}
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                     rows={2}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#3b8554] bg-white resize-none"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#3b8554] bg-white resize-none font-medium text-sm"
                   />
                 </div>
 
                 <button
                   onClick={handleCheckout}
-                  className="w-full bg-[#1a4a28] text-white py-4 rounded-xl font-bold hover:bg-[#3b8554] transition-colors flex justify-center items-center gap-2"
+                  className="w-full bg-[#1a4a28] text-white py-4 rounded-xl font-bold hover:bg-[#3b8554] transition-colors flex justify-center items-center gap-2 shadow-md"
                 >
-                  Order via WhatsApp
+                  {t("checkoutWhatsApp")}
                 </button>
               </div>
             )}

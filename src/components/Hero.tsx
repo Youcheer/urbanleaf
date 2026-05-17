@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { getPlants } from "../lib/db";
+import { useLanguage } from "../context/LanguageContext";
 
 const DEFAULT_HERO_IMAGES = [
   "https://images.unsplash.com/photo-1453904300235-0f2f60b15b5d?auto=format&fit=crop&q=80&w=1200",
@@ -13,6 +14,7 @@ const DEFAULT_HERO_IMAGES = [
 
 export const Hero = () => {
   const { scrollY } = useScroll();
+  const { t } = useLanguage();
   const y1 = useTransform(scrollY, [0, 500], [0, 150]);
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
@@ -26,7 +28,6 @@ export const Hero = () => {
         const plants = await getPlants();
         let allImages: string[] = [];
         plants.forEach(p => {
-          // Only pull the 1st image of each plant as requested by the user
           if (p.images && p.images.length > 0) {
             allImages.push(p.images[0]);
           } else if ((p as any).image) {
@@ -56,7 +57,7 @@ export const Hero = () => {
     if (heroImages.length === 0) return;
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
-    }, 4000); // Change image every 4 seconds
+    }, 4000);
     return () => clearInterval(interval);
   }, [heroImages]);
 
@@ -72,19 +73,20 @@ export const Hero = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           style={{ opacity }}
+          className="text-left"
         >
-          <h1 className="font-playfair text-5xl md:text-7xl font-bold leading-tight text-[#1a4a28] mb-6">
-            Bring Nature <br />
-            <span className="text-[#3b8554] italic">Home</span>
+          {/* Sinhala & English Multi-lingual Headline & Subheadline */}
+          <h1 className="font-playfair text-4xl md:text-6xl font-bold leading-tight text-[#1a4a28] mb-6 whitespace-pre-line">
+            {t("heroHeadline")}
           </h1>
-          <p className="text-lg md:text-xl text-[#1a4a28]/80 mb-8 max-w-lg leading-relaxed">
-            Discover our curated collection of premium indoor plants. Transform your living space into a lush, breathable sanctuary.
+          <p className="text-base md:text-lg text-[#1a4a28]/80 mb-8 max-w-lg leading-relaxed">
+            {t("heroSubheadline")}
           </p>
           <a
             href="#collection"
-            className="inline-flex items-center gap-2 bg-[#1a4a28] text-white px-8 py-4 rounded-full font-medium hover:bg-[#3b8554] transition-all transform hover:scale-105"
+            className="inline-flex items-center gap-2 bg-[#1a4a28] text-white px-8 py-4 rounded-full font-semibold hover:bg-[#3b8554] transition-all transform hover:scale-105"
           >
-            Shop Collection
+            {t("heroCta")}
             <ArrowRight className="w-5 h-5" />
           </a>
         </motion.div>
@@ -127,8 +129,8 @@ export const Hero = () => {
               <span className="text-xl">🌱</span>
             </div>
             <div>
-              <p className="font-bold text-[#1a4a28] text-sm">100% Organic</p>
-              <p className="text-xs text-gray-500">Premium Quality</p>
+              <p className="font-bold text-[#1a4a28] text-sm">{t("organic")}</p>
+              <p className="text-xs text-gray-500">{t("premiumQuality")}</p>
             </div>
           </motion.div>
         </motion.div>

@@ -5,10 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Sun, Droplets, ThermometerSun, ShoppingCart } from "lucide-react";
 import { Plant } from "../lib/data";
 import { useCart } from "../context/CartContext";
+import { useLanguage } from "../context/LanguageContext";
 
 export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => void }) => {
   const [currentImage, setCurrentImage] = useState(0);
   const { addToCart } = useCart();
+  const { t } = useLanguage();
 
   const images = plant.images && plant.images.length > 0 ? plant.images : (plant.image ? [plant.image] : []);
 
@@ -81,14 +83,6 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
 
           {/* Right: Details */}
           <div className="w-full md:w-1/2 p-8 md:p-12 overflow-y-auto flex flex-col">
-            <div className="flex gap-2 mb-4">
-              {plant.category.map((cat) => (
-                <span key={cat} className="text-xs bg-[#f4f7f4] text-[#3b8554] px-3 py-1.5 rounded-full uppercase font-bold tracking-wider">
-                  {cat}
-                </span>
-              ))}
-            </div>
-            
             <h2 className="font-playfair text-4xl font-bold text-[#1a4a28] mb-2 uppercase">{plant.name}</h2>
             <p className="text-gray-400 italic text-lg mb-6">{plant.scientificName}</p>
             
@@ -97,20 +91,20 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
             </p>
 
             <div className="mb-8">
-              <h3 className="font-semibold text-[#1a4a28] mb-3 text-lg">About this plant</h3>
+              <h3 className="font-semibold text-[#1a4a28] mb-3 text-lg">{t("description")}</h3>
               <p className="text-gray-600 leading-relaxed">
-                {plant.description || "A beautiful, carefully nurtured plant ready to bring life and fresh air to your home."}
+                {plant.description || "A beautiful, carefully nurtured Anthurium ready to bring life and fresh air to your outdoor space."}
               </p>
             </div>
 
             <div className="space-y-4 mb-10 bg-[#f4f7f4]/50 p-6 rounded-2xl border border-[#3b8554]/10">
-              <h3 className="font-semibold text-[#1a4a28] mb-4">Care Requirements</h3>
+              <h3 className="font-semibold text-[#1a4a28] mb-4">{t("careInstructions")}</h3>
               <div className="flex items-center gap-4 text-gray-700">
                 <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
                   <Sun className="w-5 h-5 text-yellow-600" />
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400 font-semibold uppercase">Sunlight</p>
+                  <p className="text-xs text-gray-400 font-semibold uppercase">{t("sunlight")}</p>
                   <p className="font-medium">{plant.care.sunlight}</p>
                 </div>
               </div>
@@ -119,7 +113,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                   <Droplets className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400 font-semibold uppercase">Watering</p>
+                  <p className="text-xs text-gray-400 font-semibold uppercase">{t("watering")}</p>
                   <p className="font-medium">{plant.care.watering}</p>
                 </div>
               </div>
@@ -128,7 +122,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                   <ThermometerSun className="w-5 h-5 text-orange-600" />
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400 font-semibold uppercase">Environment</p>
+                  <p className="text-xs text-gray-400 font-semibold uppercase">{t("environment")}</p>
                   <p className="font-medium">{plant.care.environment}</p>
                 </div>
               </div>
@@ -143,7 +137,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                 className="w-full bg-[#1a4a28] text-white py-4 rounded-xl font-bold hover:bg-[#3b8554] transition-colors flex justify-center items-center gap-3 text-lg"
               >
                 <ShoppingCart className="w-6 h-6" />
-                Add to Cart
+                {t("addToCart")}
               </button>
             </div>
           </div>

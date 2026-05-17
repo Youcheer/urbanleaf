@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "react-emotion";
+import { motion as motionFramer, AnimatePresence as AnimatePresenceFramer } from "framer-motion";
 import { Plus, Sun, Droplets, ThermometerSun } from "lucide-react";
 import { Plant } from "../lib/data";
 import { useCart } from "../context/CartContext";
@@ -13,7 +14,7 @@ export const PlantCard = ({ plant, onClick }: { plant: Plant; onClick: () => voi
   const mainImage = plant.images && plant.images.length > 0 ? plant.images[0] : plant.image;
 
   return (
-    <motion.div
+    <motionFramer.div
       onClick={onClick}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -25,7 +26,7 @@ export const PlantCard = ({ plant, onClick }: { plant: Plant; onClick: () => voi
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="relative h-80 w-full overflow-hidden bg-gray-100">
-        <motion.img
+        <motionFramer.img
           animate={{ scale: isHovered ? 1.05 : 1 }}
           transition={{ duration: 0.6 }}
           src={mainImage}
@@ -34,9 +35,9 @@ export const PlantCard = ({ plant, onClick }: { plant: Plant; onClick: () => voi
         />
         
         {/* Care Instructions Overlay */}
-        <AnimatePresence>
+        <AnimatePresenceFramer>
           {isHovered && (
-            <motion.div
+            <motionFramer.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -54,9 +55,9 @@ export const PlantCard = ({ plant, onClick }: { plant: Plant; onClick: () => voi
                 <ThermometerSun className="w-5 h-5 text-orange-300 flex-shrink-0" />
                 <span className="text-sm">{plant.care.environment}</span>
               </div>
-            </motion.div>
+            </motionFramer.div>
           )}
-        </AnimatePresence>
+        </AnimatePresenceFramer>
 
         <button
           onClick={(e) => {
@@ -73,15 +74,8 @@ export const PlantCard = ({ plant, onClick }: { plant: Plant; onClick: () => voi
         <h3 className="font-playfair text-xl font-bold text-[#1a4a28] uppercase">{plant.name}</h3>
         <div className="flex items-center justify-between mt-2">
           <span className="text-lg font-semibold text-[#153b20]">LKR {plant.price.toLocaleString()}</span>
-          <div className="flex gap-2">
-            {plant.category.slice(0, 1).map((cat) => (
-              <span key={cat} className="text-[10px] bg-[#f4f7f4] text-[#3b8554] px-2 py-1 rounded-full uppercase font-bold tracking-wider">
-                {cat}
-              </span>
-            ))}
-          </div>
         </div>
       </div>
-    </motion.div>
+    </motionFramer.div>
   );
 };
