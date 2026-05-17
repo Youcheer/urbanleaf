@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { getPlants } from "../lib/db";
 
-const HERO_IMAGES = [
+const DEFAULT_HERO_IMAGES = [
   "https://images.unsplash.com/photo-1453904300235-0f2f60b15b5d?auto=format&fit=crop&q=80&w=1200",
   "https://images.unsplash.com/photo-1614594975525-e45190c55d40?auto=format&fit=crop&q=80&w=1200",
   "https://images.unsplash.com/photo-1597055905091-88981f337f7a?auto=format&fit=crop&q=80&w=1200",
-  "https://images.unsplash.com/photo-1632207691143-643e2a9a9361?auto=format&fit=crop&q=80&w=1200",
 ];
 
 export const Hero = () => {
@@ -17,14 +17,45 @@ export const Hero = () => {
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
+  const [heroImages, setHeroImages] = useState<string[]>(DEFAULT_HERO_IMAGES);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const plants = await getPlants();
+        let allImages: string[] = [];
+        plants.forEach(p => {
+          if (p.images && p.images.length > 0) {
+            allImages.push(...p.images);
+          } else if ((p as any).image) {
+            allImages.push((p as any).image);
+          }
+        });
+        
+        // Remove duplicates and get up to 4 images
+        const uniqueImages = Array.from(new Set(allImages));
+        
+        // If the user has uploaded their own plants, use those images instead!
+        if (uniqueImages.length > 0) {
+          // Shuffle array to make it random
+          const shuffled = uniqueImages.sort(() => 0.5 - Math.random());
+          setHeroImages(shuffled.slice(0, 4));
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchImages();
+  }, []);
+
+  useEffect(() => {
+    if (heroImages.length === 0) return;
     const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % HERO_IMAGES.length);
+      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
     }, 4000); // Change image every 4 seconds
     return () => clearInterval(interval);
-  }, []);
+  }, [heroImages]);
 
   return (
     <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden bg-[#f4f7f4]">
@@ -67,9 +98,9 @@ export const Hero = () => {
             <AnimatePresence initial={false} mode="wait">
               <motion.img
                 key={currentImageIndex}
-                src={HERO_IMAGES[currentImageIndex]}
+                src={heroImages[currentImageIndex]}
                 alt={`Beautiful Plant ${currentImageIndex + 1}`}
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover bg-gray-100"
                 initial={{ opacity: 0, rotateY: 90, scale: 0.9 }}
                 animate={{ opacity: 1, rotateY: 0, scale: 1 }}
                 exit={{ opacity: 0, rotateY: -90, scale: 1.1 }}

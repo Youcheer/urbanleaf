@@ -2,21 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Edit, Trash2, LogOut, ArrowLeft, Save, Sparkles, Upload } from "lucide-react";
+import { Plus, Edit, Trash2, LogOut, ArrowLeft, Save, Sparkles, Upload, X } from "lucide-react";
 import { getPlants, addPlant, updatePlant, deletePlant } from "../../lib/db";
 import { Plant } from "../../lib/data";
 import Link from "next/link";
-
-const PRESET_IMAGES = [
-  "https://images.unsplash.com/photo-1614594975525-e45190c55d40?auto=format&fit=crop&q=80&w=800",
-  "https://images.unsplash.com/photo-1599421487840-02c34fc07df0?auto=format&fit=crop&q=80&w=800",
-  "https://images.unsplash.com/photo-1597055905091-88981f337f7a?auto=format&fit=crop&q=80&w=800",
-  "https://images.unsplash.com/photo-1632207691143-643e2a9a9361?auto=format&fit=crop&q=80&w=800",
-  "https://images.unsplash.com/photo-1593691509543-c55fb32e7355?auto=format&fit=crop&q=80&w=800",
-  "https://images.unsplash.com/photo-1598880940080-c97a5f6e80b2?auto=format&fit=crop&q=80&w=800",
-  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80&w=800",
-  "https://images.unsplash.com/photo-1525498128493-380d1990a112?auto=format&fit=crop&q=80&w=800"
-];
 
 // Client-side image compressor using HTML5 Canvas
 const compressImage = (file: File, maxWidth = 800, quality = 0.75): Promise<Blob> => {
@@ -31,7 +20,6 @@ const compressImage = (file: File, maxWidth = 800, quality = 0.75): Promise<Blob
         let width = img.width;
         let height = img.height;
 
-        // Calculate new dimensions while maintaining aspect ratio
         if (width > maxWidth) {
           height = (maxWidth / width) * height;
           width = maxWidth;
@@ -75,8 +63,9 @@ export default function AdminPage() {
   // Form State
   const [name, setName] = useState("");
   const [scientificName, setScientificName] = useState("");
+  const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [imageUrl, setImageUrl] = useState(PRESET_IMAGES[0]);
+  const [images, setImages] = useState<string[]>([]);
   const [categories, setCategories] = useState<string[]>(["Indoor Spaces"]);
   const [sunlight, setSunlight] = useState("");
   const [watering, setWatering] = useState("");
@@ -88,7 +77,6 @@ export default function AdminPage() {
   const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "admin123";
 
   useEffect(() => {
-    // Check if previously authenticated in this session
     const authStatus = sessionStorage.getItem("urbanleaf_admin_auth");
     if (authStatus === "true") {
       setIsAuthenticated(true);
@@ -132,8 +120,13 @@ export default function AdminPage() {
     setEditingPlant(plant);
     setName(plant.name);
     setScientificName(plant.scientificName);
+    setDescription(plant.description || "");
     setPrice(plant.price.toString());
-    setImageUrl(plant.image);
+    
+    // Support legacy data structure
+    const plantImages = plant.images && plant.images.length > 0 ? plant.images : (plant.image ? [plant.image] : []);
+    setImages(plantImages);
+    
     setCategories(plant.category);
     setSunlight(plant.care.sunlight);
     setWatering(plant.care.watering);
@@ -156,14 +149,17 @@ export default function AdminPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    if (images.length >= 3) {
+      alert("You can only upload up to 3 images.");
+      return;
+    }
+
     setUploading(true);
 
     try {
-      // Compress the image client-side first (Max width 800px, 75% JPEG quality)
       const compressedBlob = await compressImage(file, 800, 0.75);
       
       const formData = new FormData();
-      // ImgBB requires a file name, so convert Blob to File
       const compressedFile = new File([compressedBlob], file.name, {
         type: "image/jpeg",
         lastModified: Date.now()
@@ -183,7 +179,7 @@ export default function AdminPage() {
 
       const result = await response.json();
       if (result.success && result.data?.url) {
-        setImageUrl(result.data.url);
+        setImages((prev) => [...prev, result.data.url]);
       } else {
         throw new Error(result.error?.message || "Upload failed");
       }
@@ -195,18 +191,23 @@ export default function AdminPage() {
     }
   };
 
+  const removeImage = (idxToRemove: number) => {
+    setImages((prev) => prev.filter((_, idx) => idx !== idxToRemove));
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !price || !imageUrl) {
-      alert("Please fill in required fields.");
+    if (!name || !price || images.length === 0) {
+      alert("Please fill in required fields and upload at least 1 image.");
       return;
     }
 
     const plantData = {
       name,
       scientificName,
+      description,
       price: parseFloat(price),
-      image: imageUrl,
+      images,
       category: categories,
       care: {
         sunlight,
@@ -232,8 +233,9 @@ export default function AdminPage() {
     setEditingPlant(null);
     setName("");
     setScientificName("");
+    setDescription("");
     setPrice("");
-    setImageUrl(PRESET_IMAGES[0]);
+    setImages([]);
     setCategories(["Indoor Spaces"]);
     setSunlight("");
     setWatering("");
@@ -341,32 +343,35 @@ export default function AdminPage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {plantsList.map((plant) => (
-                  <div key={plant.id} className="bg-white p-5 rounded-3xl shadow-sm hover:shadow-md border border-gray-100 flex gap-4 transition-all">
-                    <img src={plant.image} alt={plant.name} className="w-24 h-24 object-cover rounded-2xl flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-lg truncate">{plant.name}</h3>
-                      <p className="text-xs text-gray-400 italic truncate mb-2">{plant.scientificName}</p>
-                      <p className="font-semibold text-[#3b8554]">LKR {plant.price.toLocaleString()}</p>
-                      <div className="flex gap-2 mt-4">
-                        <button
-                          onClick={() => handleEdit(plant)}
-                          className="p-2 bg-gray-100 hover:bg-[#e2e8e4] rounded-lg transition-colors"
-                          title="Edit"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(plant.id)}
-                          className="p-2 bg-red-50 hover:bg-red-100 text-red-500 rounded-lg transition-colors"
-                          title="Delete"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                {plantsList.map((plant) => {
+                  const mainImg = plant.images && plant.images.length > 0 ? plant.images[0] : (plant as any).image;
+                  return (
+                    <div key={plant.id} className="bg-white p-5 rounded-3xl shadow-sm hover:shadow-md border border-gray-100 flex gap-4 transition-all">
+                      <img src={mainImg} alt={plant.name} className="w-24 h-24 object-cover rounded-2xl flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-lg truncate uppercase">{plant.name}</h3>
+                        <p className="text-xs text-gray-400 italic truncate mb-2">{plant.scientificName}</p>
+                        <p className="font-semibold text-[#3b8554]">LKR {plant.price.toLocaleString()}</p>
+                        <div className="flex gap-2 mt-4">
+                          <button
+                            onClick={() => handleEdit(plant)}
+                            className="p-2 bg-gray-100 hover:bg-[#e2e8e4] rounded-lg transition-colors"
+                            title="Edit"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(plant.id)}
+                            className="p-2 bg-red-50 hover:bg-red-100 text-red-500 rounded-lg transition-colors"
+                            title="Delete"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
@@ -407,6 +412,16 @@ export default function AdminPage() {
                       />
                     </div>
                     <div>
+                      <label className="block text-sm font-semibold mb-2">Description</label>
+                      <textarea
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="Write a small description about this plant..."
+                        rows={3}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#3b8554] resize-none"
+                      />
+                    </div>
+                    <div>
                       <label className="block text-sm font-semibold mb-2">Price (LKR) *</label>
                       <input
                         type="number"
@@ -418,20 +433,36 @@ export default function AdminPage() {
                       />
                     </div>
 
-                    {/* Image Upload Input */}
+                    {/* Image Upload Input (Up to 3 images) */}
                     <div>
-                      <label className="block text-sm font-semibold mb-2">Upload Custom Image</label>
-                      <div className="flex items-center gap-4 mb-4">
+                      <label className="block text-sm font-semibold mb-2">Images (Max 3) *</label>
+                      
+                      <div className="flex gap-3 mb-4 overflow-x-auto pb-2">
+                        {images.map((imgUrl, idx) => (
+                          <div key={idx} className="relative w-20 h-20 rounded-2xl overflow-hidden border border-gray-200 flex-shrink-0 group">
+                            <img src={imgUrl} className="w-full h-full object-cover" />
+                            <button
+                              type="button"
+                              onClick={() => removeImage(idx)}
+                              className="absolute top-1 right-1 bg-white/80 p-1 rounded-full text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+
+                      {images.length < 3 && (
                         <label className="flex-1 flex flex-col items-center justify-center px-4 py-5 bg-[#f4f7f4]/50 hover:bg-[#e2e8e4]/50 text-gray-500 rounded-xl border border-dashed border-gray-300 cursor-pointer transition-colors relative min-h-[80px]">
                           {uploading ? (
                             <div className="flex flex-col items-center gap-2">
                               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#1a4a28]"></div>
-                              <span className="text-[10px]">Uploading to ImgBB...</span>
+                              <span className="text-[10px]">Uploading...</span>
                             </div>
                           ) : (
                             <div className="flex flex-col items-center gap-1">
                               <Upload className="w-5 h-5 text-gray-400" />
-                              <span className="text-xs font-semibold">Click to upload photo</span>
+                              <span className="text-xs font-semibold">Click to upload photo ({images.length}/3)</span>
                             </div>
                           )}
                           <input
@@ -442,38 +473,7 @@ export default function AdminPage() {
                             className="hidden"
                           />
                         </label>
-                        {imageUrl && (
-                          <div className="w-20 h-20 rounded-2xl overflow-hidden border border-gray-200 flex-shrink-0">
-                            <img src={imageUrl} className="w-full h-full object-cover" />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Preset Image Selectors */}
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">Or Choose from Presets</label>
-                      <div className="grid grid-cols-4 gap-2 mb-3">
-                        {PRESET_IMAGES.map((img, idx) => (
-                          <button
-                            key={idx}
-                            type="button"
-                            onClick={() => setImageUrl(img)}
-                            className={`h-12 w-full rounded-lg overflow-hidden border-2 ${
-                              imageUrl === img ? "border-[#3b8554]" : "border-transparent"
-                            }`}
-                          >
-                            <img src={img} className="w-full h-full object-cover" />
-                          </button>
-                        ))}
-                      </div>
-                      <input
-                        type="url"
-                        value={imageUrl}
-                        onChange={(e) => setImageUrl(e.target.value)}
-                        placeholder="Or paste direct image URL..."
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#3b8554] text-xs"
-                      />
+                      )}
                     </div>
 
                     {/* Categories */}

@@ -13,7 +13,6 @@ import { Plant, plants as mockPlants } from "./data";
 
 const LOCAL_STORAGE_KEY = "urbanleaf_plants";
 
-// Helper to initialize local storage with mock data if empty
 const getLocalPlants = (): Plant[] => {
   if (typeof window === "undefined") return mockPlants;
   const local = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -21,7 +20,13 @@ const getLocalPlants = (): Plant[] => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(mockPlants));
     return mockPlants;
   }
-  return JSON.parse(local);
+  const parsed = JSON.parse(local);
+  // Migrate legacy data
+  return parsed.map((p: any) => ({
+    ...p,
+    description: p.description || "",
+    images: p.images && p.images.length > 0 ? p.images : (p.image ? [p.image] : []),
+  }));
 };
 
 const saveLocalPlants = (plants: Plant[]) => {
@@ -39,12 +44,13 @@ export const getPlants = async (): Promise<Plant[]> => {
         const data = docSnap.data();
         plantsList.push({
           id: docSnap.id,
-          name: data.name,
-          scientificName: data.scientificName,
-          price: data.price,
-          image: data.image,
-          category: data.category,
-          care: data.care,
+          name: data.name || "",
+          scientificName: data.scientificName || "",
+          description: data.description || "",
+          price: data.price || 0,
+          images: data.images && data.images.length > 0 ? data.images : (data.image ? [data.image] : []),
+          category: data.category || [],
+          care: data.care || { sunlight: "", watering: "", environment: "" },
         });
       });
       return plantsList;

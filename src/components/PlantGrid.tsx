@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { getPlants } from "../lib/db";
 import { Plant } from "../lib/data";
 import { PlantCard } from "./PlantCard";
+import { PlantModal } from "./PlantModal";
 
 const categories = ["All", "Indoor Spaces", "Low Maintenance", "Office"];
 
@@ -12,6 +13,7 @@ export const PlantGrid = () => {
   const [plantsList, setPlantsList] = useState<Plant[]>([]);
   const [activeCategory, setActiveCategory] = useState("All");
   const [loading, setLoading] = useState(true);
+  const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
 
   useEffect(() => {
     const fetchPlants = async () => {
@@ -32,7 +34,7 @@ export const PlantGrid = () => {
   );
 
   return (
-    <section id="collection" className="py-24 px-6 max-w-7xl mx-auto">
+    <section id="collection" className="py-24 px-6 max-w-7xl mx-auto relative">
       <div className="text-center mb-16">
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}
@@ -71,9 +73,21 @@ export const PlantGrid = () => {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {filteredPlants.map((plant) => (
-            <PlantCard key={plant.id} plant={plant} />
+            <PlantCard 
+              key={plant.id} 
+              plant={plant} 
+              onClick={() => setSelectedPlant(plant)}
+            />
           ))}
         </motion.div>
+      )}
+
+      {/* Product Details Modal */}
+      {selectedPlant && (
+        <PlantModal 
+          plant={selectedPlant} 
+          onClose={() => setSelectedPlant(null)} 
+        />
       )}
     </section>
   );
