@@ -18,6 +18,53 @@ const PRESET_IMAGES = [
   "https://images.unsplash.com/photo-1525498128493-380d1990a112?auto=format&fit=crop&q=80&w=800"
 ];
 
+// Client-side image compressor using HTML5 Canvas
+const compressImage = (file: File, maxWidth = 800, quality = 0.75): Promise<Blob> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target?.result as string;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+
+        // Calculate new dimensions while maintaining aspect ratio
+        if (width > maxWidth) {
+          height = (maxWidth / width) * height;
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          reject(new Error("Canvas context is null"));
+          return;
+        }
+
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              resolve(blob);
+            } else {
+              reject(new Error("Canvas toBlob failed"));
+            }
+          },
+          "image/jpeg",
+          quality
+        );
+      };
+      img.onerror = (err) => reject(err);
+    };
+    reader.onerror = (err) => reject(err);
+  });
+};
+
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
@@ -110,12 +157,21 @@ export default function AdminPage() {
     if (!file) return;
 
     setUploading(true);
-    const formData = new FormData();
-    formData.append("image", file);
-
-    const apiKey = process.env.NEXT_PUBLIC_IMGBB_API_KEY || "1421a9d660059426977d35dad31197d0";
 
     try {
+      // Compress the image client-side first (Max width 800px, 75% JPEG quality)
+      const compressedBlob = await compressImage(file, 800, 0.75);
+      
+      const formData = new FormData();
+      // ImgBB requires a file name, so convert Blob to File
+      const compressedFile = new File([compressedBlob], file.name, {
+        type: "image/jpeg",
+        lastModified: Date.now()
+      });
+      formData.append("image", compressedFile);
+
+      const apiKey = process.env.NEXT_PUBLIC_IMGBB_API_KEY || "1421a9d660059426977d35dad31197d0";
+
       const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
         method: "POST",
         body: formData,
