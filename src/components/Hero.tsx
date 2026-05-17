@@ -17,7 +17,8 @@ export const Hero = () => {
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
-  const [heroImages, setHeroImages] = useState<string[]>(DEFAULT_HERO_IMAGES);
+  // Start with empty array to prevent Unsplash image flash before DB images load
+  const [heroImages, setHeroImages] = useState<string[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
@@ -33,18 +34,14 @@ export const Hero = () => {
           }
         });
         
-        // Remove duplicates and filter out empty or invalid image URLs
         const uniqueImages = Array.from(new Set(allImages)).filter(
           (img) => typeof img === "string" && img.trim() !== "" && img.startsWith("http")
         );
         
-        // If the user has uploaded their own plants with valid images, use those instead!
         if (uniqueImages.length > 0) {
-          // Shuffle array to make it random
           const shuffled = uniqueImages.sort(() => 0.5 - Math.random());
           setHeroImages(shuffled.slice(0, 4));
         } else {
-          // Fallback to default unsplash images if no valid images in db
           setHeroImages(DEFAULT_HERO_IMAGES);
         }
       } catch (e) {
@@ -97,23 +94,28 @@ export const Hero = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}
           className="relative h-[45vh] lg:h-[70vh] w-full"
-          style={{ perspective: 1200 }} // Added perspective for 3D effect
+          style={{ perspective: 1200 }}
         >
           {/* Main Hero Image Slider with 3D Flip */}
-          <div className="relative w-full h-full rounded-3xl shadow-2xl overflow-hidden animate-float" style={{ transformStyle: "preserve-3d" }}>
-            <AnimatePresence initial={false} mode="wait">
-              <motion.img
-                key={currentImageIndex}
-                src={heroImages[currentImageIndex]}
-                alt={`Beautiful Plant ${currentImageIndex + 1}`}
-                className="absolute inset-0 w-full h-full object-cover bg-gray-100"
-                initial={{ opacity: 0, rotateY: 90, scale: 0.9 }}
-                animate={{ opacity: 1, rotateY: 0, scale: 1 }}
-                exit={{ opacity: 0, rotateY: -90, scale: 1.1 }}
-                transition={{ duration: 0.8, type: "spring", bounce: 0.3 }}
-                style={{ backfaceVisibility: "hidden" }}
-              />
-            </AnimatePresence>
+          <div className="relative w-full h-full rounded-3xl shadow-2xl overflow-hidden bg-[#e2e8e4]/40" style={{ transformStyle: "preserve-3d" }}>
+            {heroImages.length > 0 ? (
+              <AnimatePresence initial={false} mode="wait">
+                <motion.img
+                  key={currentImageIndex}
+                  src={heroImages[currentImageIndex]}
+                  alt={`Beautiful Plant ${currentImageIndex + 1}`}
+                  className="absolute inset-0 w-full h-full object-cover bg-gray-100"
+                  initial={{ opacity: 0, rotateY: 90, scale: 0.9 }}
+                  animate={{ opacity: 1, rotateY: 0, scale: 1 }}
+                  exit={{ opacity: 0, rotateY: -90, scale: 1.1 }}
+                  transition={{ duration: 0.8, type: "spring", bounce: 0.3 }}
+                  style={{ backfaceVisibility: "hidden" }}
+                />
+              </AnimatePresence>
+            ) : (
+              // Soft green pulsing skeleton loader while images are fetching from database
+              <div className="absolute inset-0 w-full h-full bg-[#e2e8e4]/60 animate-pulse" />
+            )}
           </div>
           
           {/* Floating Element 1 */}
