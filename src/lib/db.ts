@@ -21,7 +21,7 @@ const getLocalPlants = (): Plant[] => {
     return mockPlants;
   }
   const parsed = JSON.parse(local);
-  // Migrate legacy data
+  // Migrate legacy data structures in localStorage
   return parsed.map((p: any) => ({
     ...p,
     description: p.description || "",
@@ -53,6 +53,46 @@ export const getPlants = async (): Promise<Plant[]> => {
           care: data.care || { sunlight: "", watering: "", environment: "" },
         });
       });
+
+      // --- AUTOMATIC FIRST-TIME MIGRATION FROM LOCALSTORAGE TO FIRESTORE ---
+      // If Firestore is empty (just configured) and we have custom plants in local storage, migrate them!
+      if (plantsList.length === 0) {
+        const localPlants = getLocalPlants();
+        // Check if there are any custom plants (not our initial mock p1, p2)
+        const customLocalPlants = localPlants.filter(
+          (p) => !p.id.startsWith("p1") && !p.id.startsWith("p2")
+        );
+
+        if (customLocalPlants.length > 0) {
+          console.log("Found custom plants in LocalStorage. Migrating to Firestore...", customLocalPlants);
+          
+          for (const localPlant of customLocalPlants) {
+            // Destructure to remove the temporary local ID before adding to Firestore
+            const { id, ...plantData } = localPlant;
+            await addDoc(collection(db, "plants"), plantData);
+          }
+
+          // Fetch the fresh list from Firestore now that they are uploaded
+          const newSnapshot = await getDocs(q);
+          const newPlantsList: Plant[] = [];
+          newSnapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            newPlantsList.push({
+              id: docSnap.id,
+              name: data.name || "",
+              scientificName: data.scientificName || "",
+              description: data.description || "",
+              price: data.price || 0,
+              images: data.images && data.images.length > 0 ? data.images : (data.image ? [data.image] : []),
+              category: data.category || [],
+              care: data.care || { sunlight: "", watering: "", environment: "" },
+            });
+          });
+          return newPlantsList;
+        }
+      }
+      // -------------------------------------------------------------
+
       return plantsList;
     } catch (error) {
       console.error("Error fetching from Firestore, falling back to LocalStorage:", error);
