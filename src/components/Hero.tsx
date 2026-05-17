@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { getPlants } from "../lib/db";
 import { useLanguage } from "../context/LanguageContext";
@@ -13,12 +13,7 @@ const DEFAULT_HERO_IMAGES = [
 ];
 
 export const Hero = () => {
-  const { scrollY } = useScroll();
   const { t } = useLanguage();
-  const y1 = useTransform(scrollY, [0, 500], [0, 150]);
-  const y2 = useTransform(scrollY, [0, 500], [0, -150]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
-
   const [heroImages, setHeroImages] = useState<string[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -57,82 +52,55 @@ export const Hero = () => {
     if (heroImages.length === 0) return;
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
-    }, 4000);
+    }, 5000); // 5 seconds for a majestic full screen experience
     return () => clearInterval(interval);
   }, [heroImages]);
 
   return (
-    <section id="home" className="relative min-h-screen pt-24 lg:pt-0 flex items-center justify-center overflow-hidden bg-[#f4f7f4]">
-      {/* Background Floating Elements */}
-      <motion.div style={{ y: y1 }} className="absolute top-20 -left-10 w-64 h-64 bg-[#3b8554]/10 rounded-full blur-3xl" />
-      <motion.div style={{ y: y2 }} className="absolute bottom-20 -right-10 w-96 h-96 bg-[#1a4a28]/10 rounded-full blur-3xl" />
-      
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center z-10 w-full py-12 lg:py-0">
+    <section id="home" className="relative min-h-screen flex flex-col justify-end items-center overflow-hidden bg-black">
+      {/* Full Screen Image Slider */}
+      <div className="absolute inset-0 z-0">
+        {heroImages.length > 0 ? (
+          <AnimatePresence initial={false}>
+            <motion.img
+              key={currentImageIndex}
+              src={heroImages[currentImageIndex]}
+              alt={`Urban Leaf Collection`}
+              className="absolute inset-0 w-full h-full object-cover"
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
+            />
+          </AnimatePresence>
+        ) : (
+          <div className="absolute inset-0 w-full h-full bg-[#1a4a28]/20 animate-pulse" />
+        )}
+        
+        {/* Premium Gradient Overlay: Dark top for Navbar, dark bottom for Text */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/90 z-10" />
+      </div>
+
+      {/* Hero Text Content - Overlaid at the bottom */}
+      <div className="relative z-20 max-w-5xl mx-auto px-6 w-full pb-20 md:pb-32 text-center text-white">
         <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          style={{ opacity }}
-          className="text-left"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
         >
-          {/* Sinhala & English Multi-lingual Headline & Subheadline */}
-          <h1 className="font-playfair text-4xl md:text-6xl font-bold leading-tight text-[#1a4a28] mb-6 whitespace-pre-line">
+          <h1 className="font-playfair text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 drop-shadow-2xl">
             {t("heroHeadline")}
           </h1>
-          <p className="text-base md:text-lg text-[#1a4a28]/80 mb-8 max-w-lg leading-relaxed">
+          <p className="text-base md:text-xl lg:text-2xl text-gray-200 mb-10 max-w-3xl mx-auto leading-relaxed drop-shadow-lg font-light tracking-wide">
             {t("heroSubheadline")}
           </p>
           <a
             href="#collection"
-            className="inline-flex items-center gap-2 bg-[#1a4a28] text-white px-8 py-4 rounded-full font-semibold hover:bg-[#3b8554] transition-all transform hover:scale-105"
+            className="inline-flex items-center gap-3 bg-white text-[#1a4a28] px-10 py-4 md:py-5 rounded-full font-bold text-base md:text-lg hover:bg-[#3b8554] hover:text-white transition-all transform hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.3)]"
           >
             {t("heroCta")}
             <ArrowRight className="w-5 h-5" />
           </a>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="relative h-[45vh] lg:h-[70vh] w-full"
-          style={{ perspective: 1200 }}
-        >
-          {/* Main Hero Image Slider with 3D Flip */}
-          <div className="relative w-full h-full rounded-3xl shadow-2xl overflow-hidden bg-[#e2e8e4]/40" style={{ transformStyle: "preserve-3d" }}>
-            {heroImages.length > 0 ? (
-              <AnimatePresence initial={false} mode="wait">
-                <motion.img
-                  key={currentImageIndex}
-                  src={heroImages[currentImageIndex]}
-                  alt={`Beautiful Plant ${currentImageIndex + 1}`}
-                  className="absolute inset-0 w-full h-full object-cover bg-gray-100"
-                  initial={{ opacity: 0, rotateY: 90, scale: 0.9 }}
-                  animate={{ opacity: 1, rotateY: 0, scale: 1 }}
-                  exit={{ opacity: 0, rotateY: -90, scale: 1.1 }}
-                  transition={{ duration: 0.8, type: "spring", bounce: 0.3 }}
-                  style={{ backfaceVisibility: "hidden" }}
-                />
-              </AnimatePresence>
-            ) : (
-              <div className="absolute inset-0 w-full h-full bg-[#e2e8e4]/60 animate-pulse" />
-            )}
-          </div>
-          
-          {/* Floating Element 1 */}
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
-            className="absolute -bottom-4 -left-4 bg-white p-3 rounded-2xl shadow-xl flex items-center gap-3 z-20 scale-90 md:scale-100"
-          >
-            <div className="w-10 h-10 bg-[#f4f7f4] rounded-full flex items-center justify-center">
-              <span className="text-xl">🌱</span>
-            </div>
-            <div>
-              <p className="font-bold text-[#1a4a28] text-sm">{t("organic")}</p>
-              <p className="text-xs text-gray-500">{t("premiumQuality")}</p>
-            </div>
-          </motion.div>
         </motion.div>
       </div>
     </section>
