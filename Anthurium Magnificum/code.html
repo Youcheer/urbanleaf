@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Urban Leaf - Anthurium</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Playfair+Display:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-dim": "#dcd9d9",
+                      "on-secondary-fixed": "#141f05",
+                      "inverse-primary": "#a2d1bb",
+                      "surface-container-highest": "#e5e2e1",
+                      "inverse-on-surface": "#f3f0ef",
+                      "on-secondary-fixed-variant": "#3f4b2c",
+                      "surface-container": "#f0eded",
+                      "primary": "#00261a",
+                      "tertiary-container": "#353634",
+                      "on-primary-fixed-variant": "#234f3f",
+                      "on-error": "#ffffff",
+                      "on-surface-variant": "#414944",
+                      "surface-container-high": "#eae7e7",
+                      "primary-container": "#0f3d2e",
+                      "on-tertiary": "#ffffff",
+                      "background": "#fcf9f8",
+                      "surface-tint": "#3b6756",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed": "#002116",
+                      "surface-bright": "#fcf9f8",
+                      "outline-variant": "#c0c8c3",
+                      "error-container": "#ffdad6",
+                      "on-primary": "#ffffff",
+                      "on-tertiary-container": "#9f9e9c",
+                      "on-secondary-container": "#5a6745",
+                      "secondary": "#566342",
+                      "primary-fixed": "#beedd7",
+                      "on-background": "#1b1b1c",
+                      "on-secondary": "#ffffff",
+                      "on-surface": "#1b1b1c",
+                      "surface": "#fcf9f8",
+                      "on-tertiary-fixed": "#1b1c1a",
+                      "tertiary": "#20211f",
+                      "tertiary-fixed-dim": "#c8c6c4",
+                      "secondary-fixed": "#dae8be",
+                      "on-tertiary-fixed-variant": "#474745",
+                      "on-primary-container": "#7ba894",
+                      "secondary-fixed-dim": "#becca3",
+                      "tertiary-fixed": "#e4e2df",
+                      "on-error-container": "#93000a",
+                      "primary-fixed-dim": "#a2d1bb",
+                      "outline": "#717974",
+                      "surface-variant": "#e5e2e1",
+                      "error": "#ba1a1a",
+                      "secondary-container": "#d7e5bb",
+                      "surface-container-low": "#f6f3f2",
+                      "inverse-surface": "#303030"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "20px",
+                      "section-gap": "80px",
+                      "base": "8px",
+                      "container-max": "1280px",
+                      "margin-desktop": "64px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Playfair Display"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Playfair Display"
+                      ],
+                      "headline-lg": [
+                              "Playfair Display"
+                      ],
+                      "display-lg-mobile": [
+                              "Playfair Display"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+      </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 40px rgba(0, 38, 26, 0.06);
+        }
+
+        /* Framer Motion Style Easing */
+        .ease-framer {
+            transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Entrance Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes imageEntrance {
+            from {
+                opacity: 0;
+                transform: scale(1.05);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-fade-in-up {
+            opacity: 0;
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-image-entrance {
+            opacity: 0;
+            animation: imageEntrance 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-400 { animation-delay: 400ms; }
+        .delay-500 { animation-delay: 500ms; }
+        
+        /* Smooth Accordion Expansion */
+        .accordion-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .accordion-content > div {
+            overflow: hidden;
+        }
+        .accordion-open .accordion-content {
+            grid-template-rows: 1fr;
+        }
+      </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col selection:bg-primary-fixed selection:text-primary">
+<!-- TopNavBar -->
+<nav class="bg-white/60 dark:bg-tertiary/60 backdrop-blur-xl w-full top-0 sticky border-b border-white/20 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.04)] z-50">
+<div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-6 max-w-container-max mx-auto">
+<div class="text-headline-md font-headline-md font-bold text-primary dark:text-primary-fixed tracking-tight hover:scale-95 transition-transform duration-200 cursor-pointer ease-framer">
+                Urban Leaf
+            </div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-label-md font-label-md uppercase tracking-widest text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors duration-300" href="#">Collections</a>
+<a class="text-label-md font-label-md uppercase tracking-widest text-primary dark:text-primary-fixed relative after:content-[''] after:absolute after:-bottom-2 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-primary dark:after:bg-primary-fixed after:rounded-full" href="#">Plants</a>
+<a class="text-label-md font-label-md uppercase tracking-widest text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors duration-300" href="#">Care</a>
+<a class="text-label-md font-label-md uppercase tracking-widest text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors duration-300" href="#">Journal</a>
+</div>
+<div class="flex items-center gap-4 text-primary dark:text-primary-fixed">
+<button class="hover:scale-95 transition-transform duration-200 scale-98 active:scale-95 ease-framer">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+<button class="hover:scale-95 transition-transform duration-200 scale-98 active:scale-95 ease-framer">
+<span class="material-symbols-outlined">person</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Product Section -->
+<main class="flex-grow">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12 md:py-section-gap">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-gutter items-start">
+<!-- Left: Hero Image -->
+<div class="lg:col-span-7 h-full animate-image-entrance">
+<div class="rounded-xl overflow-hidden shadow-[0_20px_60px_rgba(0,38,26,0.08)] bg-surface-container-low h-[60vh] lg:h-[80vh] relative">
+<img alt="A stunning, rare Anthurium plant with vibrant red, waxy spathes and deep green, heart-shaped leaves. The plant is potted in a minimalist, textured ceramic vessel sitting on a pale beige geometric plinth. Soft, diffused natural light streams through a subtle windowpane in the background, illuminating the glossy texture of the leaves and creating a serene, high-end botanical gallery atmosphere. The overall composition is elegant, modern, and embodies a premium luxury lifestyle." class="w-full h-full object-cover object-center absolute inset-0 parallax-img" src="https://lh3.googleusercontent.com/aida/ADBb0uhlniPhb1ptGJZv0LRyb89rACzkamaW7w9HrGXqOw8hV8nULPtjCm5Xu2T-e_8KVmm3W4Tm0TOsnFowPzgXidmZYP3FXCpvtCdxDALvZkkW6WvX3vYMdNGQUP5EzQafu9upN2YIqWbhmeS_mto_HRJKX9OgTB_yE0MaTU7gLb1029RBwlXEhmxEQ3JOIITLH-Xuvd7JYBkpFtsAtc99cG8rOLB79X8wRJ7NBFZ9tPtBpTAV1aGhBMkGr8PL"/>
+</div>
+</div>
+<!-- Right: Glassmorphic Info Panel -->
+<div class="lg:col-span-5 lg:sticky lg:top-32">
+<div class="glass-panel rounded-xl p-8 md:p-10">
+<div class="mb-4 animate-fade-in-up delay-100">
+<span class="inline-block px-4 py-1.5 bg-secondary-container/50 text-primary font-label-sm rounded-full tracking-widest uppercase mb-4 border border-secondary-container">Rare Collection</span>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-2">Anthurium Andreanum</h1>
+<p class="font-headline-md text-headline-md text-secondary/80 italic">Flamingo Lily</p>
+</div>
+<div class="py-6 border-y border-outline-variant/30 mb-8 animate-fade-in-up delay-200">
+<p class="font-display-lg-mobile text-display-lg-mobile text-primary">$185.00</p>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Complimentary nationwide overnight shipping included.</p>
+</div>
+<div class="mb-10 space-y-4 animate-fade-in-up delay-300">
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                                Bring tropical beauty and timeless elegance to your space. This exceptional Anthurium specimen features striking, vibrant spathes that command attention. Cultivated in our specialized conservatories to ensure pristine health and longevity.
+                            </p>
+</div>
+<!-- Care Guide Accordion -->
+<div class="mb-10 animate-fade-in-up delay-400">
+<div class="border-b border-outline-variant/30 py-4 flex justify-between items-center cursor-pointer group transition-colors duration-300 ease-framer hover:bg-surface-container-highest/20 rounded-t-lg px-2 -mx-2">
+<h3 class="font-headline-md text-headline-md text-primary text-lg transition-transform duration-500 ease-framer group-hover:translate-x-1">Care Guide</h3>
+<span class="material-symbols-outlined text-primary transition-transform duration-500 ease-framer group-hover:rotate-180">expand_more</span>
+</div>
+<div class="border-b border-outline-variant/30 py-4 flex justify-between items-center cursor-pointer group transition-colors duration-300 ease-framer hover:bg-surface-container-highest/20 px-2 -mx-2">
+<h3 class="font-headline-md text-headline-md text-primary text-lg transition-transform duration-500 ease-framer group-hover:translate-x-1">Shipping &amp; Returns</h3>
+<span class="material-symbols-outlined text-primary transition-transform duration-500 ease-framer group-hover:rotate-180">expand_more</span>
+</div>
+</div>
+<div class="animate-fade-in-up delay-500">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest py-5 rounded-DEFAULT shadow-md transition-all duration-500 ease-framer hover:scale-[1.02] hover:bg-primary/90 hover:shadow-xl hover:tracking-[0.08em]">
+                                Secure Purchase
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Features Section -->
+<div class="border-y border-outline-variant/20 bg-surface-container-low/50">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-outline-variant/20">
+<div class="flex flex-col items-center py-4 md:py-0 group">
+<span class="material-symbols-outlined text-4xl text-secondary mb-4 transition-transform duration-500 ease-framer group-hover:-translate-y-2 group-hover:scale-110" style="font-variation-settings: 'FILL' 0;">local_shipping</span>
+<h4 class="font-headline-md text-headline-md text-primary text-xl mb-2">Fast Delivery</h4>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xs mx-auto">Climate-controlled overnight transport directly to your door.</p>
+</div>
+<div class="flex flex-col items-center py-4 md:py-0 group">
+<span class="material-symbols-outlined text-4xl text-secondary mb-4 transition-transform duration-500 ease-framer group-hover:-translate-y-2 group-hover:scale-110" style="font-variation-settings: 'FILL' 0;">eco</span>
+<h4 class="font-headline-md text-headline-md text-primary text-xl mb-2">Sustainably Grown</h4>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xs mx-auto">Cultivated using eco-conscious practices and organic nutrients.</p>
+</div>
+<div class="flex flex-col items-center py-4 md:py-0 group">
+<span class="material-symbols-outlined text-4xl text-secondary mb-4 transition-transform duration-500 ease-framer group-hover:-translate-y-2 group-hover:scale-110" style="font-variation-settings: 'FILL' 0;">support_agent</span>
+<h4 class="font-headline-md text-headline-md text-primary text-xl mb-2">Expert Support</h4>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xs mx-auto">Lifetime access to our horticultural specialists for care advice.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-background dark:bg-tertiary border-t border-outline-variant/30 w-full bottom-0">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-mobile md:px-margin-desktop py-section-gap max-w-container-max mx-auto">
+<div class="md:col-span-1">
+<div class="text-headline-md font-headline-md font-bold text-primary dark:text-primary-fixed mb-4 hover:scale-95 transition-transform duration-300 ease-framer cursor-pointer inline-block">
+                    Urban Leaf
+                </div>
+<p class="text-body-md font-body-md text-on-surface-variant dark:text-on-surface-variant">
+                    © 2024 Urban Leaf. Cultivating serenity in the urban landscape.
+                </p>
+</div>
+<div class="md:col-span-3 flex flex-wrap gap-8 md:justify-end">
+<a class="text-label-sm font-label-sm uppercase tracking-widest text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed underline-offset-4 hover:underline transition-all opacity-100 hover:opacity-80" href="#">Sustainability</a>
+<a class="text-label-sm font-label-sm uppercase tracking-widest text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed underline-offset-4 hover:underline transition-all opacity-100 hover:opacity-80" href="#">Shipping &amp; Returns</a>
+<a class="text-label-sm font-label-sm uppercase tracking-widest text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed underline-offset-4 hover:underline transition-all opacity-100 hover:opacity-80" href="#">Privacy Policy</a>
+<a class="text-label-sm font-label-sm uppercase tracking-widest text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed underline-offset-4 hover:underline transition-all opacity-100 hover:opacity-80" href="#">Contact</a>
+</div>
+</div>
+</footer>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const parallaxImg = document.querySelector('.parallax-img');
+        
+        window.addEventListener('scroll', () => {
+            if (parallaxImg) {
+                const scrolled = window.scrollY;
+                // Subtle parallax effect, scaling slightly so we don't see edges
+                parallaxImg.style.transform = `translateY(${scrolled * 0.15}px) scale(1.05)`;
+            }
+        });
+    });
+</script>
+</body></html>
