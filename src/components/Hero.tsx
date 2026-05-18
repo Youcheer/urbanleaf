@@ -6,51 +6,24 @@ import { useLanguage } from "../context/LanguageContext";
 import { getPlants } from "../lib/db";
 
 const DEFAULT_HERO_IMAGES = [
-  "/about_gardener.jpg"
+  "/hero_1.jpg",
+  "/hero_2.jpg",
+  "/hero_3.jpg",
+  "/hero_4.jpg",
+  "/hero_5.jpg"
 ];
 
 export const Hero = () => {
   const { t } = useLanguage();
-  const [heroImages, setHeroImages] = useState<string[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const heroImages = DEFAULT_HERO_IMAGES;
 
   useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const plants = await getPlants();
-        let allImages: string[] = [];
-        plants.forEach((p) => {
-          if (p.images && p.images.length > 0) {
-            allImages.push(p.images[0]);
-          }
-        });
-
-        const uniqueImages = Array.from(new Set(allImages)).filter(
-          (img) => typeof img === "string" && img.trim() !== "" && img.startsWith("http")
-        );
-
-        if (uniqueImages.length > 0) {
-          // Shuffle and take up to 4 images
-          const shuffled = uniqueImages.sort(() => 0.5 - Math.random());
-          setHeroImages(shuffled.slice(0, 4));
-        } else {
-          setHeroImages(DEFAULT_HERO_IMAGES);
-        }
-      } catch (e) {
-        console.error(e);
-        setHeroImages(DEFAULT_HERO_IMAGES);
-      }
-    };
-    fetchImages();
-  }, []);
-
-  useEffect(() => {
-    if (heroImages.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
     }, 6000);
     return () => clearInterval(interval);
-  }, [heroImages]);
+  }, []);
 
   return (
     <header
