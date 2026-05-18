@@ -41,19 +41,19 @@ export const Navbar = () => {
   return (
     <nav
       id="main-nav"
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 w-full border-b backdrop-blur-xl ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 w-full border-b ${
         scrolled
-          ? "py-4 bg-white/90 dark:bg-tertiary/90 border-outline-variant/20 shadow-[0_8px_30px_rgba(0,38,26,0.08)]"
-          : "py-6 bg-white/60 dark:bg-tertiary/60 border-white/20 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.04)]"
+          ? "py-4 bg-white dark:bg-tertiary border-outline-variant/20 shadow-[0_8px_30px_rgba(0,38,26,0.08)]"
+          : "py-6 bg-white dark:bg-tertiary border-outline-variant/10 shadow-[0_4px_30px_rgba(0,0,0,0.04)]"
       }`}
     >
       <div className="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
         {/* Brand Logo */}
         <a
           href="#home"
-          className="text-headline-md font-serif font-bold text-primary dark:text-primary-fixed tracking-tight hover:opacity-80 transition-opacity"
+          className="hover:opacity-80 transition-opacity flex items-center shrink-0"
         >
-          Urban Leaf
+          <img src="/logo.png" alt="Urban Leaf Logo" className="h-10 md:h-12 w-auto object-contain" />
         </a>
 
         {/* Navigation Links with dot indicators */}
