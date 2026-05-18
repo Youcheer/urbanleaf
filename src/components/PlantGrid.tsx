@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getPlants } from "../lib/db";
 import { Plant } from "../lib/data";
-import { PlantCard } from "./PlantCard";
 import { PlantModal } from "./PlantModal";
 import { useLanguage } from "../context/LanguageContext";
 
@@ -12,11 +11,6 @@ export const PlantGrid = () => {
   const [plantsList, setPlantsList] = useState<Plant[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
-  
-  // Filtering & Sorting states
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [selectedLight, setSelectedLight] = useState<string>("All");
-  const [sortBy, setSortBy] = useState<string>("Curated");
 
   const { language, t } = useLanguage();
 
@@ -34,296 +28,158 @@ export const PlantGrid = () => {
     fetchPlants();
   }, []);
 
-  // Translation helpers
   const getFilterLabels = () => {
     if (language === "si") {
       return {
-        category: "කාණ්ඩය",
-        lightLevel: "සූර්යාලෝක මට්ටම",
-        all: "සියල්ල",
-        rareFinds: "දුර්ලභ පැලෑටි",
-        interiorStaples: "අභ්‍යන්තර අලංකරණ",
-        brightIndirect: "දීප්තිමත් වක්‍ර ආලෝකය",
-        mediumLight: "මධ්‍යම ආලෝකය",
-        lowLight: "අඩු ආලෝකය",
-        sortBy: "පිළිවෙල:",
-        sortCurated: "තෝරාගත් මෝස්තර",
-        sortLowHigh: "මිල: අඩු සිට වැඩි",
-        sortHighLow: "මිල: වැඩි සිට අඩු",
-        noPlants: "තෝරාගත් පෙරහන් වලට ගැළපෙන පැලෑටි කිසිවක් හමු නොවීය.",
-        subheading: "නගරබද ජීවිතයට සොබාදහමේ සන්සුන් බව සහ සුන්දරත්වය ළඟා කර දීම සඳහා විශේෂයෙන් තෝරාගත් අලංකාරවත් ශාක එකතුව.",
+        viewAll: "සියල්ල බලන්න",
+        curatedBotanicals: "සුවිශේෂී පැලෑටි එකතුව",
+        subtext: "ඔබේ අභ්‍යන්තර අලංකරණය සඳහා තෝරාගත් අලංකාරවත් ශාක.",
+        add: "එකතු කරන්න",
       };
     }
     return {
-      category: "Category",
-      lightLevel: "Light Level",
-      all: "All",
-      rareFinds: "Rare Finds",
-      interiorStaples: "Interior Staples",
-      brightIndirect: "Bright Indirect",
-      mediumLight: "Medium Light",
-      lowLight: "Low Light Tolerant",
-      sortBy: "Sort by:",
-      sortCurated: "Curated",
-      sortLowHigh: "Price: Low to High",
-      sortHighLow: "Price: High to Low",
-      noPlants: "No plants found matching the selected filters.",
-      subheading: "Curated botanical specimens designed to elevate your living spaces with structural elegance and organic warmth.",
+      viewAll: "View All",
+      curatedBotanicals: "Curated Botanicals",
+      subtext: "Exceptional specimens for the modern interior.",
+      add: "Add to Cart",
     };
   };
 
   const labels = getFilterLabels();
 
-  // Filter logic
-  const filteredPlants = plantsList.filter((plant) => {
-    const categoryMatch =
-      selectedCategory === "All" ||
-      (plant.category && plant.category.includes(selectedCategory));
+  // Helper to chunk array into groups of 3
+  const chunkArray = (arr: Plant[], size: number) => {
+    return Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+      arr.slice(i * size, i * size + size)
+    );
+  };
 
-    let lightMatch = true;
-    if (selectedLight !== "All") {
-      const sunlightText = (plant.care?.sunlight || "").toLowerCase();
-      if (selectedLight === "Bright Indirect") {
-        lightMatch = sunlightText.includes("bright") || sunlightText.includes("indirect");
-      } else if (selectedLight === "Medium Light") {
-        lightMatch = sunlightText.includes("medium");
-      } else if (selectedLight === "Low Light Tolerant") {
-        lightMatch =
-          sunlightText.includes("low") ||
-          sunlightText.includes("adaptable") ||
-          sunlightText.includes("completely");
-      }
-    }
-
-    return categoryMatch && lightMatch;
-  });
-
-  // Sort logic
-  const sortedPlants = [...filteredPlants].sort((a, b) => {
-    if (sortBy === "LowToHigh") {
-      return a.price - b.price;
-    }
-    if (sortBy === "HighToLow") {
-      return b.price - a.price;
-    }
-    return 0; // Default curated order
-  });
+  const plantChunks = chunkArray(plantsList, 3);
 
   return (
-    <section id="collection" className="py-section-gap w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative">
-      {/* Minimalist Page Header */}
-      <header className="py-16 md:py-24 text-center flex flex-col items-center">
-        <h2 className="font-serif text-display-lg-mobile md:text-display-lg text-primary mb-4">
-          {t("ourCollection")}
-        </h2>
-        <p className="font-sans text-body-lg text-on-surface-variant max-w-2xl mx-auto leading-relaxed font-light">
-          {labels.subheading}
-        </p>
-      </header>
+    <section id="collection" className="py-section-gap w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+      {/* Header */}
+      <div className="flex justify-between items-end mb-12">
+        <div>
+          <h2 className="text-headline-lg font-serif text-primary mb-2">
+            {labels.curatedBotanicals}
+          </h2>
+          <p className="text-body-md font-sans text-on-surface-variant font-light">
+            {labels.subtext}
+          </p>
+        </div>
+        <a
+          className="hidden md:flex items-center text-label-sm font-sans uppercase tracking-widest text-primary hover:opacity-80 transition-opacity gap-2"
+          href="#"
+        >
+          {labels.viewAll} <span className="material-symbols-outlined text-sm">arrow_forward</span>
+        </a>
+      </div>
 
       {loading ? (
         <div className="flex justify-center items-center py-20">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
         </div>
       ) : (
-        <div className="flex flex-col md:flex-row gap-margin-desktop items-start">
-          {/* Sidebar: Premium Filtering (Desktop mostly) */}
-          <aside className="hidden md:block w-64 shrink-0 sticky top-32 space-y-12">
-            {/* Filter Group: Category */}
-            <div className="border-b border-surface-variant pb-8">
-              <h3 className="font-sans text-label-md uppercase tracking-widest text-primary font-semibold mb-6">
-                {labels.category}
-              </h3>
-              <ul className="space-y-4 font-sans text-body-md text-on-surface-variant font-light">
-                <li>
-                  <label className="flex items-center gap-3 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={selectedCategory === "All"}
-                      onChange={() => setSelectedCategory("All")}
-                      className="form-checkbox h-4.5 w-4.5 text-primary border-outline-variant rounded focus:ring-primary focus:ring-offset-background bg-transparent transition-colors cursor-pointer"
-                    />
-                    <span className={`group-hover:text-primary transition-colors ${selectedCategory === "All" ? "text-primary font-medium" : ""}`}>
-                      {labels.all}
-                    </span>
-                  </label>
-                </li>
-                <li>
-                  <label className="flex items-center gap-3 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={selectedCategory === "Rare Finds"}
-                      onChange={() => setSelectedCategory("Rare Finds")}
-                      className="form-checkbox h-4.5 w-4.5 text-primary border-outline-variant rounded focus:ring-primary focus:ring-offset-background bg-transparent transition-colors cursor-pointer"
-                    />
-                    <span className={`group-hover:text-primary transition-colors ${selectedCategory === "Rare Finds" ? "text-primary font-medium" : ""}`}>
-                      {labels.rareFinds}
-                    </span>
-                  </label>
-                </li>
-                <li>
-                  <label className="flex items-center gap-3 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={selectedCategory === "Interior Staples"}
-                      onChange={() => setSelectedCategory("Interior Staples")}
-                      className="form-checkbox h-4.5 w-4.5 text-primary border-outline-variant rounded focus:ring-primary focus:ring-offset-background bg-transparent transition-colors cursor-pointer"
-                    />
-                    <span className={`group-hover:text-primary transition-colors ${selectedCategory === "Interior Staples" ? "text-primary font-medium" : ""}`}>
-                      {labels.interiorStaples}
-                    </span>
-                  </label>
-                </li>
-              </ul>
-            </div>
+        <div className="flex flex-col gap-16">
+          {plantChunks.map((chunk, chunkIdx) => {
+            const isEvenRow = chunkIdx % 2 === 0;
 
-            {/* Filter Group: Light Level */}
-            <div>
-              <h3 className="font-sans text-label-md uppercase tracking-widest text-primary font-semibold mb-6">
-                {labels.lightLevel}
-              </h3>
-              <ul className="space-y-4 font-sans text-body-md text-on-surface-variant font-light">
-                <li>
-                  <label className="flex items-center gap-3 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={selectedLight === "All"}
-                      onChange={() => setSelectedLight("All")}
-                      className="form-checkbox h-4.5 w-4.5 text-primary border-outline-variant rounded focus:ring-primary focus:ring-offset-background bg-transparent transition-colors cursor-pointer"
-                    />
-                    <span className={`group-hover:text-primary transition-colors ${selectedLight === "All" ? "text-primary font-medium" : ""}`}>
-                      {labels.all}
-                    </span>
-                  </label>
-                </li>
-                <li>
-                  <label className="flex items-center gap-3 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={selectedLight === "Bright Indirect"}
-                      onChange={() => setSelectedLight("Bright Indirect")}
-                      className="form-checkbox h-4.5 w-4.5 text-primary border-outline-variant rounded focus:ring-primary focus:ring-offset-background bg-transparent transition-colors cursor-pointer"
-                    />
-                    <span className={`group-hover:text-primary transition-colors ${selectedLight === "Bright Indirect" ? "text-primary font-medium" : ""}`}>
-                      {labels.brightIndirect}
-                    </span>
-                  </label>
-                </li>
-                <li>
-                  <label className="flex items-center gap-3 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={selectedLight === "Medium Light"}
-                      onChange={() => setSelectedLight("Medium Light")}
-                      className="form-checkbox h-4.5 w-4.5 text-primary border-outline-variant rounded focus:ring-primary focus:ring-offset-background bg-transparent transition-colors cursor-pointer"
-                    />
-                    <span className={`group-hover:text-primary transition-colors ${selectedLight === "Medium Light" ? "text-primary font-medium" : ""}`}>
-                      {labels.mediumLight}
-                    </span>
-                  </label>
-                </li>
-                <li>
-                  <label className="flex items-center gap-3 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={selectedLight === "Low Light Tolerant"}
-                      onChange={() => setSelectedLight("Low Light Tolerant")}
-                      className="form-checkbox h-4.5 w-4.5 text-primary border-outline-variant rounded focus:ring-primary focus:ring-offset-background bg-transparent transition-colors cursor-pointer"
-                    />
-                    <span className={`group-hover:text-primary transition-colors ${selectedLight === "Low Light Tolerant" ? "text-primary font-medium" : ""}`}>
-                      {labels.lowLight}
-                    </span>
-                  </label>
-                </li>
-              </ul>
-            </div>
-          </aside>
+            const largePlant = chunk[0];
+            const smallPlants = chunk.slice(1); // can be 1 or 2 items
 
-          {/* Main Product Area */}
-          <div className="flex-1 w-full">
-            {/* Mobile/Top Controls */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-6 border-b border-outline-variant/10 pb-6">
-              {/* Category Chips scrollable (Mobile friendly) */}
-              <div className="flex gap-3 overflow-x-auto scrollbar-none w-full sm:w-auto pb-2 sm:pb-0">
-                <button
-                  onClick={() => setSelectedCategory("All")}
-                  className={`px-5 py-2 rounded-full font-sans text-xs uppercase tracking-widest whitespace-nowrap transition-all duration-300 cursor-pointer ${
-                    selectedCategory === "All"
-                      ? "bg-primary text-white shadow-md"
-                      : "bg-surface-container-low border border-outline-variant/30 text-primary hover:bg-surface-container-high"
-                  }`}
-                >
-                  {labels.all}
-                </button>
-                <button
-                  onClick={() => setSelectedCategory("Rare Finds")}
-                  className={`px-5 py-2 rounded-full font-sans text-xs uppercase tracking-widest whitespace-nowrap transition-all duration-300 cursor-pointer ${
-                    selectedCategory === "Rare Finds"
-                      ? "bg-primary text-white shadow-md"
-                      : "bg-surface-container-low border border-outline-variant/30 text-primary hover:bg-surface-container-high"
-                  }`}
-                >
-                  {labels.rareFinds}
-                </button>
-                <button
-                  onClick={() => setSelectedCategory("Interior Staples")}
-                  className={`px-5 py-2 rounded-full font-sans text-xs uppercase tracking-widest whitespace-nowrap transition-all duration-300 cursor-pointer ${
-                    selectedCategory === "Interior Staples"
-                      ? "bg-primary text-white shadow-md"
-                      : "bg-surface-container-low border border-outline-variant/30 text-primary hover:bg-surface-container-high"
-                  }`}
-                >
-                  {labels.interiorStaples}
-                </button>
+            const largeCard = (
+              <div
+                className="md:col-span-8 group relative rounded-xl overflow-hidden glass-panel flex flex-col md:flex-row shadow-[0_4px_40px_rgba(0,38,26,0.06)] hover:shadow-[0_12px_60px_rgba(0,38,26,0.12)] hover:-translate-y-1 transition-all duration-500 cursor-pointer"
+                onClick={() => setSelectedPlant(largePlant)}
+              >
+                <div className="w-full md:w-1/2 h-[300px] md:h-[500px] relative overflow-hidden bg-surface-container">
+                  <img
+                    src={largePlant.images[0] || "/placeholder.jpg"}
+                    alt={largePlant.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                </div>
+                <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+                  {largePlant.category && largePlant.category[0] && (
+                    <div className="inline-flex items-center justify-center px-4 py-1 rounded-full bg-secondary-container/50 text-primary text-label-sm font-sans uppercase tracking-widest mb-6 w-max font-semibold">
+                      {largePlant.category[0]}
+                    </div>
+                  )}
+                  <h3 className="text-headline-md font-serif text-primary mb-4">
+                    {largePlant.name}
+                  </h3>
+                  <p className="text-body-md font-sans text-on-surface-variant mb-8 line-clamp-3 font-light">
+                    {largePlant.description}
+                  </p>
+                  <div className="mt-auto flex items-center justify-between">
+                    <span className="text-body-lg font-sans text-primary font-medium">
+                      Rs. {largePlant.price.toLocaleString()}
+                    </span>
+                    <button className="w-12 h-12 rounded-full border border-primary flex items-center justify-center text-primary hover:bg-primary hover:text-white active:scale-95 transition-all duration-300">
+                      <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0" }}>add</span>
+                    </button>
+                  </div>
+                </div>
               </div>
+            );
 
-              {/* Sorting Dropdown */}
-              <div className="flex items-center gap-3 text-on-surface-variant font-sans text-xs uppercase tracking-widest shrink-0 w-full sm:w-auto justify-end font-semibold">
-                <span className="font-light">{labels.sortBy}</span>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-transparent border-none text-primary font-semibold focus:ring-0 cursor-pointer uppercase py-1 pr-8 pl-0 text-xs hover:text-surface-tint transition-colors"
-                >
-                  <option value="Curated">{labels.sortCurated}</option>
-                  <option value="LowToHigh">{labels.sortLowHigh}</option>
-                  <option value="HighToLow">{labels.sortHighLow}</option>
-                </select>
+            const smallCardsCol = smallPlants.length > 0 && (
+              <div className="md:col-span-4 flex flex-col gap-gutter">
+                {smallPlants.map((plant) => (
+                  <div
+                    key={plant.id}
+                    className="flex-1 group relative rounded-xl overflow-hidden glass-panel shadow-[0_4px_40px_rgba(0,38,26,0.06)] hover:shadow-[0_12px_60px_rgba(0,38,26,0.12)] hover:-translate-y-1 transition-all duration-500 cursor-pointer flex flex-col"
+                    onClick={() => setSelectedPlant(plant)}
+                  >
+                    <div className="h-[250px] relative overflow-hidden bg-surface-container shrink-0">
+                      <img
+                        src={plant.images[0] || "/placeholder.jpg"}
+                        alt={plant.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                      />
+                    </div>
+                    <div className="p-6 flex flex-col grow justify-between">
+                      <h4 className="text-body-lg font-serif text-primary font-medium mb-2">
+                        {plant.name}
+                      </h4>
+                      <div className="flex items-center justify-between mt-auto">
+                        <span className="text-body-md font-sans text-on-surface-variant font-light">
+                          Rs. {plant.price.toLocaleString()}
+                        </span>
+                        <span className="material-symbols-outlined text-outline-variant hover:text-primary hover:scale-110 active:scale-95 transition-all cursor-pointer">
+                          favorite
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
+            );
 
-            {/* Product Grid */}
-            <AnimatePresence mode="wait">
-              {sortedPlants.length === 0 ? (
-                <motion.div
-                  key="no-plants"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="text-center text-on-surface-variant font-sans py-20 font-light"
-                >
-                  {labels.noPlants}
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="plants-grid"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter"
-                >
-                  {sortedPlants.map((plant) => (
-                    <PlantCard
-                      key={plant.id}
-                      plant={plant}
-                      onClick={() => setSelectedPlant(plant)}
-                    />
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+            return (
+              <motion.div
+                key={chunkIdx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="grid grid-cols-1 md:grid-cols-12 gap-gutter"
+              >
+                {isEvenRow ? (
+                  <>
+                    {largeCard}
+                    {smallCardsCol}
+                  </>
+                ) : (
+                  <>
+                    {smallCardsCol}
+                    {largeCard}
+                  </>
+                )}
+              </motion.div>
+            );
+          })}
         </div>
       )}
 
