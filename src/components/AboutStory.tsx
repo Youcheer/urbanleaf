@@ -14,7 +14,7 @@ export const AboutStory = () => {
         storyTitle: "අපගේ කතාව (Our Story)",
         storyPara: '"Urban Leaf" අපගේ පාරිභෝගිකයින් වෙත උසස් තත්ත්වයේ සහ සෞඛ්‍ය සම්පන්න පැලෑටි සැපයීම සඳහා කැපවී සිටී. ශ්‍රී ලංකාවේ ගණේමුල්ල පදනම් කරගත් අපි, සොබාදහමේ සුවදායී ශක්තිය ඔබේ නිවසට ළඟා කිරීමට උද්‍යෝගයෙන් කටයුතු කරන විශ්වාසදායක පැල තවානක් සහ ගෙවතු වගා වෙළඳසැලකි.',
         collectionTitle: "අපගේ එකතුව (Our Collection)",
-        collectionPara: "අපි Red Feather, Rima Red, සහ Greenflash වැනි විශිෂ්ටතම ඇන්තුරියම් (Anthurium) වර්ග කෙරෙහි විශේෂ අවධානයක් යොමු කරමින්, සජීවී සහ හොඳින් රැකබලා ගත් ගෘහස්ථ පැලෑටි සැපයීම සඳහා විශේෂීකරණය වී සිටිමු. ඔබ අලංකාර මල් සහිත පැල හෝ ආකර්ශනීය පත්‍ර සහිත පැල සෙවුවද, අපගේ ප්‍රවේශමෙන් තෝරාගත් පැලෑටි ඔබේ නවීන නාගරික අවකාශය අලංකාර කරන සජීවී මූර්තීන් ලෙස ක්‍රියා කරයි.",
+        collectionPara: "අපි විවිධාකාර සහ නිරන්තරයෙන් වර්ධනය වන, සජීවී මෙන්ම හොඳින් රැකබලා ගත් ගෘහස්ථ පැලෑටි එකතුවක් සැපයීම සඳහා විශේෂීකරණය වී සිටිමු. විශිෂ්ටතම ඇන්තුරියම් (Anthuriums) වර්ග සහ අනෙකුත් සශ්‍රීක උද්භිද පැලෑටි කෙරෙහි දැඩි අවධානයක් යොමු කරමින්, ඕනෑම සෞන්දර්යාත්මක රුචිකත්වයකට ගැළපෙන පරිදි පුළුල් පරාසයක තේරීම් අපි පිරිනමන්නෙමු. ඔබ අලංකාර මල් සහිත පැල හෝ ආකර්ශනීය පත්‍ර සහිත පැල සෙවුවද, අපගේ ප්‍රවේශමෙන් තෝරාගත් පැලෑටි ඔබේ නවීන නාගරික අවකාශය අලංකාර කරන සජීවී මූර්තීන් ලෙස ක්‍රියා කරයි.",
         whyTitle: "ඇයි අපව තෝරාගත යුත්තේ? (Why Choose Us)",
         benefits: [
           {
@@ -42,7 +42,7 @@ export const AboutStory = () => {
       storyTitle: "Our Story",
       storyPara: '"Urban Leaf" is dedicated to providing high-quality, healthy plants to our customers. Based in Ganemulla, Sri Lanka, we are a trusted nursery and gardening store passionate about bringing the restorative power of nature into your home.',
       collectionTitle: "Our Collection",
-      collectionPara: "We specialize in vibrant, well-nurtured indoor plants, with a special focus on premium Anthurium varieties like the Red Feather, Rima Red, and Greenflash. Whether you are looking for plants with beautiful blooms or striking foliage, our carefully curated botanical specimens act as living sculptures to elevate your modern urban space.",
+      collectionPara: "We specialize in a diverse and ever-growing collection of vibrant, well-nurtured indoor plants. With a strong focus on a wide variety of premium Anthuriums and other lush botanicals, we offer an extensive range of choices to suit any aesthetic. Whether you are looking for plants with beautiful blooms or striking foliage, our carefully curated botanical specimens act as living sculptures to elevate your modern urban space.",
       whyTitle: "Why Choose Us?",
       benefits: [
         {
