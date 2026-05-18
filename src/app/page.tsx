@@ -11,20 +11,24 @@ import { useLanguage } from "../context/LanguageContext";
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Store",
-  name: "Urban Leaf",
+  name: "Urban Leaf - Anthurium Plant Nursery",
   url: "https://urbanleaf.vercel.app/",
   description:
-    "Buy healthy, beautiful Anthuriums and premium indoor plants online at Urban Leaf Sri Lanka. Island-wide courier delivery available.",
+    "Premium Anthurium and garden plant nursery in Ganemulla, Gampaha, Sri Lanka.",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Ganemulla",
-    addressRegion: "Western Province",
+    addressRegion: "Gampaha, Western Province",
     addressCountry: "LK",
   },
   telephone: "+94718546219",
   priceRange: "$$",
   sameAs: ["https://www.facebook.com/urbanleafsl/"],
-  hasMap: "https://maps.google.com/?q=Ganemulla,+Sri+Lanka",
+  hasMap: "https://maps.google.com/?q=Ganemulla,+Gampaha,+Sri+Lanka",
+  areaServed: {
+    "@type": "Country",
+    name: "Sri Lanka",
+  },
 };
 
 

@@ -9,38 +9,42 @@ const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfa
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://urbanleaf.vercel.app"),
-  title: "Urban Leaf | Premium Anthuriums & Indoor Plants Sri Lanka",
+  title: "Urban Leaf | Premium Anthurium Nursery Gampaha, Sri Lanka",
   description:
-    "Buy healthy, beautiful Anthuriums and premium indoor plants online at Urban Leaf Sri Lanka. Island-wide courier delivery available. Fresh green luxury for your space.",
+    "Discover high-quality, beautiful Anthuriums and garden plants at Urban Leaf in Ganemulla, Gampaha. Island-wide courier delivery available across Sri Lanka. Bring nature home.",
   alternates: {
     canonical: "https://urbanleaf.vercel.app/",
   },
   verification: {
-    google: "PLACEHOLDER_FOR_GOOGLE_VERIFICATION_CODE",
+    google: "d16e0b46446fa13f",
   },
   openGraph: {
     type: "website",
     url: "https://urbanleaf.vercel.app/",
     siteName: "Urban Leaf",
-    title: "Urban Leaf | Premium Anthuriums & Indoor Plants Sri Lanka",
+    title: "Urban Leaf | Premium Anthurium Nursery Gampaha, Sri Lanka",
     description:
-      "Buy healthy, beautiful Anthuriums and premium indoor plants online at Urban Leaf Sri Lanka. Island-wide courier delivery available. Fresh green luxury for your space.",
+      "Discover high-quality, beautiful Anthuriums and garden plants at Urban Leaf in Ganemulla, Gampaha. Island-wide courier delivery available across Sri Lanka. Bring nature home.",
     locale: "en_LK",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Urban Leaf | Premium Anthuriums & Indoor Plants Sri Lanka",
+    title: "Urban Leaf | Premium Anthurium Nursery Gampaha, Sri Lanka",
     description:
-      "Buy healthy, beautiful Anthuriums and premium indoor plants online at Urban Leaf Sri Lanka. Island-wide courier delivery available.",
+      "Discover high-quality Anthuriums and garden plants at Urban Leaf, Ganemulla, Gampaha. Island-wide delivery across Sri Lanka.",
   },
   keywords: [
     "Urban Leaf",
-    "Anthuriums Sri Lanka",
-    "buy anthurium plants",
-    "indoor plants Sri Lanka",
-    "premium plants Colombo",
-    "plant shop Sri Lanka",
+    "Urban Leaf Sri Lanka",
+    "Anthurium nursery Sri Lanka",
+    "Anthuriums Gampaha",
+    "Anthuriums Ganemulla",
+    "buy anthurium plants Sri Lanka",
+    "garden plants Gampaha",
+    "plant nursery Ganemulla",
     "anthurium delivery Sri Lanka",
+    "garden plants Sri Lanka",
+    "premium anthurium plants",
     "Ganemulla nursery",
   ],
 };
