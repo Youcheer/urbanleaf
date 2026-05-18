@@ -1,16 +1,131 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-primary: #1a4a28;
-  --color-brand-secondary: #3b8554;
-  --color-brand-accent: #153b20;
-  --color-brand-bg: #f4f7f4;
-  --color-brand-text: #1a4a28;
+  /* Brand Theme Colors */
+  --color-primary: #00261a;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #0f3d2e;
+  --color-on-primary-container: #7ba894;
+  --color-inverse-primary: #a2d1bb;
+  
+  --color-secondary: #566342;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #d7e5bb;
+  --color-on-secondary-container: #5a6745;
+  
+  --color-tertiary: #20211f;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #353634;
+  --color-on-tertiary-container: #9f9e9c;
+  
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+  
+  --color-background: #fcf9f8;
+  --color-on-background: #1b1b1c;
+  
+  --color-surface: #fcf9f8;
+  --color-on-surface: #1b1b1c;
+  --color-surface-variant: #e5e2e1;
+  --color-on-surface-variant: #414944;
+  --color-surface-dim: #dcd9d9;
+  --color-surface-bright: #fcf9f8;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f6f3f2;
+  --color-surface-container: #f0eded;
+  --color-surface-container-high: #eae7e7;
+  --color-surface-container-highest: #e5e2e1;
+  --color-surface-tint: #3b6756;
+  
+  --color-inverse-surface: #303030;
+  --color-inverse-on-surface: #f3f0ef;
+  --color-outline: #717974;
+  --color-outline-variant: #c0c8c3;
+  
+  --color-primary-fixed: #beedd7;
+  --color-primary-fixed-dim: #a2d1bb;
+  --color-on-primary-fixed: #002116;
+  --color-on-primary-fixed-variant: #234f3f;
+  --color-secondary-fixed: #dae8be;
+  --color-secondary-fixed-dim: #becca3;
+  --color-on-secondary-fixed: #141f05;
+  --color-on-secondary-fixed-variant: #3f4b2c;
+  --color-tertiary-fixed: #e4e2df;
+  --color-tertiary-fixed-dim: #c8c6c4;
+  --color-on-tertiary-fixed: #1b1c1a;
+  --color-on-tertiary-fixed-variant: #474745;
+
+  /* Font Families */
+  --font-sans: var(--font-inter), sans-serif;
+  --font-serif: var(--font-playfair), serif;
+
+  /* Rounded Corners */
+  --radius-sm: 0.25rem;
+  --radius-default: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Spacing Tokens */
+  --spacing-margin-desktop: 64px;
+  --spacing-container-max: 1280px;
+  --spacing-margin-mobile: 20px;
+  --spacing-gutter: 24px;
+  --spacing-base: 8px;
+  --spacing-section-gap: 80px;
+
+  /* Premium Micro-animations & Keyframes */
+  --animate-fade-in-up: fade-in-up 0.8s ease-out forwards;
+  --animate-zoom-in: zoom-in 20s ease-out forwards;
+  --animate-slide-in-left: slide-in-left 1s ease-out forwards;
+  --animate-slide-in-right: slide-in-right 1s ease-out forwards;
+
+  @keyframes fade-in-up {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes zoom-in {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.05); }
+  }
+  @keyframes slide-in-left {
+    0% { opacity: 0; transform: translateX(-50px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slide-in-right {
+    0% { opacity: 0; transform: translateX(50px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
 }
 
 @layer base {
   body {
-    background-color: var(--color-brand-bg);
-    color: var(--color-brand-text);
+    background-color: var(--color-background);
+    color: var(--color-on-surface);
   }
 }
+
+/* Glassmorphism Stylesheet */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 32px rgba(0, 38, 26, 0.04);
+}
+
+.dark .glass-panel {
+  background: rgba(32, 33, 31, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Utility for animation delays */
+.delay-100 { animation-delay: 100ms !important; }
+.delay-200 { animation-delay: 200ms !important; }
+.delay-300 { animation-delay: 300ms !important; }

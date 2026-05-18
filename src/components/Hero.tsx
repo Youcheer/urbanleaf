@@ -2,14 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import { getPlants } from "../lib/db";
 import { useLanguage } from "../context/LanguageContext";
+import { getPlants } from "../lib/db";
 
 const DEFAULT_HERO_IMAGES = [
-  "https://images.unsplash.com/photo-1453904300235-0f2f60b15b5d?auto=format&fit=crop&q=80&w=1200",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuA1WWZZ_Es3vP2_1o4-H8EeXdq0FKtjfY6JkkoQgO3fOYJsLe7I9Ef02pSUhIvMq9u4oqZ8HlWr06lEaXgb7WM6QxEiDL89RPhlcGO_ECnv-H-aLVZfXuE9B1Eo-0FR5VJr0_m3YSXHYr2XxnPVd3w3QR5DorIrQSLKrgR7bs0Kq8MLSDEFsCTBhwxrhFfAQiInl7_xpGr3OR-pZI5e8eFpk3JTl9N1mDBdL3OaolTl9Zo_PVlWJaJYZnX_8g52d28827YkDxczZOUQ",
   "https://images.unsplash.com/photo-1614594975525-e45190c55d40?auto=format&fit=crop&q=80&w=1200",
-  "https://images.unsplash.com/photo-1597055905091-88981f337f7a?auto=format&fit=crop&q=80&w=1200",
+  "https://images.unsplash.com/photo-1597055905091-88981f337f7a?auto=format&fit=crop&q=80&w=1200"
 ];
 
 export const Hero = () => {
@@ -22,21 +21,21 @@ export const Hero = () => {
       try {
         const plants = await getPlants();
         let allImages: string[] = [];
-        plants.forEach(p => {
+        plants.forEach((p) => {
           if (p.images && p.images.length > 0) {
             allImages.push(p.images[0]);
-          } else if ((p as any).image) {
-            allImages.push((p as any).image);
           }
         });
-        
+
         const uniqueImages = Array.from(new Set(allImages)).filter(
           (img) => typeof img === "string" && img.trim() !== "" && img.startsWith("http")
         );
-        
+
         if (uniqueImages.length > 0) {
+          // Shuffle and take up to 4 images
           const shuffled = uniqueImages.sort(() => 0.5 - Math.random());
-          setHeroImages(shuffled.slice(0, 6)); // Keep up to 6 images for the slider
+          // Always ensure the beautiful default crimson anthurium is in the list
+          setHeroImages([DEFAULT_HERO_IMAGES[0], ...shuffled.slice(0, 3)]);
         } else {
           setHeroImages(DEFAULT_HERO_IMAGES);
         }
@@ -52,119 +51,86 @@ export const Hero = () => {
     if (heroImages.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
-    }, 5000); 
+    }, 6000);
     return () => clearInterval(interval);
   }, [heroImages]);
 
-  const renderDesktopImages = () => {
-    if (heroImages.length === 1) {
-      return (
-        <div className="w-full h-full relative">
-          <AnimatePresence initial={false}>
-            <motion.img
-              key={`d-0-${currentImageIndex}`}
-              src={heroImages[0]}
-              className="absolute inset-0 w-full h-full object-cover object-[center_30%]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.5 }}
-            />
-          </AnimatePresence>
-        </div>
-      );
-    } else if (heroImages.length === 2) {
-      return [0, 1].map((offset) => (
-        <div key={offset} className="w-1/2 h-full relative">
-          <AnimatePresence initial={false}>
-            <motion.img
-              key={`d-${offset}-${currentImageIndex}`}
-              src={heroImages[(currentImageIndex + offset) % heroImages.length]}
-              className="absolute inset-0 w-full h-full object-cover object-[center_30%]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.5 }}
-            />
-          </AnimatePresence>
-        </div>
-      ));
-    } else {
-      return [0, 1, 2].map((offset) => (
-        <div key={offset} className="w-1/3 h-full relative">
-          <AnimatePresence initial={false}>
-            <motion.img
-              key={`d-${offset}-${currentImageIndex}`}
-              src={heroImages[(currentImageIndex + offset) % heroImages.length]}
-              className="absolute inset-0 w-full h-full object-cover object-[center_30%]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.5 }}
-            />
-          </AnimatePresence>
-        </div>
-      ));
-    }
-  };
-
   return (
-    <section id="home" className="relative min-h-[90vh] md:h-screen flex flex-col justify-end items-center overflow-hidden bg-black">
-      {/* Dynamic Grid Image Display */}
-      <div className="absolute inset-0 z-0 flex">
-        {heroImages.length > 0 ? (
-          <>
-            {/* Mobile View: Always 1 image to save space */}
-            <div className="w-full h-full md:hidden relative">
-              <AnimatePresence initial={false}>
-                <motion.img
-                  key={`mobile-${currentImageIndex}`}
-                  src={heroImages[currentImageIndex]}
-                  className="absolute inset-0 w-full h-full object-cover object-[center_30%]"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 1.5 }}
-                />
-              </AnimatePresence>
-            </div>
-
-            {/* Desktop View: Dynamic columns (1, 2, or 3 images side-by-side) */}
-            <div className="hidden md:flex w-full h-full">
-              {renderDesktopImages()}
-            </div>
-          </>
-        ) : (
-          <div className="absolute inset-0 w-full h-full bg-[#1a4a28]/20 animate-pulse" />
-        )}
+    <header
+      id="home"
+      className="relative w-full h-[90vh] min-h-[650px] md:h-screen flex items-center justify-center overflow-hidden bg-surface-container-low"
+    >
+      {/* Background Image Slider with continuous Zoom-In effect */}
+      <div className="absolute inset-0 z-0">
+        <AnimatePresence initial={false}>
+          {heroImages.length > 0 ? (
+            <motion.div
+              key={currentImageIndex}
+              className="absolute inset-0 w-full h-full"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.95 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 2.0, ease: "easeInOut" }}
+            >
+              <motion.img
+                src={heroImages[currentImageIndex]}
+                alt="Botanical Background"
+                className="w-full h-full object-cover object-center"
+                initial={{ scale: 1.0 }}
+                animate={{ scale: 1.06 }}
+                transition={{ duration: 7.0, ease: "easeOut" }}
+              />
+            </motion.div>
+          ) : (
+            <div className="absolute inset-0 bg-[#00261a]/10 animate-pulse" />
+          )}
+        </AnimatePresence>
         
-        {/* Premium Gradient Overlays for readable text */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/90 z-10" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/20 to-black/80 z-10" />
+        {/* Soft luxury editorial gradient overlays */}
+        <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/40 to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-80 z-10" />
       </div>
 
-      {/* Hero Text Content - Overlaid at the bottom */}
-      <div className="relative z-20 max-w-5xl mx-auto px-6 w-full pb-20 md:pb-28 text-center text-white">
+      {/* Hero Content - Luxury Glassmorphic Center Card */}
+      <div className="relative z-20 w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop flex flex-col items-start justify-center">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
+          transition={{ duration: 1.0, ease: "easeOut" }}
+          className="max-w-2xl glass-panel p-8 md:p-12 rounded-xl"
         >
-          <h1 className="font-playfair text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 drop-shadow-2xl text-white">
-            {t("heroHeadline")}
-          </h1>
-          <p className="text-base md:text-xl lg:text-2xl text-gray-200 mb-10 max-w-3xl mx-auto leading-relaxed drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] font-light tracking-wide">
-            {t("heroSubheadline")}
-          </p>
-          <a
-            href="#collection"
-            className="inline-flex items-center gap-3 bg-white text-[#1a4a28] px-10 py-4 md:py-5 rounded-full font-bold text-base md:text-lg hover:bg-[#3b8554] hover:text-white transition-all transform hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.2)]"
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-display-lg-mobile md:text-display-lg font-serif text-primary mb-6 leading-tight"
           >
-            {t("heroCta")}
-            <ArrowRight className="w-5 h-5" />
-          </a>
+            {t("heroHeadline")}
+          </motion.h1>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-body-lg font-sans text-on-surface-variant mb-8 max-w-lg leading-relaxed"
+          >
+            {t("heroSubheadline")}
+          </motion.p>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            <a
+              href="#collection"
+              className="inline-block bg-primary text-on-primary px-8 py-4 rounded-default hover:bg-surface-tint active:scale-95 transition-all duration-300 text-label-md font-sans font-semibold uppercase tracking-widest shadow-[0_8px_32px_rgba(0,38,26,0.15)]"
+            >
+              {t("heroCta")}
+            </a>
+          </motion.div>
         </motion.div>
       </div>
-    </section>
+    </header>
   );
 };

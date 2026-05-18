@@ -1,20 +1,36 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ShoppingCart } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
-import { motion } from "framer-motion";
 
 export const Navbar = () => {
   const { cart, setIsCartOpen } = useCart();
   const { language, setLanguage, t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      setScrolled(window.scrollY > 20);
+      
+      // Determine which section is currently active
+      const sections = ["home", "collection", "about"];
+      const scrollPosition = window.scrollY + 100;
+      
+      for (const section of sections) {
+        const el = document.getElementById(section);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
     };
+    
     window.addEventListener("scroll", handleScroll);
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
@@ -23,39 +39,72 @@ export const Navbar = () => {
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled 
-          ? "bg-white/95 backdrop-blur-md shadow-sm py-3 border-b border-gray-100" 
-          : "bg-gradient-to-b from-black/80 to-transparent py-6"
+    <nav
+      id="main-nav"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 w-full border-b backdrop-blur-xl ${
+        scrolled
+          ? "py-4 bg-white/90 dark:bg-tertiary/90 border-outline-variant/20 shadow-[0_8px_30px_rgba(0,38,26,0.08)]"
+          : "py-6 bg-white/60 dark:bg-tertiary/60 border-white/20 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.04)]"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <a href="#home" className="flex items-center gap-2 cursor-pointer relative group">
-          {/* subtle white glow behind logo only when not scrolled for better contrast */}
-          <div className={`absolute inset-0 bg-white/70 blur-xl rounded-full transition-opacity duration-500 ${scrolled ? 'opacity-0' : 'opacity-100'}`} />
-          <img src="/logo.png" alt="Urban Leaf Logo" className="h-12 md:h-16 w-auto object-contain relative z-10" />
+      <div className="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+        {/* Brand Logo */}
+        <a
+          href="#home"
+          className="text-headline-md font-serif font-bold text-primary dark:text-primary-fixed tracking-tight hover:opacity-80 transition-opacity"
+        >
+          Urban Leaf
         </a>
 
-        {/* Navigation links translated */}
-        <div className={`hidden md:flex items-center gap-8 font-semibold transition-colors duration-500 ${scrolled ? 'text-[#1a4a28]' : 'text-white'}`}>
-          <a href="#home" className={`transition-colors drop-shadow-lg ${scrolled ? 'hover:text-[#3b8554] drop-shadow-none' : 'hover:text-gray-300'}`}>{t("home")}</a>
-          <a href="#collection" className={`transition-colors drop-shadow-lg ${scrolled ? 'hover:text-[#3b8554] drop-shadow-none' : 'hover:text-gray-300'}`}>{t("collection")}</a>
-          <a href="#about" className={`transition-colors drop-shadow-lg ${scrolled ? 'hover:text-[#3b8554] drop-shadow-none' : 'hover:text-gray-300'}`}>{t("aboutUs")}</a>
+        {/* Navigation Links with dot indicators */}
+        <div className="hidden md:flex space-x-8 items-center">
+          <a
+            href="#home"
+            className={`text-label-md font-sans uppercase tracking-widest relative py-1 transition-colors duration-300 scale-98 active:scale-95 ease-out ${
+              activeSection === "home"
+                ? "text-primary dark:text-primary-fixed font-semibold"
+                : "text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed"
+            }`}
+          >
+            {t("home")}
+            {activeSection === "home" && (
+              <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-primary dark:bg-primary-fixed rounded-full" />
+            )}
+          </a>
+          <a
+            href="#collection"
+            className={`text-label-md font-sans uppercase tracking-widest relative py-1 transition-colors duration-300 scale-98 active:scale-95 ease-out ${
+              activeSection === "collection"
+                ? "text-primary dark:text-primary-fixed font-semibold"
+                : "text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed"
+            }`}
+          >
+            {t("collection")}
+            {activeSection === "collection" && (
+              <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-primary dark:bg-primary-fixed rounded-full" />
+            )}
+          </a>
+          <a
+            href="#about"
+            className={`text-label-md font-sans uppercase tracking-widest relative py-1 transition-colors duration-300 scale-98 active:scale-95 ease-out ${
+              activeSection === "about"
+                ? "text-primary dark:text-primary-fixed font-semibold"
+                : "text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed"
+            }`}
+          >
+            {t("aboutUs")}
+            {activeSection === "about" && (
+              <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-primary dark:bg-primary-fixed rounded-full" />
+            )}
+          </a>
         </div>
 
-        <div className="flex items-center gap-4">
-          {/* Elegant Language Switcher Button */}
+        {/* Right Nav Options (Language and Cart) */}
+        <div className="flex items-center space-x-6">
+          {/* Language Switcher */}
           <button
             onClick={() => setLanguage(language === "en" ? "si" : "en")}
-            className={`px-3.5 py-1.5 rounded-full border transition-all duration-500 text-xs font-bold font-sans tracking-wide backdrop-blur-sm active:scale-95 shadow-lg ${
-              scrolled 
-                ? "border-[#1a4a28]/20 text-[#1a4a28] hover:border-[#3b8554] hover:text-[#3b8554] bg-white/50" 
-                : "border-white/60 text-white hover:border-white hover:bg-white/20 bg-black/40"
-            }`}
+            className="text-label-sm font-sans uppercase tracking-widest text-on-surface-variant hover:text-primary transition-all active:scale-95 px-3 py-1.5 rounded-full border border-outline-variant/30 bg-surface-container-lowest/50 backdrop-blur-sm"
           >
             {language === "en" ? "සිංහල 🇱🇰" : "English 🇬🇧"}
           </button>
@@ -63,21 +112,19 @@ export const Navbar = () => {
           {/* Cart Icon */}
           <button
             onClick={() => setIsCartOpen(true)}
-            className={`relative p-2 transition-colors duration-500 drop-shadow-lg ${
-              scrolled ? 'text-[#1a4a28] hover:text-[#3b8554] drop-shadow-none' : 'text-white hover:text-gray-200'
-            }`}
+            className="text-primary hover:scale-110 active:scale-95 transition-all duration-200 relative p-1"
           >
-            <ShoppingCart className="w-6 h-6" />
+            <span className="material-symbols-outlined block text-[28px]" style={{ fontVariationSettings: "'FILL' 0" }}>
+              shopping_cart
+            </span>
             {totalItems > 0 && (
-              <span className={`absolute top-0 right-0 text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold shadow-sm ${
-                scrolled ? 'bg-[#3b8554] text-white' : 'bg-white text-[#1a4a28]'
-              }`}>
+              <span className="absolute -top-1.5 -right-1.5 bg-primary text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold shadow-[0_2px_8px_rgba(0,38,26,0.2)]">
                 {totalItems}
               </span>
             )}
           </button>
         </div>
       </div>
-    </motion.nav>
+    </nav>
   );
 };

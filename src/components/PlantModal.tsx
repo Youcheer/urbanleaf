@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, Sun, Droplets, ThermometerSun, ShoppingCart } from "lucide-react";
 import { Plant } from "../lib/data";
 import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
@@ -32,22 +31,24 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
           exit={{ y: 50, opacity: 0, scale: 0.95 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-white rounded-[2rem] shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col md:flex-row relative max-h-[90vh]"
+          className="bg-white dark:bg-tertiary rounded-[1.5rem] shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col md:flex-row relative max-h-[90vh] border border-outline-variant/20"
         >
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-50 bg-white/80 backdrop-blur-sm p-2 rounded-full shadow-lg text-gray-500 hover:text-red-500 transition-colors"
+            className="absolute top-4 right-4 z-50 bg-white/90 dark:bg-tertiary/90 backdrop-blur-sm p-2.5 rounded-full shadow-lg text-primary hover:text-error transition-colors border border-outline-variant/20 active:scale-90"
           >
-            <X className="w-6 h-6" />
+            <span className="material-symbols-outlined block text-lg font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
+              close
+            </span>
           </button>
 
           {/* Left: Image Gallery */}
-          <div className="w-full md:w-1/2 relative bg-gray-100 min-h-[40vh] md:min-h-full">
+          <div className="w-full md:w-1/2 relative bg-surface-container min-h-[40vh] md:min-h-full">
             <AnimatePresence mode="wait">
               <motion.img
                 key={currentImage}
-                initial={{ opacity: 0, scale: 1.05 }}
+                initial={{ opacity: 0, scale: 1.03 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
@@ -59,11 +60,21 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
             
             {images.length > 1 && (
               <>
-                <button onClick={handlePrev} className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-lg text-[#1a4a28] hover:bg-white transition-colors">
-                  <ChevronLeft className="w-6 h-6" />
+                <button
+                  onClick={handlePrev}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2.5 rounded-full shadow-lg text-primary hover:bg-white active:scale-90 transition-all"
+                >
+                  <span className="material-symbols-outlined block font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
+                    chevron_left
+                  </span>
                 </button>
-                <button onClick={handleNext} className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-lg text-[#1a4a28] hover:bg-white transition-colors">
-                  <ChevronRight className="w-6 h-6" />
+                <button
+                  onClick={handleNext}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2.5 rounded-full shadow-lg text-primary hover:bg-white active:scale-90 transition-all"
+                >
+                  <span className="material-symbols-outlined block font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
+                    chevron_right
+                  </span>
                 </button>
                 {/* Dots */}
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
@@ -82,61 +93,73 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
           </div>
 
           {/* Right: Details */}
-          <div className="w-full md:w-1/2 p-8 md:p-12 overflow-y-auto flex flex-col">
-            <h2 className="font-playfair text-4xl font-bold text-[#1a4a28] mb-2 uppercase">{plant.name}</h2>
-            <p className="text-gray-400 italic text-lg mb-6">{plant.scientificName}</p>
+          <div className="w-full md:w-1/2 p-8 md:p-12 overflow-y-auto flex flex-col bg-background/50 dark:bg-tertiary/30">
+            <h2 className="font-serif text-3xl font-bold text-primary mb-2 leading-tight uppercase">{plant.name}</h2>
+            <p className="text-on-surface-variant/70 italic text-base mb-6 font-sans font-light">{plant.scientificName}</p>
             
-            <p className="text-3xl font-bold text-[#3b8554] mb-8">
+            <p className="text-3xl font-sans font-semibold text-primary mb-8">
               LKR {plant.price.toLocaleString()}
             </p>
 
             <div className="mb-8">
-              <h3 className="font-semibold text-[#1a4a28] mb-3 text-lg">{t("description")}</h3>
-              <p className="text-gray-600 leading-relaxed">
+              <h3 className="font-serif text-lg font-semibold text-primary mb-3">{t("description")}</h3>
+              <p className="text-on-surface-variant font-sans leading-relaxed font-light">
                 {plant.description || "A beautiful, carefully nurtured Anthurium ready to bring life and fresh air to your outdoor space."}
               </p>
             </div>
 
-            <div className="space-y-4 mb-10 bg-[#f4f7f4]/50 p-6 rounded-2xl border border-[#3b8554]/10">
-              <h3 className="font-semibold text-[#1a4a28] mb-4">{t("careInstructions")}</h3>
-              <div className="flex items-center gap-4 text-gray-700">
-                <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Sun className="w-5 h-5 text-yellow-600" />
+            {/* Care details structured in a sleek glass panel */}
+            <div className="space-y-4 mb-10 bg-white/40 dark:bg-tertiary/40 border border-outline-variant/35 p-6 rounded-xl shadow-[0_4px_24px_rgba(0,38,26,0.02)]">
+              <h3 className="font-serif text-base font-semibold text-primary mb-4">{t("careInstructions")}</h3>
+              
+              <div className="flex items-center gap-4 text-on-surface">
+                <div className="w-10 h-10 bg-secondary-container/50 rounded-full flex items-center justify-center flex-shrink-0 text-primary">
+                  <span className="material-symbols-outlined text-xl font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
+                    sunny
+                  </span>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400 font-semibold uppercase">{t("sunlight")}</p>
-                  <p className="font-medium">{plant.care.sunlight}</p>
+                  <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-semibold font-sans">{t("sunlight")}</p>
+                  <p className="font-medium font-sans text-sm">{plant.care.sunlight}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-4 text-gray-700">
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Droplets className="w-5 h-5 text-blue-600" />
+              
+              <div className="flex items-center gap-4 text-on-surface">
+                <div className="w-10 h-10 bg-secondary-container/50 rounded-full flex items-center justify-center flex-shrink-0 text-primary">
+                  <span className="material-symbols-outlined text-xl font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
+                    water_drop
+                  </span>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400 font-semibold uppercase">{t("watering")}</p>
-                  <p className="font-medium">{plant.care.watering}</p>
+                  <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-semibold font-sans">{t("watering")}</p>
+                  <p className="font-medium font-sans text-sm">{plant.care.watering}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-4 text-gray-700">
-                <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <ThermometerSun className="w-5 h-5 text-orange-600" />
+              
+              <div className="flex items-center gap-4 text-on-surface">
+                <div className="w-10 h-10 bg-secondary-container/50 rounded-full flex items-center justify-center flex-shrink-0 text-primary">
+                  <span className="material-symbols-outlined text-xl font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
+                    thermostat
+                  </span>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400 font-semibold uppercase">{t("environment")}</p>
-                  <p className="font-medium">{plant.care.environment}</p>
+                  <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-semibold font-sans">{t("environment")}</p>
+                  <p className="font-medium font-sans text-sm">{plant.care.environment}</p>
                 </div>
               </div>
             </div>
 
-            <div className="mt-auto pt-6 border-t border-gray-100">
+            <div className="mt-auto pt-6 border-t border-outline-variant/10">
               <button
                 onClick={() => {
                   addToCart(plant);
                   onClose();
                 }}
-                className="w-full bg-[#1a4a28] text-white py-4 rounded-xl font-bold hover:bg-[#3b8554] transition-colors flex justify-center items-center gap-3 text-lg"
+                className="w-full bg-primary text-on-primary py-4 rounded-default font-sans font-semibold hover:bg-surface-tint active:scale-[0.98] transition-all duration-300 flex justify-center items-center gap-3 text-base uppercase tracking-widest shadow-[0_8px_32px_rgba(0,38,26,0.1)]"
               >
-                <ShoppingCart className="w-6 h-6" />
+                <span className="material-symbols-outlined text-xl font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
+                  shopping_cart
+                </span>
                 {t("addToCart")}
               </button>
             </div>
