@@ -8,8 +8,41 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 
 export const metadata: Metadata = {
-  title: "Urban Leaf - Anthuriums & Premium Plants",
-  description: "Bring Nature Home with Urban Leaf. High quality Anthuriums and premium outdoor plants in Sri Lanka.",
+  metadataBase: new URL("https://urbanleaf.vercel.app"),
+  title: "Urban Leaf | Premium Anthuriums & Indoor Plants Sri Lanka",
+  description:
+    "Buy healthy, beautiful Anthuriums and premium indoor plants online at Urban Leaf Sri Lanka. Island-wide courier delivery available. Fresh green luxury for your space.",
+  alternates: {
+    canonical: "https://urbanleaf.vercel.app/",
+  },
+  verification: {
+    google: "PLACEHOLDER_FOR_GOOGLE_VERIFICATION_CODE",
+  },
+  openGraph: {
+    type: "website",
+    url: "https://urbanleaf.vercel.app/",
+    siteName: "Urban Leaf",
+    title: "Urban Leaf | Premium Anthuriums & Indoor Plants Sri Lanka",
+    description:
+      "Buy healthy, beautiful Anthuriums and premium indoor plants online at Urban Leaf Sri Lanka. Island-wide courier delivery available. Fresh green luxury for your space.",
+    locale: "en_LK",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Urban Leaf | Premium Anthuriums & Indoor Plants Sri Lanka",
+    description:
+      "Buy healthy, beautiful Anthuriums and premium indoor plants online at Urban Leaf Sri Lanka. Island-wide courier delivery available.",
+  },
+  keywords: [
+    "Urban Leaf",
+    "Anthuriums Sri Lanka",
+    "buy anthurium plants",
+    "indoor plants Sri Lanka",
+    "premium plants Colombo",
+    "plant shop Sri Lanka",
+    "anthurium delivery Sri Lanka",
+    "Ganemulla nursery",
+  ],
 };
 
 export default function RootLayout({

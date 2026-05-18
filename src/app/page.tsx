@@ -8,6 +8,26 @@ import { AboutStory } from "../components/AboutStory";
 import { Cart } from "../components/Cart";
 import { useLanguage } from "../context/LanguageContext";
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Store",
+  name: "Urban Leaf",
+  url: "https://urbanleaf.vercel.app/",
+  description:
+    "Buy healthy, beautiful Anthuriums and premium indoor plants online at Urban Leaf Sri Lanka. Island-wide courier delivery available.",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Ganemulla",
+    addressRegion: "Western Province",
+    addressCountry: "LK",
+  },
+  telephone: "+94718546219",
+  priceRange: "$$",
+  sameAs: ["https://www.facebook.com/urbanleafsl/"],
+  hasMap: "https://maps.google.com/?q=Ganemulla,+Sri+Lanka",
+};
+
+
 export default function Home() {
   const { language, t } = useLanguage();
 
@@ -38,6 +58,12 @@ export default function Home() {
 
   return (
     <main className="min-h-screen">
+      {/* JSON-LD LocalBusiness / Store Structured Data for Google */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* Navigation Bar */}
       <Navbar />
       
