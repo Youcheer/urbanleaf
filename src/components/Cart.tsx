@@ -38,20 +38,20 @@ export const Cart = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsCartOpen(false)}
-            className="fixed inset-0 bg-black/75 backdrop-blur-[4px] z-50"
+            className="fixed inset-0 bg-black/50 backdrop-blur-[4px] z-50"
           />
           
-          {/* Cart Sidebar Panel in exact Premium Dark Forest Green from Screenshot */}
+          {/* Cart Sidebar Panel in Premium Light Sage Wash with #002115 Text */}
           <motion.div
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 26, stiffness: 220 }}
-            className="fixed top-0 right-0 h-full w-full max-w-md bg-[#002115] shadow-2xl z-50 flex flex-col border-l border-white/10"
+            className="fixed top-0 right-0 h-full w-full max-w-md bg-[#f7faf7] shadow-2xl z-50 flex flex-col border-l border-[#002115]/10 text-[#002115]"
           >
             {/* Header */}
-            <div className="p-6 border-b border-white/10 flex items-center justify-between">
-              <h2 className="font-serif text-2xl font-bold text-[#86b98d] flex items-center gap-3">
+            <div className="p-6 border-b border-[#002115]/10 flex items-center justify-between">
+              <h2 className="font-serif text-2xl font-bold text-[#002115] flex items-center gap-3">
                 <span className="material-symbols-outlined font-light text-2xl" style={{ fontVariationSettings: "'FILL' 0" }}>
                   shopping_bag
                 </span>
@@ -59,7 +59,7 @@ export const Cart = () => {
               </h2>
               <button
                 onClick={() => setIsCartOpen(false)}
-                className="p-2 text-[#86b98d] hover:text-white transition-colors rounded-full hover:bg-white/5 active:scale-90 cursor-pointer border-none bg-transparent"
+                className="p-2 text-[#002115]/75 hover:text-[#ba1a1a] transition-colors rounded-full hover:bg-[#002115]/5 active:scale-90 cursor-pointer border-none bg-transparent"
               >
                 <span className="material-symbols-outlined block text-xl font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
                   close
@@ -70,7 +70,7 @@ export const Cart = () => {
             {/* Cart Items List */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
               {cart.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center text-[#86b98d]/40 gap-4">
+                <div className="h-full flex flex-col items-center justify-center text-[#002115]/45 gap-4">
                   <span className="material-symbols-outlined text-6xl font-light opacity-30" style={{ fontVariationSettings: "'FILL' 0" }}>
                     shopping_bag
                   </span>
@@ -135,34 +135,34 @@ export const Cart = () => {
 
             {/* Footer Checkout Panel */}
             {cart.length > 0 && (
-              <div className="p-6 border-t border-white/10 bg-[#072110]/50">
+              <div className="p-6 border-t border-[#002115]/10 bg-[#ecefec]">
                 <div className="flex justify-between items-center mb-6">
-                  <span className="text-[#86b98d]/60 font-sans text-sm font-medium">{t("total")}</span>
-                  <span className="text-xl font-serif font-bold text-[#baefc0]">LKR {cartTotal.toLocaleString()}</span>
+                  <span className="text-[#002115]/60 font-sans text-sm font-medium">{t("total")}</span>
+                  <span className="text-xl font-serif font-bold text-[#002115]">LKR {cartTotal.toLocaleString()}</span>
                 </div>
                 
-                {/* Clean white inputs from Screenshot */}
+                {/* Clean white inputs with dark green borders */}
                 <div className="space-y-4 mb-6">
                   <input
                     type="text"
                     placeholder={t("yourName")}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-white/10 focus:outline-none focus:ring-1 focus:ring-[#86b98d] bg-white text-[#003314] font-sans text-sm placeholder:text-gray-400 transition-all duration-300 font-light"
+                    className="w-full px-4 py-3 rounded-xl border border-[#002115]/20 focus:outline-none focus:ring-1 focus:ring-[#002115]/30 bg-white text-[#003314] font-sans text-sm placeholder:text-gray-400 transition-all duration-300 font-light"
                   />
                   <textarea
                     placeholder={t("deliveryAddress")}
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                     rows={2}
-                    className="w-full px-4 py-3 rounded-xl border border-white/10 focus:outline-none focus:ring-1 focus:ring-[#86b98d] bg-white text-[#003314] font-sans text-sm placeholder:text-gray-400 transition-all duration-300 resize-none font-light"
+                    className="w-full px-4 py-3 rounded-xl border border-[#002115]/20 focus:outline-none focus:ring-1 focus:ring-[#002115]/30 bg-white text-[#003314] font-sans text-sm placeholder:text-gray-400 transition-all duration-300 resize-none font-light"
                   />
                 </div>
 
-                {/* CHECKOUT VIA WHATSAPP Button from Screenshot */}
+                {/* CHECKOUT VIA WHATSAPP Button (Solid Dark Contrast CTA) */}
                 <button
                   onClick={handleCheckout}
-                  className="w-full bg-[#00170f] hover:bg-[#002d1a] border border-white/15 text-white py-4 rounded-default font-sans font-bold hover:scale-[1.01] active:scale-[0.98] transition-all duration-300 flex justify-center items-center gap-2.5 uppercase tracking-[0.08em] text-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.15)] cursor-pointer"
+                  className="w-full bg-[#002115] hover:bg-[#003823] text-white py-4 rounded-default font-sans font-bold hover:scale-[1.01] active:scale-[0.98] transition-all duration-300 flex justify-center items-center gap-2.5 uppercase tracking-[0.08em] text-[12px] shadow-[0_8px_32px_rgba(0,33,20,0.12)] cursor-pointer border-none"
                 >
                   <span className="material-symbols-outlined text-lg font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
                     chat

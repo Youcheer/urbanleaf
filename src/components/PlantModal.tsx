@@ -54,7 +54,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] flex items-center justify-center p-4 md:p-6"
+        className="fixed inset-0 bg-black/50 backdrop-blur-md z-[100] flex items-center justify-center p-4 md:p-6"
       >
         <motion.div
           initial={{ y: 50, opacity: 0, scale: 0.95 }}
@@ -62,12 +62,12 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
           exit={{ y: 50, opacity: 0, scale: 0.95 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-[#002115] rounded-[1.5rem] shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col md:flex-row relative max-h-[90vh] border border-white/10"
+          className="bg-[#f7faf7] rounded-[1.5rem] shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col md:flex-row relative max-h-[90vh] border border-[#002115]/10"
         >
-          {/* Circular Outline Close Button from Screenshot */}
+          {/* Circular Outline Close Button (Light Theme aligned to #002115 text) */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-50 bg-[#002115]/60 backdrop-blur-sm w-10 h-10 rounded-full border border-white/10 text-white/70 hover:text-white hover:border-white/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
+            className="absolute top-4 right-4 z-50 bg-[#f7faf7]/85 backdrop-blur-sm w-10 h-10 rounded-full border border-[#002115]/10 text-[#002115]/70 hover:text-[#002115] hover:border-[#002115]/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
           >
             <span className="material-symbols-outlined block text-[20px] font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
               close
@@ -75,7 +75,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
           </button>
 
           {/* Left: Premium Full Height Image Gallery */}
-          <div className="w-full md:w-1/2 relative bg-[#001710] min-h-[40vh] md:min-h-full overflow-hidden flex items-center justify-center">
+          <div className="w-full md:w-1/2 relative bg-[#ecefec] min-h-[40vh] md:min-h-full overflow-hidden flex items-center justify-center">
             <AnimatePresence mode="wait">
               <motion.img
                 key={currentImage}
@@ -89,12 +89,12 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
               />
             </AnimatePresence>
 
-            {/* Left/Right Chevrons from Screenshot */}
+            {/* Left/Right Chevrons */}
             {images.length > 1 && (
               <>
                 <button
                   onClick={handlePrev}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-[#001c13]/60 hover:bg-[#001c13] text-white w-10 h-10 rounded-full flex items-center justify-center border border-white/10 active:scale-90 transition-all cursor-pointer z-10"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-[#002115] w-10 h-10 rounded-full flex items-center justify-center border border-[#002115]/10 active:scale-90 transition-all cursor-pointer z-10"
                 >
                   <span className="material-symbols-outlined block text-lg font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
                     chevron_left
@@ -102,7 +102,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                 </button>
                 <button
                   onClick={handleNext}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-[#001c13]/60 hover:bg-[#001c13] text-white w-10 h-10 rounded-full flex items-center justify-center border border-white/10 active:scale-90 transition-all cursor-pointer z-10"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-[#002115] w-10 h-10 rounded-full flex items-center justify-center border border-[#002115]/10 active:scale-90 transition-all cursor-pointer z-10"
                 >
                   <span className="material-symbols-outlined block text-lg font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
                     chevron_right
@@ -116,7 +116,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                       key={idx}
                       onClick={() => setCurrentImage(idx)}
                       className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
-                        currentImage === idx ? "bg-white scale-125" : "bg-white/45"
+                        currentImage === idx ? "bg-[#002115] scale-125" : "bg-[#002115]/30"
                       }`}
                     />
                   ))}
@@ -125,58 +125,58 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
             )}
           </div>
 
-          {/* Right: Solid Deep Forest Green Info Panel */}
-          <div className="w-full md:w-1/2 p-8 md:p-12 overflow-y-auto flex flex-col bg-[#002115] max-h-[90vh] text-white scrollbar-thin">
+          {/* Right: Premium Light Cream Info Panel with #002115 Contrast Text */}
+          <div className="w-full md:w-1/2 p-8 md:p-12 overflow-y-auto flex flex-col bg-[#f7faf7] max-h-[90vh] text-[#002115] scrollbar-thin">
             
             {/* Headline tag & names */}
             <div className="mb-2">
-              <span className="inline-block px-4 py-1.5 bg-[#173827] text-[#86b98d] font-sans text-[10px] font-semibold rounded-full tracking-widest uppercase mb-4 border border-[#86b98d]/20">
+              <span className="inline-block px-4 py-1.5 bg-[#ecefec] text-[#002115] font-sans text-[10px] font-semibold rounded-full tracking-widest uppercase mb-4 border border-[#002115]/15">
                 {tag}
               </span>
-              <h2 className="font-serif text-3xl md:text-[38px] font-bold text-white mb-2 leading-tight uppercase tracking-wide">
+              <h2 className="font-serif text-3xl md:text-[38px] font-bold text-[#002115] mb-2 leading-tight uppercase tracking-wide">
                 {plant.name}
               </h2>
             </div>
 
             {/* Divider */}
-            <div className="border-t border-white/10 my-2" />
+            <div className="border-t border-[#002115]/10 my-2" />
 
             {/* Pricing block */}
             <div className="py-2">
-              <p className="font-serif text-2xl md:text-3xl font-bold text-white tracking-wide">
+              <p className="font-serif text-2xl md:text-3xl font-bold text-[#002115] tracking-wide">
                 LKR {plant.price.toLocaleString()}
               </p>
-              <p className="text-[11px] font-sans text-[#86b98d]/50 mt-1.5 tracking-wide font-light">
+              <p className="text-[11px] font-sans text-[#002115]/60 mt-1.5 tracking-wide font-light">
                 {labels.freeShippingText}
               </p>
             </div>
 
             {/* Divider */}
-            <div className="border-t border-white/10 my-2" />
+            <div className="border-t border-[#002115]/10 my-2" />
 
             {/* Description from screenshot */}
             <div className="my-4">
-              <p className="text-white/80 font-sans text-sm leading-relaxed font-light">
+              <p className="text-[#002115]/80 font-sans text-sm leading-relaxed font-light">
                 {plant.description}
               </p>
             </div>
 
             {/* Divider */}
-            <div className="border-t border-white/10 my-2" />
+            <div className="border-t border-[#002115]/10 my-2" />
 
             {/* Care Guide & Shipping Accordions */}
             <div className="mb-6">
               
               {/* Accordion: Care Guide */}
-              <div className="border-b border-white/10 py-3.5">
+              <div className="border-b border-[#002115]/10 py-3.5">
                 <button
                   onClick={() => setActiveAccordion(activeAccordion === "care" ? null : "care")}
                   className="w-full flex justify-between items-center text-left cursor-pointer border-none bg-transparent p-0 focus:outline-none"
                 >
-                  <h3 className="font-serif text-white text-lg font-medium transition-transform duration-300">
+                  <h3 className="font-serif text-[#002115] text-lg font-medium transition-transform duration-300">
                     {labels.careGuide}
                   </h3>
-                  <span className={`material-symbols-outlined text-white transition-transform duration-300 ${activeAccordion === "care" ? "rotate-180" : ""}`}>
+                  <span className={`material-symbols-outlined text-[#002115] transition-transform duration-300 ${activeAccordion === "care" ? "rotate-180" : ""}`}>
                     expand_more
                   </span>
                 </button>
@@ -192,30 +192,30 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                     >
                       <div className="pt-4 space-y-4 font-sans text-xs">
                         <div className="flex items-center gap-4">
-                          <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/80 shrink-0">
+                          <div className="w-8 h-8 rounded-full border border-[#002115]/15 flex items-center justify-center text-[#002115] shrink-0">
                             <span className="material-symbols-outlined text-base">sunny</span>
                           </div>
                           <div>
-                            <span className="font-bold text-white uppercase tracking-wider block text-[9px]">SUNLIGHT</span>
-                            <span className="text-white/70 font-light text-xs">{plant.care.sunlight}</span>
+                            <span className="font-bold text-[#002115] uppercase tracking-wider block text-[9px]">SUNLIGHT</span>
+                            <span className="text-[#002115]/80 font-light text-xs">{plant.care.sunlight}</span>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
-                          <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/80 shrink-0">
+                          <div className="w-8 h-8 rounded-full border border-[#002115]/15 flex items-center justify-center text-[#002115] shrink-0">
                             <span className="material-symbols-outlined text-base">water_drop</span>
                           </div>
                           <div>
-                            <span className="font-bold text-white uppercase tracking-wider block text-[9px]">WATERING</span>
-                            <span className="text-white/70 font-light text-xs">{plant.care.watering}</span>
+                            <span className="font-bold text-[#002115] uppercase tracking-wider block text-[9px]">WATERING</span>
+                            <span className="text-[#002115]/80 font-light text-xs">{plant.care.watering}</span>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
-                          <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/80 shrink-0">
+                          <div className="w-8 h-8 rounded-full border border-[#002115]/15 flex items-center justify-center text-[#002115] shrink-0">
                             <span className="material-symbols-outlined text-base">thermostat</span>
                           </div>
                           <div>
-                            <span className="font-bold text-white uppercase tracking-wider block text-[9px]">ENVIRONMENT</span>
-                            <span className="text-white/70 font-light text-xs">{plant.care.environment}</span>
+                            <span className="font-bold text-[#002115] uppercase tracking-wider block text-[9px]">ENVIRONMENT</span>
+                            <span className="text-[#002115]/80 font-light text-xs">{plant.care.environment}</span>
                           </div>
                         </div>
                       </div>
@@ -225,15 +225,15 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
               </div>
 
               {/* Accordion: Shipping & Returns */}
-              <div className="border-b border-white/10 py-3.5">
+              <div className="border-b border-[#002115]/10 py-3.5">
                 <button
                   onClick={() => setActiveAccordion(activeAccordion === "shipping" ? null : "shipping")}
                   className="w-full flex justify-between items-center text-left cursor-pointer border-none bg-transparent p-0 focus:outline-none"
                 >
-                  <h3 className="font-serif text-white text-lg font-medium transition-transform duration-300">
+                  <h3 className="font-serif text-[#002115] text-lg font-medium transition-transform duration-300">
                     {labels.shippingReturns}
                   </h3>
-                  <span className={`material-symbols-outlined text-white transition-transform duration-300 ${activeAccordion === "shipping" ? "rotate-180" : ""}`}>
+                  <span className={`material-symbols-outlined text-[#002115] transition-transform duration-300 ${activeAccordion === "shipping" ? "rotate-180" : ""}`}>
                     expand_more
                   </span>
                 </button>
@@ -247,7 +247,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="pt-4 text-xs font-sans text-white/70 leading-relaxed font-light">
+                      <div className="pt-4 text-xs font-sans text-[#002115]/80 leading-relaxed font-light">
                         {labels.shippingDetails}
                       </div>
                     </motion.div>
@@ -257,14 +257,14 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
 
             </div>
 
-            {/* SECURE PURCHASE Button from Screenshot */}
+            {/* SECURE PURCHASE Button (Solid Dark Contrast CTA) */}
             <div className="mt-auto pt-2">
               <button
                 onClick={() => {
                   addToCart(plant);
                   onClose();
                 }}
-                className="w-full bg-[#00170f] hover:bg-[#002d1a] border border-white/15 text-white py-4 rounded-default font-sans font-bold hover:scale-[1.01] active:scale-[0.98] transition-all duration-300 flex justify-center items-center gap-3 text-[12px] uppercase tracking-[0.1em] shadow-[0_8px_32px_rgba(0,0,0,0.15)] cursor-pointer"
+                className="w-full bg-[#002115] hover:bg-[#003823] text-white py-4 rounded-default font-sans font-bold hover:scale-[1.01] active:scale-[0.98] transition-all duration-300 flex justify-center items-center gap-3 text-[12px] uppercase tracking-[0.1em] shadow-[0_8px_32px_rgba(0,33,20,0.12)] cursor-pointer border-none"
               >
                 <span className="material-symbols-outlined text-lg font-light">
                   shopping_cart
