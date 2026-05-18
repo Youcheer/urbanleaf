@@ -8,8 +8,8 @@ import { useLanguage } from "../context/LanguageContext";
 
 export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => void }) => {
   const [currentImage, setCurrentImage] = useState(0);
-  const [activeAccordion, setActiveAccordion] = useState<"care" | "shipping" | null>("care"); // Default open care guide
-  
+  const [activeAccordion, setActiveAccordion] = useState<"care" | "shipping" | null>("care"); // Care guide open by default
+
   const { addToCart } = useCart();
   const { language, t } = useLanguage();
 
@@ -23,21 +23,21 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
     if (language === "si") {
       return {
         rareCollection: "දුර්ලභ එකතුව",
-        botanicalCollection: "තෝරාගත් ශාක එකතුව",
-        freeShippingText: "දිවයින පුරා නොමිලේ එදිනම ශීතකරණ පහසුකම් සහිත බෙදාහැරීම ඇතුළත් වේ.",
-        careGuide: "රැකබලා ගැනීමේ උපදෙස්",
-        shippingReturns: "නැව්ගත කිරීම් සහ ප්‍රතිලාභ",
-        securePurchase: "කරත්තයට එක් කරන්න",
-        shippingDetails: "නොමිලේ එදිනම ශීතකරණ පහසුකම් සහිත විශේෂිත කුරියර් සේවාව මඟින් බෙදා හැරීම සිදු කෙරේ. පැළෑටිවල නැවුම් බව සහ ප්‍රකෘතිමත්භාවය උපරිමයෙන් ආරක්ෂා වන සේ ඉතා ප්‍රවේශමෙන් ඇසුරුම් කරනු ලැබේ. කිසියම් හානියක් සිදුවුවහොත් දින 7ක් ඇතුළත ආපසු භාරගෙන නව පැළයක් හෝ මුදල් ආපසු ලබාදේ.",
+        botanicalCollection: "BOTANICAL COLLECTION",
+        freeShippingText: "Complimentary nationwide overnight shipping included.",
+        careGuide: "Care Guide",
+        shippingReturns: "Shipping & Returns",
+        securePurchase: "SECURE PURCHASE",
+        shippingDetails: "නොමිලේ දිවයින පුරා එදිනම ශීතකරණ පහසුකම් සහිත විශේෂිත කුරියර් සේවාව මඟින් බෙදා හැරීම සිදු කෙරේ. පැළෑටිවල නැවුම් බව සහ ප්‍රකෘතිමත්භාවය උපරිමයෙන් ආරක්ෂා වන සේ ඉතා ප්‍රවේශමෙන් ඇසුරුම් කරනු ලැබේ. කිසියම් හානියක් සිදුවුවහොත් දින 7ක් ඇතුළත ආපසු භාරගෙන නව පැළයක් හෝ මුදල් ආපසු ලබාදේ.",
       };
     }
     return {
-      rareCollection: "Rare Collection",
-      botanicalCollection: "Botanical Collection",
+      rareCollection: "RARE COLLECTION",
+      botanicalCollection: "BOTANICAL COLLECTION",
       freeShippingText: "Complimentary nationwide overnight shipping included.",
       careGuide: "Care Guide",
       shippingReturns: "Shipping & Returns",
-      securePurchase: "Secure Purchase",
+      securePurchase: "SECURE PURCHASE",
       shippingDetails: "Complimentary climate-controlled overnight transport directly to your door. Packaged meticulously in our custom thermal eco-sleeves to ensure pristine structural health and moisture retention. If your specimen arrives with any structural damage, notify us within 7 days for a complimentary replacement or full refund.",
     };
   };
@@ -54,7 +54,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="fixed inset-0 bg-black/75 backdrop-blur-md z-[100] flex items-center justify-center p-4 md:p-6"
+        className="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] flex items-center justify-center p-4 md:p-6"
       >
         <motion.div
           initial={{ y: 50, opacity: 0, scale: 0.95 }}
@@ -62,59 +62,61 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
           exit={{ y: 50, opacity: 0, scale: 0.95 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-background dark:bg-tertiary rounded-[1.5rem] shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col md:flex-row relative max-h-[90vh] border border-outline-variant/20"
+          className="bg-[#00261a] rounded-[1.5rem] shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col md:flex-row relative max-h-[90vh] border border-white/10"
         >
-          {/* Close Button */}
+          {/* Circular Outline Close Button from Screenshot */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-50 bg-white/90 dark:bg-tertiary/90 backdrop-blur-sm p-2.5 rounded-full shadow-lg text-primary hover:text-error transition-colors border border-outline-variant/20 active:scale-90 cursor-pointer"
+            className="absolute top-4 right-4 z-50 bg-[#00261a]/60 backdrop-blur-sm w-10 h-10 rounded-full border border-white/10 text-white/70 hover:text-white hover:border-white/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
           >
-            <span className="material-symbols-outlined block text-lg font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
+            <span className="material-symbols-outlined block text-[20px] font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
               close
             </span>
           </button>
 
-          {/* Left: Premium Image Gallery with Entrance Animation */}
-          <div className="w-full md:w-1/2 relative bg-surface-container min-h-[40vh] md:min-h-full overflow-hidden">
+          {/* Left: Premium Full Height Image Gallery */}
+          <div className="w-full md:w-1/2 relative bg-[#001710] min-h-[40vh] md:min-h-full overflow-hidden flex items-center justify-center">
             <AnimatePresence mode="wait">
               <motion.img
                 key={currentImage}
-                initial={{ opacity: 0, scale: 1.05 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 src={images[currentImage]}
                 alt={plant.name}
                 className="w-full h-full absolute inset-0 object-cover object-center"
               />
             </AnimatePresence>
-            
+
+            {/* Left/Right Chevrons from Screenshot */}
             {images.length > 1 && (
               <>
                 <button
                   onClick={handlePrev}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-tertiary/80 p-2.5 rounded-full shadow-lg text-primary dark:text-white hover:bg-white active:scale-90 transition-all cursor-pointer z-10"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-[#001c13]/60 hover:bg-[#001c13] text-white w-10 h-10 rounded-full flex items-center justify-center border border-white/10 active:scale-90 transition-all cursor-pointer z-10"
                 >
-                  <span className="material-symbols-outlined block font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
+                  <span className="material-symbols-outlined block text-lg font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
                     chevron_left
                   </span>
                 </button>
                 <button
                   onClick={handleNext}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-tertiary/80 p-2.5 rounded-full shadow-lg text-primary dark:text-white hover:bg-white active:scale-90 transition-all cursor-pointer z-10"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-[#001c13]/60 hover:bg-[#001c13] text-white w-10 h-10 rounded-full flex items-center justify-center border border-white/10 active:scale-90 transition-all cursor-pointer z-10"
                 >
-                  <span className="material-symbols-outlined block font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
+                  <span className="material-symbols-outlined block text-lg font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
                     chevron_right
                   </span>
                 </button>
-                {/* Dots */}
+
+                {/* Round dots indicator at the bottom */}
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
                   {images.map((_, idx) => (
                     <button
                       key={idx}
                       onClick={() => setCurrentImage(idx)}
-                      className={`w-2.5 h-2.5 rounded-full transition-all shadow-md cursor-pointer ${
-                        currentImage === idx ? "bg-white scale-125" : "bg-white/50"
+                      className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
+                        currentImage === idx ? "bg-white scale-125" : "bg-white/45"
                       }`}
                     />
                   ))}
@@ -123,52 +125,58 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
             )}
           </div>
 
-          {/* Right: Glassmorphic Details Panel */}
-          <div className="w-full md:w-1/2 p-8 md:p-12 overflow-y-auto flex flex-col bg-white/40 dark:bg-tertiary/40 backdrop-blur-xl border-l border-white/20 dark:border-white/10 max-h-[90vh]">
+          {/* Right: Solid Deep Forest Green Info Panel */}
+          <div className="w-full md:w-1/2 p-8 md:p-12 overflow-y-auto flex flex-col bg-[#00261a] max-h-[90vh] text-white scrollbar-thin">
             
             {/* Headline tag & names */}
-            <div className="mb-6">
-              <span className="inline-block px-4 py-1.5 bg-secondary-container/50 text-primary dark:text-primary-fixed font-sans text-[11px] font-semibold rounded-full tracking-widest uppercase mb-4 border border-secondary-container">
+            <div className="mb-2">
+              <span className="inline-block px-4 py-1.5 bg-[#173827] text-[#86b98d] font-sans text-[10px] font-semibold rounded-full tracking-widest uppercase mb-4 border border-[#86b98d]/20">
                 {tag}
               </span>
-              <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary dark:text-primary-fixed mb-2 leading-tight uppercase">
+              <h2 className="font-serif text-3xl md:text-[38px] font-bold text-white mb-2 leading-tight uppercase tracking-wide">
                 {plant.name}
               </h2>
-              <p className="text-secondary/80 dark:text-on-primary-container italic text-base font-serif">
-                {plant.scientificName}
-              </p>
             </div>
 
+            {/* Divider */}
+            <div className="border-t border-white/10 my-2" />
+
             {/* Pricing block */}
-            <div className="py-5 border-y border-outline-variant/30 mb-6">
-              <p className="font-serif text-3xl font-bold text-primary dark:text-primary-fixed">
+            <div className="py-2">
+              <p className="font-serif text-2xl md:text-3xl font-bold text-white tracking-wide">
                 LKR {plant.price.toLocaleString()}
               </p>
-              <p className="text-[11px] font-sans text-on-surface-variant mt-2 tracking-wide font-light">
+              <p className="text-[11px] font-sans text-[#86b98d]/50 mt-1.5 tracking-wide font-light">
                 {labels.freeShippingText}
               </p>
             </div>
 
-            {/* Description */}
-            <div className="mb-6">
-              <p className="text-on-surface-variant font-sans text-sm md:text-base leading-relaxed font-light">
+            {/* Divider */}
+            <div className="border-t border-white/10 my-2" />
+
+            {/* Description from screenshot */}
+            <div className="my-4">
+              <p className="text-white/80 font-sans text-sm leading-relaxed font-light">
                 {plant.description}
               </p>
             </div>
 
-            {/* Care Guide & Shipping Accordion */}
-            <div className="mb-8 border-t border-outline-variant/20">
+            {/* Divider */}
+            <div className="border-t border-white/10 my-2" />
+
+            {/* Care Guide & Shipping Accordions */}
+            <div className="mb-6">
               
               {/* Accordion: Care Guide */}
-              <div className="border-b border-outline-variant/20 py-4">
+              <div className="border-b border-white/10 py-3.5">
                 <button
                   onClick={() => setActiveAccordion(activeAccordion === "care" ? null : "care")}
-                  className="w-full flex justify-between items-center text-left cursor-pointer group focus:outline-none border-none bg-transparent"
+                  className="w-full flex justify-between items-center text-left cursor-pointer border-none bg-transparent p-0 focus:outline-none"
                 >
-                  <h3 className="font-serif text-primary dark:text-primary-fixed text-base font-semibold group-hover:translate-x-1 transition-transform duration-300">
+                  <h3 className="font-serif text-white text-lg font-medium transition-transform duration-300">
                     {labels.careGuide}
                   </h3>
-                  <span className={`material-symbols-outlined text-primary dark:text-primary-fixed transition-transform duration-300 ${activeAccordion === "care" ? "rotate-180" : ""}`}>
+                  <span className={`material-symbols-outlined text-white transition-transform duration-300 ${activeAccordion === "care" ? "rotate-180" : ""}`}>
                     expand_more
                   </span>
                 </button>
@@ -182,32 +190,32 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="pt-4 space-y-3 font-sans text-xs">
+                      <div className="pt-4 space-y-4 font-sans text-xs">
                         <div className="flex items-center gap-4">
-                          <div className="w-8 h-8 rounded-full bg-secondary/15 flex items-center justify-center text-primary shrink-0">
+                          <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/80 shrink-0">
                             <span className="material-symbols-outlined text-base">sunny</span>
                           </div>
                           <div>
-                            <span className="font-semibold text-primary dark:text-primary-fixed uppercase tracking-wider block text-[9px]">{t("sunlight")}</span>
-                            <span className="text-on-surface-variant font-light">{plant.care.sunlight}</span>
+                            <span className="font-bold text-white uppercase tracking-wider block text-[9px]">SUNLIGHT</span>
+                            <span className="text-white/70 font-light text-xs">{plant.care.sunlight}</span>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
-                          <div className="w-8 h-8 rounded-full bg-secondary/15 flex items-center justify-center text-primary shrink-0">
+                          <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/80 shrink-0">
                             <span className="material-symbols-outlined text-base">water_drop</span>
                           </div>
                           <div>
-                            <span className="font-semibold text-primary dark:text-primary-fixed uppercase tracking-wider block text-[9px]">{t("watering")}</span>
-                            <span className="text-on-surface-variant font-light">{plant.care.watering}</span>
+                            <span className="font-bold text-white uppercase tracking-wider block text-[9px]">WATERING</span>
+                            <span className="text-white/70 font-light text-xs">{plant.care.watering}</span>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
-                          <div className="w-8 h-8 rounded-full bg-secondary/15 flex items-center justify-center text-primary shrink-0">
+                          <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/80 shrink-0">
                             <span className="material-symbols-outlined text-base">thermostat</span>
                           </div>
                           <div>
-                            <span className="font-semibold text-primary dark:text-primary-fixed uppercase tracking-wider block text-[9px]">{t("environment")}</span>
-                            <span className="text-on-surface-variant font-light">{plant.care.environment}</span>
+                            <span className="font-bold text-white uppercase tracking-wider block text-[9px]">ENVIRONMENT</span>
+                            <span className="text-white/70 font-light text-xs">{plant.care.environment}</span>
                           </div>
                         </div>
                       </div>
@@ -217,15 +225,15 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
               </div>
 
               {/* Accordion: Shipping & Returns */}
-              <div className="border-b border-outline-variant/20 py-4">
+              <div className="border-b border-white/10 py-3.5">
                 <button
                   onClick={() => setActiveAccordion(activeAccordion === "shipping" ? null : "shipping")}
-                  className="w-full flex justify-between items-center text-left cursor-pointer group focus:outline-none border-none bg-transparent"
+                  className="w-full flex justify-between items-center text-left cursor-pointer border-none bg-transparent p-0 focus:outline-none"
                 >
-                  <h3 className="font-serif text-primary dark:text-primary-fixed text-base font-semibold group-hover:translate-x-1 transition-transform duration-300">
+                  <h3 className="font-serif text-white text-lg font-medium transition-transform duration-300">
                     {labels.shippingReturns}
                   </h3>
-                  <span className={`material-symbols-outlined text-primary dark:text-primary-fixed transition-transform duration-300 ${activeAccordion === "shipping" ? "rotate-180" : ""}`}>
+                  <span className={`material-symbols-outlined text-white transition-transform duration-300 ${activeAccordion === "shipping" ? "rotate-180" : ""}`}>
                     expand_more
                   </span>
                 </button>
@@ -239,7 +247,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="pt-4 text-xs font-sans text-on-surface-variant leading-relaxed font-light">
+                      <div className="pt-4 text-xs font-sans text-white/70 leading-relaxed font-light">
                         {labels.shippingDetails}
                       </div>
                     </motion.div>
@@ -249,14 +257,14 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
 
             </div>
 
-            {/* Secure Purchase / Add to Cart Action */}
-            <div className="mt-auto">
+            {/* SECURE PURCHASE Button from Screenshot */}
+            <div className="mt-auto pt-2">
               <button
                 onClick={() => {
                   addToCart(plant);
                   onClose();
                 }}
-                className="w-full bg-primary text-on-primary py-4 rounded-default font-sans font-semibold hover:bg-surface-tint active:scale-[0.98] transition-all duration-300 flex justify-center items-center gap-3 text-sm uppercase tracking-widest shadow-[0_8px_32px_rgba(0,38,26,0.1)] cursor-pointer border-none"
+                className="w-full bg-[#00170f] hover:bg-[#002d1a] border border-white/15 text-white py-4 rounded-default font-sans font-bold hover:scale-[1.01] active:scale-[0.98] transition-all duration-300 flex justify-center items-center gap-3 text-[12px] uppercase tracking-[0.1em] shadow-[0_8px_32px_rgba(0,0,0,0.15)] cursor-pointer"
               >
                 <span className="material-symbols-outlined text-lg font-light">
                   shopping_cart

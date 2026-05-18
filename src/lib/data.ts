@@ -73,10 +73,10 @@ export const plants: Plant[] = [
   },
   {
     id: "p5",
-    name: "Anthurium Magnificum",
-    scientificName: "Anthurium magnificum",
-    description: "Bring tropical beauty and timeless elegance to your space. This exceptional Anthurium specimen features striking, velvet-textured dark green leaves with prominent white veins that command attention. Cultivated in our specialized conservatories to ensure pristine health and longevity.",
-    price: 55500,
+    name: "Bambino Red",
+    scientificName: "Anthurium andraeanum 'Bambino Red'",
+    description: "❤️ B A M B I N O R E D ❤️ බැම්බිනෝ රෙඩ් ❤️ මෙම ශාකය විකිණීමට ඇත 🚚 කුරියර් පහසුකම් ඇත 💵 බැංකු තැන්පතු පමණි. COD නොමැත",
+    price: 1100,
     images: ["https://lh3.googleusercontent.com/aida/ADBb0uhlniPhb1ptGJZv0LRyb89rACzkamaW7w9HrGXqOw8hV8nULPtjCm5Xu2T-e_8KVmm3W4Tm0TOsnFowPzgXidmZYP3FXCpvtCdxDALvZkkW6WvX3vYMdNGQUP5EzQafu9upN2YIqWbhmeS_mto_HRJKX9OgTB_yE0MaTU7gLb1029RBwlXEhmxEQ3JOIITLH-Xuvd7JYBkpFtsAtc99cG8rOLB79X8wRJ7NBFZ9tPtBpTAV1aGhBMkGr8PL"],
     category: ["Rare Finds", "Interior Staples"],
     care: {
