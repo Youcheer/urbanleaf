@@ -36,7 +36,7 @@ export const Hero = () => {
           {heroImages.length > 0 ? (
             <motion.div
               key={currentImageIndex}
-              className="absolute inset-0 w-full h-full"
+              className="absolute inset-0 w-full h-full select-none"
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.95 }}
               exit={{ opacity: 0 }}
@@ -45,10 +45,18 @@ export const Hero = () => {
               <motion.img
                 src={heroImages[currentImageIndex]}
                 alt="Botanical Background"
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-cover object-center select-none pointer-events-none"
+                draggable={false}
+                onContextMenu={(e) => e.preventDefault()}
                 initial={{ scale: 1.0 }}
                 animate={{ scale: 1.06 }}
                 transition={{ duration: 7.0, ease: "easeOut" }}
+              />
+              {/* Invisible touch & click protector block to completely block image interactions */}
+              <div 
+                className="absolute inset-0 z-10 bg-transparent select-none" 
+                onContextMenu={(e) => e.preventDefault()}
+                onDragStart={(e) => e.preventDefault()}
               />
             </motion.div>
           ) : (
