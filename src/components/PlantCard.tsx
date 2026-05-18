@@ -1,103 +1,99 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Plant } from "../lib/data";
 import { useCart } from "../context/CartContext";
+import { useLanguage } from "../context/LanguageContext";
 
 export const PlantCard = ({ plant, onClick }: { plant: Plant; onClick: () => void }) => {
   const [isHovered, setIsHovered] = useState(false);
   const { addToCart } = useCart();
+  const { language } = useLanguage();
 
   const mainImage = plant.images && plant.images.length > 0 ? plant.images[0] : plant.image;
+
+  // Let's get translation for Add to Cart
+  const getAddToCartText = () => {
+    return language === "si" ? "කරත්තයට එක් කරන්න" : "Add to Cart";
+  };
+
+  // Tag helper
+  const getTag = () => {
+    if (plant.id === "p1") {
+      return language === "si" ? "වැඩිම ඉල්ලුමක් ඇති" : "Bestseller";
+    }
+    if (plant.id === "p2") {
+      return language === "si" ? "දුර්ලභ වර්ගයක්" : "Rare Find";
+    }
+    return null;
+  };
+
+  const tag = getTag();
 
   return (
     <motion.div
       onClick={onClick}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      whileHover={{ y: -8 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-      className="group relative rounded-xl overflow-hidden glass-panel flex flex-col shadow-[0_4px_40px_rgba(0,38,26,0.06)] hover:shadow-[0_12px_60px_rgba(0,38,26,0.12)] transition-all duration-500 cursor-pointer"
+      className="group relative overflow-hidden rounded-xl bg-white/60 dark:bg-tertiary/60 backdrop-blur-xl border border-white dark:border-white/10 shadow-[0_8px_32px_rgba(0,38,26,0.03)] hover:shadow-[0_24px_48px_rgba(0,38,26,0.08)] hover:-translate-y-1.5 transition-all duration-500 ease-out cursor-pointer aspect-[3/4] flex flex-col"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Image and Care Instructions Overlay */}
-      <div className="relative h-80 w-full overflow-hidden bg-surface-container-low">
+      {/* Image Container with Zoom effect */}
+      <div className="w-full h-full overflow-hidden absolute inset-0 z-0">
         <motion.img
-          animate={{ scale: isHovered ? 1.05 : 1 }}
+          alt={plant.name}
+          animate={{ scale: isHovered ? 1.04 : 1 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
           src={mainImage}
-          alt={plant.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-center"
         />
-        
-        {/* Care Instructions Overlay using premium Glassmorphism */}
-        <AnimatePresence>
-          {isHovered && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-primary/40 dark:bg-tertiary/40 backdrop-blur-[6px] flex flex-col justify-center items-center gap-4 text-white p-6"
-            >
-              <div className="flex items-center gap-3 w-full max-w-[200px] bg-white/10 p-2.5 rounded-lg border border-white/10">
-                <span className="material-symbols-outlined text-yellow-300 text-xl font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
-                  sunny
-                </span>
-                <span className="text-xs font-sans tracking-wide font-medium">{plant.care.sunlight}</span>
-              </div>
-              
-              <div className="flex items-center gap-3 w-full max-w-[200px] bg-white/10 p-2.5 rounded-lg border border-white/10">
-                <span className="material-symbols-outlined text-blue-300 text-xl font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
-                  water_drop
-                </span>
-                <span className="text-xs font-sans tracking-wide font-medium">{plant.care.watering}</span>
-              </div>
-              
-              <div className="flex items-center gap-3 w-full max-w-[200px] bg-white/10 p-2.5 rounded-lg border border-white/10">
-                <span className="material-symbols-outlined text-orange-300 text-xl font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
-                  thermostat
-                </span>
-                <span className="text-xs font-sans tracking-wide font-medium">{plant.care.environment}</span>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+      </div>
 
-        {/* Floating Quick Add to Cart button */}
+      {/* Top Floating Tag */}
+      {tag && (
+        <div className="absolute top-4 left-4 z-10">
+          <span className="px-3 py-1 bg-white/80 dark:bg-tertiary/80 backdrop-blur-md rounded-full font-sans text-[11px] uppercase tracking-widest text-primary dark:text-primary-fixed border border-white/50 dark:border-white/10 font-semibold shadow-sm">
+            {tag}
+          </span>
+        </div>
+      )}
+
+      {/* Glassmorphism Bottom Overlay */}
+      <div 
+        className={`mt-auto relative z-10 p-5 bg-white/80 dark:bg-tertiary/80 backdrop-blur-xl border-t border-white/30 dark:border-white/10 flex flex-col transition-all duration-500 ease-out translate-y-14 group-hover:translate-y-0`}
+      >
+        <div className="flex justify-between items-start mb-2 gap-2">
+          <div>
+            <h3 className="font-serif text-base md:text-lg text-primary dark:text-primary-fixed leading-snug font-semibold">
+              {plant.name}
+            </h3>
+            <p className="text-[10px] font-sans text-on-surface-variant italic font-light mt-0.5">
+              {plant.scientificName}
+            </p>
+          </div>
+          <span className="font-sans text-xs md:text-sm text-primary dark:text-primary-fixed font-semibold whitespace-nowrap">
+            LKR {plant.price.toLocaleString()}
+          </span>
+        </div>
+        
+        {/* Care specifications */}
+        <p className="font-sans text-[11px] text-on-surface-variant mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 leading-normal line-clamp-1">
+          {plant.care.sunlight} • {plant.care.watering}
+        </p>
+
+        {/* Slide-up Button */}
         <button
           onClick={(e) => {
             e.stopPropagation();
             addToCart(plant);
           }}
-          className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-md w-11 h-11 rounded-full shadow-lg text-primary flex items-center justify-center hover:bg-primary hover:text-white active:scale-90 transition-all duration-300 z-10"
+          className="w-full py-2.5 bg-primary text-white rounded-lg font-sans text-xs uppercase tracking-widest hover:scale-[0.98] active:scale-95 transition-all duration-200 opacity-0 group-hover:opacity-100 delay-150 font-semibold cursor-pointer"
         >
-          <span className="material-symbols-outlined font-light text-xl" style={{ fontVariationSettings: "'FILL' 0" }}>
-            add
-          </span>
+          {getAddToCartText()}
         </button>
-      </div>
-
-      {/* Card Info Details */}
-      <div className="p-6 flex flex-col flex-grow justify-between bg-white/40 dark:bg-tertiary/20">
-        <div>
-          <h3 className="font-serif text-lg text-primary group-hover:text-surface-tint transition-colors duration-300 font-semibold leading-snug">
-            {plant.name}
-          </h3>
-          <p className="text-xs font-sans text-on-surface-variant italic mt-1 font-light">
-            {plant.scientificName}
-          </p>
-        </div>
-        <div className="flex items-center justify-between mt-4 pt-4 border-t border-outline-variant/10">
-          <span className="text-body-md font-sans text-primary font-semibold">
-            LKR {plant.price.toLocaleString()}
-          </span>
-          <span className="text-[10px] font-sans uppercase tracking-widest text-outline font-semibold">
-            {plant.category && plant.category.length > 0 ? plant.category[0] : ""}
-          </span>
-        </div>
       </div>
     </motion.div>
   );
