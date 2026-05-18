@@ -62,12 +62,12 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
           exit={{ y: 50, opacity: 0, scale: 0.95 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-[#00261a] rounded-[1.5rem] shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col md:flex-row relative max-h-[90vh] border border-white/10"
+          className="bg-[#002115] rounded-[1.5rem] shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col md:flex-row relative max-h-[90vh] border border-white/10"
         >
           {/* Circular Outline Close Button from Screenshot */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-50 bg-[#00261a]/60 backdrop-blur-sm w-10 h-10 rounded-full border border-white/10 text-white/70 hover:text-white hover:border-white/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
+            className="absolute top-4 right-4 z-50 bg-[#002115]/60 backdrop-blur-sm w-10 h-10 rounded-full border border-white/10 text-white/70 hover:text-white hover:border-white/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
           >
             <span className="material-symbols-outlined block text-[20px] font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
               close
@@ -126,7 +126,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
           </div>
 
           {/* Right: Solid Deep Forest Green Info Panel */}
-          <div className="w-full md:w-1/2 p-8 md:p-12 overflow-y-auto flex flex-col bg-[#00261a] max-h-[90vh] text-white scrollbar-thin">
+          <div className="w-full md:w-1/2 p-8 md:p-12 overflow-y-auto flex flex-col bg-[#002115] max-h-[90vh] text-white scrollbar-thin">
             
             {/* Headline tag & names */}
             <div className="mb-2">
