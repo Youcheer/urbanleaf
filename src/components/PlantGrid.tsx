@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { getPlants } from "../lib/db";
 import { Plant } from "../lib/data";
 import { PlantModal } from "./PlantModal";
@@ -40,7 +40,7 @@ export const PlantGrid = () => {
   const [loading, setLoading] = useState(true);
   const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
 
-  const { language, t } = useLanguage();
+  const { language } = useLanguage();
   const { addToCart } = useCart();
 
   const sectionRef = useRef<HTMLElement>(null);
@@ -272,7 +272,7 @@ export const PlantGrid = () => {
 
             const smallCardsCol = smallPlants.length > 0 && (
               <div className="md:col-span-4 flex flex-col gap-gutter">
-                {smallPlants.map((plant, plantIdx) => (
+                {smallPlants.map((plant) => (
                   <motion.div
                     key={plant.id}
                     variants={itemVariants}

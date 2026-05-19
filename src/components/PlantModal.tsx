@@ -15,7 +15,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   const { addToCart } = useCart();
-  const { language, t } = useLanguage();
+  const { language } = useLanguage();
 
   const images = plant.images && plant.images.length > 0 ? plant.images : (plant.image ? [plant.image] : []);
 
