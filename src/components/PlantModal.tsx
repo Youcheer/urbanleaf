@@ -1,22 +1,76 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plant } from "../lib/data";
 import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
 
+const AUTO_SLIDE_INTERVAL = 4000; // 4 seconds per image
+
 export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => void }) => {
   const [currentImage, setCurrentImage] = useState(0);
+  const [direction, setDirection] = useState(1); // 1 = forward, -1 = backward
   const [activeAccordion, setActiveAccordion] = useState<"care" | "shipping" | null>("care"); // Care guide open by default
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   const { addToCart } = useCart();
   const { language, t } = useLanguage();
 
   const images = plant.images && plant.images.length > 0 ? plant.images : (plant.image ? [plant.image] : []);
 
-  const handleNext = () => setCurrentImage((prev) => (prev + 1) % images.length);
-  const handlePrev = () => setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
+  // Auto-slide images
+  useEffect(() => {
+    if (!isAutoPlaying || images.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setDirection(1);
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }, AUTO_SLIDE_INTERVAL);
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, images.length, currentImage]);
+
+  const handleNext = useCallback(() => {
+    setIsAutoPlaying(false);
+    setDirection(1);
+    setCurrentImage((prev) => (prev + 1) % images.length);
+    // Resume auto-play after 8 seconds of inactivity
+    setTimeout(() => setIsAutoPlaying(true), 8000);
+  }, [images.length]);
+
+  const handlePrev = useCallback(() => {
+    setIsAutoPlaying(false);
+    setDirection(-1);
+    setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
+    setTimeout(() => setIsAutoPlaying(true), 8000);
+  }, [images.length]);
+
+  const handleDotClick = useCallback((idx: number) => {
+    setIsAutoPlaying(false);
+    setDirection(idx > currentImage ? 1 : -1);
+    setCurrentImage(idx);
+    setTimeout(() => setIsAutoPlaying(true), 8000);
+  }, [currentImage]);
+
+  // Slide animation variants
+  const slideVariants = {
+    enter: (dir: number) => ({
+      x: dir > 0 ? "100%" : "-100%",
+      opacity: 0,
+      scale: 1.05,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+    },
+    exit: (dir: number) => ({
+      x: dir > 0 ? "-100%" : "100%",
+      opacity: 0,
+      scale: 0.95,
+    }),
+  };
 
   // Translation helpers
   const getModalTranslations = () => {
@@ -74,20 +128,35 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
             </span>
           </button>
 
-          {/* Left: Premium Full Height Image Gallery */}
+          {/* Left: Premium Full Height Image Gallery with Auto-Slide */}
           <div className="w-full md:w-1/2 relative bg-[#ecefec] min-h-[40vh] md:min-h-full overflow-hidden flex items-center justify-center">
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait" custom={direction}>
               <motion.img
                 key={currentImage}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
                 src={images[currentImage]}
                 alt={plant.name}
                 className="w-full h-full absolute inset-0 object-cover object-center"
               />
             </AnimatePresence>
+
+            {/* Auto-slide progress bar */}
+            {images.length > 1 && isAutoPlaying && (
+              <div className="absolute top-0 left-0 right-0 h-[3px] z-20 bg-[#002115]/10">
+                <motion.div
+                  key={`progress-${currentImage}`}
+                  className="h-full bg-[#002115]/40"
+                  initial={{ width: "0%" }}
+                  animate={{ width: "100%" }}
+                  transition={{ duration: AUTO_SLIDE_INTERVAL / 1000, ease: "linear" }}
+                />
+              </div>
+            )}
 
             {/* Left/Right Chevrons */}
             {images.length > 1 && (
@@ -109,14 +178,16 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                   </span>
                 </button>
 
-                {/* Round dots indicator at the bottom */}
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                {/* Round dots indicator with active pulse */}
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2.5 z-10">
                   {images.map((_, idx) => (
                     <button
                       key={idx}
-                      onClick={() => setCurrentImage(idx)}
-                      className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
-                        currentImage === idx ? "bg-[#002115] scale-125" : "bg-[#002115]/30"
+                      onClick={() => handleDotClick(idx)}
+                      className={`rounded-full transition-all duration-500 cursor-pointer ${
+                        currentImage === idx
+                          ? "bg-[#002115] w-6 h-2.5 shadow-[0_0_8px_rgba(0,33,21,0.3)]"
+                          : "bg-[#002115]/30 w-2.5 h-2.5 hover:bg-[#002115]/50"
                       }`}
                     />
                   ))}
