@@ -25,6 +25,9 @@ const getLocalPlants = (): Plant[] => {
     ...p,
     description: p.description || "",
     images: p.images && p.images.length > 0 ? p.images : (p.image ? [p.image] : []),
+    isSold: p.isSold || false,
+    createdAt: p.createdAt || 0,
+    order: p.order !== undefined ? p.order : 999,
   }));
 };
 
@@ -62,6 +65,9 @@ export const getPlants = async (): Promise<Plant[]> => {
             images: data.images && data.images.length > 0 ? data.images : (data.image ? [data.image] : []),
             category: data.category || [],
             care: data.care || { sunlight: "", watering: "", environment: "" },
+            isSold: data.isSold || false,
+            createdAt: data.createdAt || 0,
+            order: data.order !== undefined ? data.order : 999,
           });
         }
       });
@@ -112,20 +118,38 @@ export const getPlants = async (): Promise<Plant[]> => {
               images: data.images && data.images.length > 0 ? data.images : (data.image ? [data.image] : []),
               category: data.category || [],
               care: data.care || { sunlight: "", watering: "", environment: "" },
+              isSold: data.isSold || false,
+              createdAt: data.createdAt || 0,
+              order: data.order !== undefined ? data.order : 999,
             });
           });
-          return newPlantsList;
+          return newPlantsList.sort((a, b) => {
+            const orderA = a.order ?? 999;
+            const orderB = b.order ?? 999;
+            if (orderA !== orderB) return orderA - orderB;
+            return (b.createdAt ?? 0) - (a.createdAt ?? 0);
+          });
         }
       }
       // -------------------------------------------------------------
 
-      return plantsList;
+      return plantsList.sort((a, b) => {
+        const orderA = a.order ?? 999;
+        const orderB = b.order ?? 999;
+        if (orderA !== orderB) return orderA - orderB;
+        return (b.createdAt ?? 0) - (a.createdAt ?? 0);
+      });
     } catch (error) {
       console.error("Error fetching from Firestore, falling back to LocalStorage:", error);
       return getLocalPlants();
     }
   } else {
-    return getLocalPlants();
+    return getLocalPlants().sort((a, b) => {
+      const orderA = a.order ?? 999;
+      const orderB = b.order ?? 999;
+      if (orderA !== orderB) return orderA - orderB;
+      return (b.createdAt ?? 0) - (a.createdAt ?? 0);
+    });
   }
 };
 
@@ -141,7 +165,7 @@ export const addPlant = async (plant: Omit<Plant, "id">): Promise<string> => {
   } else {
     const local = getLocalPlants();
     const newId = "p_" + Date.now();
-    const newPlant = { ...plant, id: newId };
+    const newPlant = { ...plant, id: newId, createdAt: plant.createdAt || Date.now() };
     saveLocalPlants([...local, newPlant]);
     return newId;
   }

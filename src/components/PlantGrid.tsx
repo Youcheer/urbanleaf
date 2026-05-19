@@ -183,7 +183,13 @@ export const PlantGrid = () => {
                     transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                   />
                   {/* Subtle image overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  {largePlant.isSold && (
+                    <div className="absolute top-6 left-6 z-20 bg-black/60 backdrop-blur-md text-white px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl border border-white/10">
+                      Sold Out
+                    </div>
+                  )}
                 </div>
 
                 {/* Info panel - NO category tag */}
@@ -206,16 +212,23 @@ export const PlantGrid = () => {
                       </span>
                     </div>
                     <motion.button
-                      whileHover={{ scale: 1.08, rotate: 90 }}
-                      whileTap={{ scale: 0.92 }}
+                      disabled={largePlant.isSold}
+                      whileHover={!largePlant.isSold ? { scale: 1.08, rotate: 90 } : {}}
+                      whileTap={!largePlant.isSold ? { scale: 0.92 } : {}}
                       transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                      className="w-12 h-12 rounded-full border border-primary/30 flex items-center justify-center text-primary hover:bg-primary hover:text-white hover:border-primary transition-colors duration-300 cursor-pointer"
+                      className={`w-12 h-12 rounded-full border flex items-center justify-center transition-colors duration-300 ${
+                        largePlant.isSold 
+                          ? "border-outline-variant/30 text-outline-variant cursor-not-allowed" 
+                          : "border-primary/30 text-primary hover:bg-primary hover:text-white hover:border-primary cursor-pointer"
+                      }`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        addToCart(largePlant);
+                        if (!largePlant.isSold) addToCart(largePlant);
                       }}
                     >
-                      <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0" }}>add</span>
+                      <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0" }}>
+                        {largePlant.isSold ? "block" : "add"}
+                      </span>
                     </motion.button>
                   </div>
                 </div>
@@ -243,7 +256,13 @@ export const PlantGrid = () => {
                         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                       />
                       {/* Overlay gradient on hover */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      
+                      {plant.isSold && (
+                        <div className="absolute top-4 left-4 z-20 bg-black/60 backdrop-blur-md text-white px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-[0.2em] shadow-lg border border-white/10">
+                          Sold Out
+                        </div>
+                      )}
                     </div>
 
                     <div className="p-6 flex flex-col grow justify-between">
@@ -251,7 +270,7 @@ export const PlantGrid = () => {
                         {plant.name}
                       </h4>
                       <div className="flex items-center justify-between mt-auto">
-                        <span className="text-body-md font-sans text-on-surface-variant font-light">
+                        <span className={`text-body-md font-sans font-light ${plant.isSold ? "text-on-surface-variant/50 line-through" : "text-on-surface-variant"}`}>
                           Rs. {plant.price.toLocaleString()}
                         </span>
                         <motion.span

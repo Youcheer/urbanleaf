@@ -206,6 +206,11 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
               <span className="inline-block px-4 py-1.5 bg-[#ecefec] text-[#002115] font-sans text-[10px] font-semibold rounded-full tracking-widest uppercase mb-4 border border-[#002115]/15">
                 {tag}
               </span>
+              {plant.isSold && (
+                <span className="inline-block ml-3 px-4 py-1.5 bg-[#002115] text-white font-sans text-[10px] font-bold rounded-full tracking-widest uppercase mb-4 shadow-sm">
+                  SOLD OUT
+                </span>
+              )}
               <h2 className="font-serif text-3xl md:text-[38px] font-bold text-[#002115] mb-2 leading-tight uppercase tracking-wide">
                 {plant.name}
               </h2>
@@ -333,16 +338,23 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
             {/* SECURE PURCHASE Button */}
             <div className="mt-auto pt-2">
               <button
+                disabled={plant.isSold}
                 onClick={() => {
-                  addToCart(plant);
-                  onClose();
+                  if (!plant.isSold) {
+                    addToCart(plant);
+                    onClose();
+                  }
                 }}
-                className="w-full bg-[#002115] hover:bg-[#003823] text-white py-4 rounded-default font-sans font-bold hover:scale-[1.01] active:scale-[0.98] transition-all duration-300 flex justify-center items-center gap-3 text-[12px] uppercase tracking-[0.1em] shadow-[0_8px_32px_rgba(0,33,20,0.12)] cursor-pointer border-none"
+                className={`w-full py-4 rounded-default font-sans font-bold transition-all duration-300 flex justify-center items-center gap-3 text-[12px] uppercase tracking-[0.1em] border-none ${
+                  plant.isSold
+                    ? "bg-[#002115]/10 text-[#002115]/40 cursor-not-allowed"
+                    : "bg-[#002115] hover:bg-[#003823] text-white hover:scale-[1.01] active:scale-[0.98] shadow-[0_8px_32px_rgba(0,33,20,0.12)] cursor-pointer"
+                }`}
               >
                 <span className="material-symbols-outlined text-lg font-light">
-                  shopping_cart
+                  {plant.isSold ? "block" : "shopping_cart"}
                 </span>
-                {labels.securePurchase}
+                {plant.isSold ? "Sold Out" : labels.securePurchase}
               </button>
             </div>
             

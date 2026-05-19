@@ -12,6 +12,9 @@ export interface Plant {
     watering: string;
     environment: string;
   };
+  isSold?: boolean;
+  createdAt?: number;
+  order?: number;
 }
 
 export const plants: Plant[] = [

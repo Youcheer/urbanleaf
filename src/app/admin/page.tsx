@@ -70,6 +70,8 @@ export default function AdminPage() {
   const [sunlight, setSunlight] = useState("");
   const [watering, setWatering] = useState("");
   const [environment, setEnvironment] = useState("");
+  const [isSold, setIsSold] = useState(false);
+  const [order, setOrder] = useState<number | "">("");
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -131,6 +133,8 @@ export default function AdminPage() {
     setSunlight(plant.care.sunlight);
     setWatering(plant.care.watering);
     setEnvironment(plant.care.environment);
+    setIsSold(plant.isSold || false);
+    setOrder(plant.order ?? "");
     setIsFormOpen(true);
   };
 
@@ -214,6 +218,8 @@ export default function AdminPage() {
         watering,
         environment,
       },
+      isSold,
+      order: order === "" ? 999 : Number(order),
     };
 
     try {
@@ -240,6 +246,8 @@ export default function AdminPage() {
     setSunlight("");
     setWatering("");
     setEnvironment("");
+    setIsSold(false);
+    setOrder("");
     setIsFormOpen(false);
   };
 
@@ -354,6 +362,10 @@ export default function AdminPage() {
                         <h3 className="font-bold text-lg truncate uppercase">{plant.name}</h3>
                         <p className="text-xs text-gray-400 italic truncate mb-2">{plant.scientificName}</p>
                         <p className="font-semibold text-[#3b8554]">LKR {plant.price.toLocaleString()}</p>
+                        <div className="flex gap-2 mt-1">
+                          {plant.isSold && <span className="text-[10px] font-bold bg-red-100 text-red-600 px-2 py-0.5 rounded-full uppercase tracking-wider">Sold Out</span>}
+                          {plant.order !== undefined && plant.order !== 999 && <span className="text-[10px] font-bold bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full uppercase tracking-wider">Order: {plant.order}</span>}
+                        </div>
                         <div className="flex gap-2 mt-4">
                           <button
                             onClick={() => handleEdit(plant)}
@@ -510,6 +522,32 @@ export default function AdminPage() {
                           value={environment}
                           onChange={(e) => setEnvironment(e.target.value)}
                           placeholder="e.g. Humid & Warm"
+                          className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#3b8554]"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Status & Order Details */}
+                    <div className="border-t pt-6 space-y-4">
+                      <h3 className="font-semibold text-sm">Status & Arrangement</h3>
+                      <div className="flex items-center gap-4">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={isSold}
+                            onChange={(e) => setIsSold(e.target.checked)}
+                            className="w-5 h-5 text-[#1a4a28] rounded focus:ring-[#3b8554]"
+                          />
+                          <span className="text-sm font-semibold text-gray-700">Mark as Sold Out</span>
+                        </label>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold mb-1 text-gray-500">Display Order (Lower number appears first)</label>
+                        <input
+                          type="number"
+                          value={order}
+                          onChange={(e) => setOrder(e.target.value === "" ? "" : Number(e.target.value))}
+                          placeholder="e.g. 1"
                           className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#3b8554]"
                         />
                       </div>
