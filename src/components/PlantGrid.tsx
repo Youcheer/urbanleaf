@@ -1,39 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { getPlants } from "../lib/db";
 import { Plant } from "../lib/data";
 import { PlantModal } from "./PlantModal";
 import { useLanguage } from "../context/LanguageContext";
 import { useCart } from "../context/CartContext";
-
-// Floating leaf particle component for ambient decoration
-const FloatingLeaf = ({ delay, x, size }: { delay: number; x: number; size: number }) => (
-  <motion.div
-    className="absolute pointer-events-none z-0"
-    style={{ left: `${x}%`, top: "-5%" }}
-    initial={{ y: -20, opacity: 0, rotate: 0 }}
-    animate={{
-      y: ["0%", "110%"],
-      opacity: [0, 0.15, 0.15, 0],
-      rotate: [0, 180, 360],
-    }}
-    transition={{
-      duration: 18 + Math.random() * 8,
-      delay: delay,
-      repeat: Infinity,
-      ease: "linear",
-    }}
-  >
-    <span
-      className="material-symbols-outlined text-primary/20"
-      style={{ fontSize: `${size}px`, fontVariationSettings: "'FILL' 0" }}
-    >
-      eco
-    </span>
-  </motion.div>
-);
 
 export const PlantGrid = () => {
   const [plantsList, setPlantsList] = useState<Plant[]>([]);
@@ -42,18 +15,6 @@ export const PlantGrid = () => {
 
   const { language } = useLanguage();
   const { addToCart } = useCart();
-
-  const sectionRef = useRef<HTMLElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const isHeaderInView = useInView(headerRef, { once: true, margin: "-100px" });
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  // Subtle parallax offset for the section
-  const yParallax = useTransform(scrollYProgress, [0, 1], [60, -60]);
 
   useEffect(() => {
     const fetchPlants = async () => {
@@ -97,7 +58,7 @@ export const PlantGrid = () => {
 
   const plantChunks = chunkArray(plantsList, 3);
 
-  // Container animation variants
+  // Stagger animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -125,30 +86,24 @@ export const PlantGrid = () => {
   return (
     <section
       id="collection"
-      ref={sectionRef}
       className="relative py-section-gap w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop overflow-hidden"
     >
-      {/* Ambient floating leaf particles */}
-      <FloatingLeaf delay={0} x={10} size={24} />
-      <FloatingLeaf delay={4} x={30} size={18} />
-      <FloatingLeaf delay={8} x={55} size={28} />
-      <FloatingLeaf delay={12} x={75} size={20} />
-      <FloatingLeaf delay={6} x={90} size={22} />
-
       {/* Premium Animated Section Header */}
-      <div ref={headerRef} className="relative flex justify-between items-end mb-16 z-10">
+      <div className="relative flex justify-between items-end mb-16 z-10">
         <div className="relative">
           {/* Decorative accent line */}
           <motion.div
             initial={{ width: 0 }}
-            animate={isHeaderInView ? { width: 48 } : { width: 0 }}
+            whileInView={{ width: 48 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="h-[2px] bg-gradient-to-r from-primary to-primary/30 mb-4"
           />
 
           <motion.h2
-            initial={{ opacity: 0, y: 25, filter: "blur(8px)" }}
-            animate={isHeaderInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.9, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="text-headline-lg font-serif text-primary mb-3"
           >
@@ -156,8 +111,9 @@ export const PlantGrid = () => {
           </motion.h2>
 
           <motion.p
-            initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
-            animate={isHeaderInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="text-body-md font-sans text-on-surface-variant font-light"
           >
@@ -167,7 +123,8 @@ export const PlantGrid = () => {
           {/* Animated underline glow */}
           <motion.div
             initial={{ scaleX: 0, opacity: 0 }}
-            animate={isHeaderInView ? { scaleX: 1, opacity: 1 } : {}}
+            whileInView={{ scaleX: 1, opacity: 1 }}
+            viewport={{ once: true }}
             transition={{ duration: 1.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
             className="absolute -bottom-4 left-0 right-0 h-px bg-gradient-to-r from-primary/40 via-primary/15 to-transparent origin-left"
           />
@@ -175,7 +132,8 @@ export const PlantGrid = () => {
 
         <motion.a
           initial={{ opacity: 0, x: 20 }}
-          animate={isHeaderInView ? { opacity: 1, x: 0 } : {}}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.4 }}
           className="hidden md:flex items-center text-label-sm font-sans uppercase tracking-widest text-primary hover:opacity-80 transition-opacity gap-2 group"
           href="#"
@@ -200,10 +158,7 @@ export const PlantGrid = () => {
           />
         </div>
       ) : (
-        <motion.div
-          style={{ y: yParallax }}
-          className="flex flex-col gap-16 relative z-10"
-        >
+        <div className="flex flex-col gap-16 relative z-10">
           {plantChunks.map((chunk, chunkIdx) => {
             const isEvenRow = chunkIdx % 2 === 0;
 
@@ -236,12 +191,9 @@ export const PlantGrid = () => {
                   {/* Decorative corner accent */}
                   <div className="absolute top-6 right-6 w-8 h-8 border-t border-r border-primary/10 rounded-tr-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                  <motion.h3
-                    className="text-headline-md font-serif text-primary mb-4"
-                    initial={false}
-                  >
+                  <h3 className="text-headline-md font-serif text-primary mb-4">
                     {largePlant.name}
-                  </motion.h3>
+                  </h3>
 
                   <p className="text-body-md font-sans text-on-surface-variant mb-8 line-clamp-3 font-light leading-relaxed">
                     {largePlant.description}
@@ -339,7 +291,7 @@ export const PlantGrid = () => {
               </motion.div>
             );
           })}
-        </motion.div>
+        </div>
       )}
 
       {/* Product Details Modal */}

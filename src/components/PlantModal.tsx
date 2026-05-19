@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plant } from "../lib/data";
 import { useCart } from "../context/CartContext";
@@ -18,40 +18,42 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
   const { language } = useLanguage();
 
   const images = plant.images && plant.images.length > 0 ? plant.images : (plant.image ? [plant.image] : []);
+  const imageCount = images.length;
 
   // Auto-slide images
   useEffect(() => {
-    if (!isAutoPlaying || images.length <= 1) return;
+    if (!isAutoPlaying || imageCount <= 1) return;
 
     const interval = setInterval(() => {
       setDirection(1);
-      setCurrentImage((prev) => (prev + 1) % images.length);
+      setCurrentImage((prev) => (prev + 1) % imageCount);
     }, AUTO_SLIDE_INTERVAL);
 
     return () => clearInterval(interval);
-  }, [isAutoPlaying, images.length, currentImage]);
+  }, [isAutoPlaying, imageCount, currentImage]);
 
-  const handleNext = useCallback(() => {
+  const pauseAutoPlay = () => {
     setIsAutoPlaying(false);
+    setTimeout(() => setIsAutoPlaying(true), 8000);
+  };
+
+  const handleNext = () => {
+    pauseAutoPlay();
     setDirection(1);
-    setCurrentImage((prev) => (prev + 1) % images.length);
-    // Resume auto-play after 8 seconds of inactivity
-    setTimeout(() => setIsAutoPlaying(true), 8000);
-  }, [images.length]);
+    setCurrentImage((prev) => (prev + 1) % imageCount);
+  };
 
-  const handlePrev = useCallback(() => {
-    setIsAutoPlaying(false);
+  const handlePrev = () => {
+    pauseAutoPlay();
     setDirection(-1);
-    setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
-    setTimeout(() => setIsAutoPlaying(true), 8000);
-  }, [images.length]);
+    setCurrentImage((prev) => (prev - 1 + imageCount) % imageCount);
+  };
 
-  const handleDotClick = useCallback((idx: number) => {
-    setIsAutoPlaying(false);
+  const handleDotClick = (idx: number) => {
+    pauseAutoPlay();
     setDirection(idx > currentImage ? 1 : -1);
     setCurrentImage(idx);
-    setTimeout(() => setIsAutoPlaying(true), 8000);
-  }, [currentImage]);
+  };
 
   // Slide animation variants
   const slideVariants = {
@@ -118,7 +120,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
           onClick={(e) => e.stopPropagation()}
           className="bg-[#f7faf7] rounded-[1.5rem] shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col md:flex-row relative max-h-[90vh] border border-[#002115]/10"
         >
-          {/* Circular Outline Close Button (Light Theme aligned to #002115 text) */}
+          {/* Circular Outline Close Button */}
           <button
             onClick={onClose}
             className="absolute top-4 right-4 z-50 bg-[#f7faf7]/85 backdrop-blur-sm w-10 h-10 rounded-full border border-[#002115]/10 text-[#002115]/70 hover:text-[#002115] hover:border-[#002115]/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
@@ -146,7 +148,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
             </AnimatePresence>
 
             {/* Auto-slide progress bar */}
-            {images.length > 1 && isAutoPlaying && (
+            {imageCount > 1 && isAutoPlaying && (
               <div className="absolute top-0 left-0 right-0 h-[3px] z-20 bg-[#002115]/10">
                 <motion.div
                   key={`progress-${currentImage}`}
@@ -159,7 +161,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
             )}
 
             {/* Left/Right Chevrons */}
-            {images.length > 1 && (
+            {imageCount > 1 && (
               <>
                 <button
                   onClick={handlePrev}
@@ -178,7 +180,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                   </span>
                 </button>
 
-                {/* Round dots indicator with active pulse */}
+                {/* Round dots indicator with active pill */}
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2.5 z-10">
                   {images.map((_, idx) => (
                     <button
@@ -196,7 +198,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
             )}
           </div>
 
-          {/* Right: Premium Light Cream Info Panel with #002115 Contrast Text */}
+          {/* Right: Premium Light Cream Info Panel */}
           <div className="w-full md:w-1/2 p-8 md:p-12 overflow-y-auto flex flex-col bg-[#f7faf7] max-h-[90vh] text-[#002115] scrollbar-thin">
             
             {/* Headline tag & names */}
@@ -225,7 +227,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
             {/* Divider */}
             <div className="border-t border-[#002115]/10 my-2" />
 
-            {/* Description from screenshot */}
+            {/* Description */}
             <div className="my-4">
               <p className="text-[#002115]/80 font-sans text-sm leading-relaxed font-light">
                 {plant.description}
@@ -328,7 +330,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
 
             </div>
 
-            {/* SECURE PURCHASE Button (Solid Dark Contrast CTA) */}
+            {/* SECURE PURCHASE Button */}
             <div className="mt-auto pt-2">
               <button
                 onClick={() => {
