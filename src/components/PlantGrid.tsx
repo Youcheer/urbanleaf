@@ -231,7 +231,7 @@ export const PlantGrid = () => {
                         {largePlant.isSold ? "block" : "add"}
                       </span>
                     </motion.button>
-                  </div>
+                  </motion.div>
                 </div>
               </motion.div>
             );
@@ -281,7 +281,7 @@ export const PlantGrid = () => {
                         >
                           favorite
                         </motion.span>
-                      </div>
+                      </motion.div>
                     </div>
                   </motion.div>
                 ))}
