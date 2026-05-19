@@ -202,7 +202,7 @@ export const AboutStory = () => {
                 arrow_forward
               </span>
             </button>
-          </div>
+          </motion.div>
           
         </motion.div>
 
