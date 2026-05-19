@@ -71,14 +71,15 @@ export const PlantGrid = () => {
   } as const;
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 50, scale: 0.96 },
+    hidden: { opacity: 0, y: 120, scale: 0.92, filter: "blur(4px)" },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
+      filter: "blur(0px)",
       transition: {
-        duration: 0.8,
-        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+        duration: 1.2,
+        ease: [0.19, 1, 0.22, 1] as [number, number, number, number],
       },
     },
   };
@@ -170,17 +171,17 @@ export const PlantGrid = () => {
                 variants={itemVariants}
                 whileHover={{ y: -6 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="md:col-span-8 group relative rounded-2xl overflow-hidden glass-panel flex flex-col md:flex-row shadow-[0_4px_40px_rgba(0,38,26,0.06)] hover:shadow-[0_20px_70px_rgba(0,38,26,0.14)] transition-shadow duration-700 cursor-pointer"
+                className="md:col-span-8 group relative rounded-[32px] overflow-hidden bg-white flex flex-col md:flex-row shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(0,38,26,0.1)] transition-all duration-700 cursor-pointer border border-[#002115]/5"
                 onClick={() => setSelectedPlant(largePlant)}
               >
                 {/* Image with Ken Burns effect */}
-                <div className="w-full md:w-1/2 h-[300px] md:h-[500px] relative overflow-hidden bg-surface-container">
+                <div className="w-full md:w-3/5 h-[400px] md:h-[600px] relative overflow-hidden bg-surface-container shrink-0">
                   <motion.img
                     src={largePlant.images[0] || "/placeholder.jpg"}
                     alt={largePlant.name}
                     className="w-full h-full object-cover"
-                    whileHover={{ scale: 1.08 }}
-                    transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 1.8, ease: [0.19, 1, 0.22, 1] }}
                   />
                   {/* Subtle image overlay gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -192,22 +193,22 @@ export const PlantGrid = () => {
                   )}
                 </div>
 
-                {/* Info panel - NO category tag */}
-                <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center relative">
+                {/* Info panel */}
+                <div className="w-full md:w-2/5 p-8 md:p-14 flex flex-col justify-center relative bg-white">
                   {/* Decorative corner accent */}
-                  <div className="absolute top-6 right-6 w-8 h-8 border-t border-r border-primary/10 rounded-tr-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute top-8 right-8 w-12 h-12 border-t-2 border-r-2 border-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-                  <h3 className="text-headline-md font-serif text-primary mb-4">
+                  <motion.h3 variants={itemVariants} className="text-[28px] md:text-[36px] leading-tight font-serif text-primary mb-6">
                     {largePlant.name}
-                  </h3>
+                  </motion.h3>
 
-                  <p className="text-body-md font-sans text-on-surface-variant mb-8 line-clamp-3 font-light leading-relaxed">
+                  <motion.p variants={itemVariants} className="text-body-lg font-sans text-on-surface-variant mb-10 line-clamp-4 font-light leading-relaxed">
                     {largePlant.description}
-                  </p>
+                  </motion.p>
 
-                  <div className="mt-auto flex items-center justify-between">
+                  <motion.div variants={itemVariants} className="mt-auto flex items-center justify-between">
                     <div>
-                      <span className="text-body-lg font-sans text-primary font-semibold">
+                      <span className="text-[22px] font-sans text-primary font-semibold tracking-wide">
                         Rs. {largePlant.price.toLocaleString()}
                       </span>
                     </div>
@@ -243,17 +244,17 @@ export const PlantGrid = () => {
                     variants={itemVariants}
                     whileHover={{ y: -6 }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    className="flex-1 group relative rounded-2xl overflow-hidden glass-panel shadow-[0_4px_40px_rgba(0,38,26,0.06)] hover:shadow-[0_20px_70px_rgba(0,38,26,0.14)] transition-shadow duration-700 cursor-pointer flex flex-col"
+                    className="flex-1 group relative rounded-[28px] overflow-hidden bg-white shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(0,38,26,0.1)] transition-all duration-700 cursor-pointer flex flex-col border border-[#002115]/5"
                     onClick={() => setSelectedPlant(plant)}
                   >
                     {/* Image with zoom */}
-                    <div className="h-[250px] relative overflow-hidden bg-surface-container shrink-0">
+                    <div className="h-[320px] md:h-[400px] relative overflow-hidden bg-surface-container shrink-0">
                       <motion.img
                         src={plant.images[0] || "/placeholder.jpg"}
                         alt={plant.name}
                         className="w-full h-full object-cover"
-                        whileHover={{ scale: 1.08 }}
-                        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                        whileHover={{ scale: 1.12 }}
+                        transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }}
                       />
                       {/* Overlay gradient on hover */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -265,12 +266,12 @@ export const PlantGrid = () => {
                       )}
                     </div>
 
-                    <div className="p-6 flex flex-col grow justify-between">
-                      <h4 className="text-body-lg font-serif text-primary font-medium mb-2">
+                    <div className="p-8 flex flex-col grow justify-between bg-white">
+                      <motion.h4 variants={itemVariants} className="text-[20px] font-serif text-primary font-medium mb-4 leading-tight">
                         {plant.name}
-                      </h4>
-                      <div className="flex items-center justify-between mt-auto">
-                        <span className={`text-body-md font-sans font-light ${plant.isSold ? "text-on-surface-variant/50 line-through" : "text-on-surface-variant"}`}>
+                      </motion.h4>
+                      <motion.div variants={itemVariants} className="flex items-center justify-between mt-auto">
+                        <span className={`text-[16px] font-sans font-medium tracking-wide ${plant.isSold ? "text-on-surface-variant/50 line-through" : "text-primary/90"}`}>
                           Rs. {plant.price.toLocaleString()}
                         </span>
                         <motion.span

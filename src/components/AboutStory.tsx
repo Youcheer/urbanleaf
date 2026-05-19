@@ -104,42 +104,66 @@ export const AboutStory = () => {
 
         {/* Right Column: Editorial Text Content */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: "easeOut", delay: 0.15 }}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.15,
+                delayChildren: 0.1,
+              },
+            },
+          }}
           className="w-full lg:w-1/2 flex flex-col text-[#002115]"
         >
           {/* Main Headline */}
-          <h2 className="font-serif text-3xl md:text-[36px] lg:text-[40px] font-bold leading-tight mb-6 uppercase tracking-wide">
+          <motion.h2 variants={{
+            hidden: { opacity: 0, y: 30 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+          }} className="font-serif text-3xl md:text-[36px] lg:text-[40px] font-bold leading-tight mb-6 uppercase tracking-wide">
             {content.headline}
-          </h2>
+          </motion.h2>
           
           {/* Thin horizontal divider */}
-          <div className="border-t border-[#002115]/10 w-16 mb-8" />
+          <motion.div variants={{
+            hidden: { opacity: 0, width: 0 },
+            visible: { opacity: 1, width: 64, transition: { duration: 0.8, ease: "easeOut" } }
+          }} className="border-t border-[#002115]/10 mb-8" />
 
           {/* Section: Our Story */}
-          <div className="mb-6">
+          <motion.div variants={{
+            hidden: { opacity: 0, y: 30 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+          }} className="mb-6">
             <h3 className="font-serif text-lg font-bold uppercase tracking-wider mb-2 text-[#002115]">
               {content.storyTitle}
             </h3>
             <p className="font-sans text-sm md:text-base leading-relaxed text-[#002115]/80 font-light">
               {content.storyPara}
             </p>
-          </div>
+          </motion.div>
 
           {/* Section: Our Collection */}
-          <div className="mb-8">
+          <motion.div variants={{
+            hidden: { opacity: 0, y: 30 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+          }} className="mb-8">
             <h3 className="font-serif text-lg font-bold uppercase tracking-wider mb-2 text-[#002115]">
               {content.collectionTitle}
             </h3>
             <p className="font-sans text-sm md:text-base leading-relaxed text-[#002115]/80 font-light">
               {content.collectionPara}
             </p>
-          </div>
+          </motion.div>
 
           {/* Section: Why Choose Us Benefits list */}
-          <div className="mb-8 py-6 border-t border-b border-[#002115]/10">
+          <motion.div variants={{
+            hidden: { opacity: 0, y: 30 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+          }} className="mb-8 py-6 border-t border-b border-[#002115]/10">
             <h3 className="font-serif text-lg font-bold uppercase tracking-wider mb-4 text-[#002115]">
               {content.whyTitle}
             </h3>
@@ -162,10 +186,13 @@ export const AboutStory = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Call to Action Button */}
-          <div>
+          <motion.div variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+          }}>
             <button
               onClick={handleCtaClick}
               className="bg-[#002115] hover:bg-[#003823] text-white px-8 py-4 rounded-full font-sans font-bold hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 inline-flex items-center gap-3 text-[12px] uppercase tracking-[0.1em] shadow-[0_8px_32px_rgba(0,33,20,0.12)] cursor-pointer border-none"
