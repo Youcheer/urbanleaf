@@ -68,7 +68,7 @@ export const PlantGrid = () => {
         delayChildren: 0.1,
       },
     },
-  };
+  } as const;
 
   const itemVariants = {
     hidden: { opacity: 0, y: 50, scale: 0.96 },
@@ -78,7 +78,7 @@ export const PlantGrid = () => {
       scale: 1,
       transition: {
         duration: 0.8,
-        ease: [0.16, 1, 0.3, 1],
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
       },
     },
   };
