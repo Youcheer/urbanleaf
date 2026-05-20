@@ -1,17 +1,13 @@
 "use client";
-import dynamic from 'next/dynamic';
-import 'react-quill/dist/quill.snow.css';
-
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+import React from 'react';
+import Editor, { DefaultEditor } from 'react-simple-wysiwyg';
 
 export const RichTextEditor = ({ value, onChange }: { value: string, onChange: (val: string) => void }) => {
   return (
-    <div className="rich-text-wrapper">
-      <ReactQuill 
-        theme="snow" 
+    <div className="rich-text-wrapper bg-white">
+      <DefaultEditor 
         value={value} 
-        onChange={onChange} 
-        className="bg-white rounded-xl" 
+        onChange={(e) => onChange(e.target.value)} 
       />
     </div>
   );
