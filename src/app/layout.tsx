@@ -49,6 +49,8 @@ export const metadata: Metadata = {
   ],
 };
 
+import { GoogleAnalytics } from '@next/third-parties/google';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -65,6 +67,7 @@ export default function RootLayout({
             {children}
           </CartProvider>
         </LanguageProvider>
+        <GoogleAnalytics gaId="G-Q6GFSZNEF0" />
       </body>
     </html>
   );
