@@ -44,7 +44,7 @@ export default function CareGuidesPage() {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           </div>
         ) : articles.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-3xl border border-gray-100 shadow-sm">
+          <div className="text-center py-20 bg-white dark:bg-surface rounded-3xl border border-gray-100 dark:border-white/10 shadow-sm">
             <p className="text-gray-500 font-sans">No guides published yet. Check back soon!</p>
           </div>
         ) : (
@@ -55,7 +55,7 @@ export default function CareGuidesPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
-                className="group flex flex-col bg-white rounded-[var(--radius-leaf)] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden border border-gray-100"
+                className="group flex flex-col bg-white dark:bg-surface rounded-[var(--radius-leaf)] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden border border-gray-100 dark:border-white/10"
               >
                 <Link href={`/care-guides/${article.slug}`} className="flex flex-col h-full">
                   <div className="w-full h-56 relative overflow-hidden">

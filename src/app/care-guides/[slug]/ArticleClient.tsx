@@ -43,9 +43,9 @@ export default function ArticleClient({ initialArticle, slug }: { initialArticle
 
   if (!article) {
     return (
-      <main className="min-h-screen bg-[#f4f7f4] flex flex-col items-center justify-center px-4">
+      <main className="min-h-screen bg-[#f4f7f4] dark:bg-surface flex flex-col items-center justify-center px-4">
         <Navbar />
-        <h1 className="text-3xl font-playfair font-bold text-[#1a4a28] mb-4 mt-20">Article Not Found</h1>
+        <h1 className="text-3xl font-playfair font-bold text-[#1a4a28] dark:text-primary mb-4 mt-20">Article Not Found</h1>
         <p className="text-gray-500 mb-6">The care guide you are looking for does not exist.</p>
         <Link href="/care-guides" className="bg-[#1a4a28] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#3b8554] transition-colors">
           Browse All Guides
@@ -84,7 +84,7 @@ export default function ArticleClient({ initialArticle, slug }: { initialArticle
               <img 
                 src={article.featuredImage} 
                 alt={article.title} 
-                className="w-full h-auto max-h-[600px] object-contain bg-gray-50"
+                className="w-full h-auto max-h-[600px] object-contain bg-gray-50 dark:bg-surface-container"
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
                 <div className="bg-white/80 backdrop-blur-sm text-[#1a4a28] px-4 py-2 rounded-full font-bold opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0">
@@ -121,7 +121,7 @@ export default function ArticleClient({ initialArticle, slug }: { initialArticle
 
         {/* Content */}
         <div 
-          className="prose prose-lg prose-green max-w-none font-sans text-on-surface-variant leading-relaxed"
+          className="prose prose-lg prose-green max-w-none font-sans text-on-surface-variant leading-relaxed dark:prose-invert"
           dangerouslySetInnerHTML={{ __html: article.content }}
         />
 
@@ -138,7 +138,7 @@ export default function ArticleClient({ initialArticle, slug }: { initialArticle
               {relatedProducts.map(product => {
                 const imgUrl = product.images?.[0] || product.image;
                 return (
-                  <div key={product.id} className="bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
+                  <div key={product.id} className="bg-white dark:bg-surface border border-gray-100 dark:border-white/10 rounded-2xl p-4 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
                     <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0">
                       {imgUrl && <img src={imgUrl} alt={product.name} className="w-full h-full object-cover" />}
                     </div>

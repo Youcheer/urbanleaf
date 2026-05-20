@@ -37,7 +37,7 @@ export const PlantCard = ({ plant, onClick }: { plant: Plant; onClick: () => voi
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      className="group relative overflow-hidden rounded-[var(--radius-leaf)] bg-white/60 dark:bg-tertiary/60 backdrop-blur-xl border border-white dark:border-white/10 border-t-2 border-t-[var(--color-accent)] shadow-[0_8px_32px_rgba(0,38,26,0.03)] hover:shadow-[0_24px_48px_rgba(0,38,26,0.08)] hover:-translate-y-1.5 transition-all duration-500 ease-out cursor-pointer aspect-[3/4] flex flex-col"
+      className="group relative overflow-hidden rounded-[var(--radius-leaf)] bg-white/60 dark:bg-surface/60 backdrop-blur-xl border border-white dark:border-white/10 border-t-2 border-t-[var(--color-accent)] shadow-[0_8px_32px_rgba(0,38,26,0.03)] hover:shadow-[0_24px_48px_rgba(0,38,26,0.08)] hover:-translate-y-1.5 transition-all duration-500 ease-out cursor-pointer aspect-[3/4] flex flex-col"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -55,7 +55,7 @@ export const PlantCard = ({ plant, onClick }: { plant: Plant; onClick: () => voi
       {/* Top Floating Tag */}
       {tag && (
         <div className="absolute top-4 left-4 z-10">
-          <span className="px-3 py-1 bg-white/80 dark:bg-tertiary/80 backdrop-blur-md rounded-[var(--radius-leaf-reverse)] font-sans text-[11px] uppercase tracking-widest text-primary dark:text-primary-fixed border border-white/50 dark:border-white/10 font-semibold shadow-sm">
+          <span className="px-3 py-1 bg-white/80 dark:bg-surface/90 backdrop-blur-md rounded-[var(--radius-leaf-reverse)] font-sans text-[11px] uppercase tracking-widest text-primary dark:text-primary-fixed border border-white/50 dark:border-white/10 font-semibold shadow-sm">
             {tag}
           </span>
         </div>
@@ -63,7 +63,7 @@ export const PlantCard = ({ plant, onClick }: { plant: Plant; onClick: () => voi
 
       {/* Glassmorphism Bottom Overlay */}
       <div 
-        className={`mt-auto relative z-10 p-5 bg-white/80 dark:bg-tertiary/80 backdrop-blur-xl border-t border-white/30 dark:border-white/10 flex flex-col transition-all duration-500 ease-out translate-y-0 md:translate-y-14 md:group-hover:translate-y-0`}
+        className={`mt-auto relative z-10 p-5 bg-white/80 dark:bg-surface-container/95 backdrop-blur-xl border-t border-white/30 dark:border-white/10 flex flex-col transition-all duration-500 ease-out translate-y-0 md:translate-y-14 md:group-hover:translate-y-0`}
       >
         <div className="flex justify-between items-start mb-2 gap-2">
           <div>
