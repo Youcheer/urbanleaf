@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "../context/CartContext";
 import { LanguageProvider } from "../context/LanguageContext";
+import { ThemeProvider } from "../components/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
@@ -61,13 +62,15 @@ export default function RootLayout({
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
       </head>
-      <body className="bg-background text-on-surface font-sans antialiased selection:bg-primary-container selection:text-on-primary-container">
-        <LanguageProvider>
-          <CartProvider>
-            {children}
-          </CartProvider>
-        </LanguageProvider>
-        <GoogleAnalytics gaId="G-Q6GFSZNEF0" />
+      <body className="bg-background text-on-surface font-sans antialiased selection:bg-primary-container selection:text-on-primary-container transition-colors duration-300">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <LanguageProvider>
+            <CartProvider>
+              {children}
+            </CartProvider>
+          </LanguageProvider>
+          <GoogleAnalytics gaId="G-Q6GFSZNEF0" />
+        </ThemeProvider>
       </body>
     </html>
   );

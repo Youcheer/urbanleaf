@@ -65,8 +65,8 @@ export const Hero = () => {
         </AnimatePresence>
 
         {/* Soft luxury editorial gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/40 to-transparent z-10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-80 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/40 to-transparent z-10 dark:from-[#08100A] dark:via-[#08100A]/60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-80 z-10 dark:from-[#08100A] dark:via-[#08100A]/40" />
       </div>
 
       {/* Hero Content - Luxury Glassmorphic Center Card */}
@@ -81,7 +81,7 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-display-lg-mobile md:text-display-lg font-serif text-primary mb-6 leading-tight"
+            className="text-display-lg-mobile md:text-display-lg font-serif text-primary dark:text-on-surface mb-6 leading-tight"
           >
             {t("heroHeadline")}
           </motion.h1>
@@ -102,7 +102,7 @@ export const Hero = () => {
           >
             <a
               href="#collection"
-              className="inline-block bg-[var(--color-primary)] text-white px-8 py-4 rounded-[var(--radius-leaf-reverse)] hover:bg-[var(--color-accent)] active:scale-95 transition-all duration-300 text-label-md font-sans font-semibold uppercase tracking-widest shadow-[0_8px_32px_rgba(0,38,26,0.15)]"
+              className="inline-block bg-[var(--color-primary)] dark:bg-gradient-to-r dark:from-[var(--color-accent)] dark:to-[#be123c] text-white px-8 py-4 rounded-[var(--radius-leaf-reverse)] hover:bg-[var(--color-accent)] active:scale-95 transition-all duration-300 text-label-md font-sans font-semibold uppercase tracking-widest shadow-[0_8px_32px_rgba(0,38,26,0.15)] dark:shadow-[0_8px_32px_rgba(229,71,94,0.3)]"
             >
               {t("heroCta")}
             </a>

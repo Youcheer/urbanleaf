@@ -116,6 +116,32 @@
     background-color: var(--color-background);
     color: var(--color-on-surface);
   }
+
+  .dark {
+    /* Premium Dark Green Theme based on Design */
+    --color-background: #08100A;
+    --color-on-background: #e6eee9;
+    
+    --color-surface: #101F15;
+    --color-on-surface: #F5F7F5;
+    
+    --color-primary: #a2d1bb;
+    --color-on-primary: #00261a;
+    --color-primary-container: #142E1F;
+    --color-on-primary-container: #a2d1bb;
+    
+    --color-accent: #e5475e;
+    --color-on-accent: #ffffff;
+    --color-accent-container: #47111c;
+    --color-on-accent-container: #ffd9e0;
+    
+    --color-outline: #4d5c53;
+    --color-outline-variant: #2d3b32;
+    
+    --color-surface-container-low: #0B160E;
+    --color-surface-container: #101F15;
+    --color-surface-container-high: #15291B;
+  }
 }
 
 /* Glassmorphism Stylesheet */
