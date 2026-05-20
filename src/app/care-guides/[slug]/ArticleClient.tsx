@@ -11,6 +11,7 @@ export default function ArticleClient({ initialArticle, slug }: { initialArticle
   const [article, setArticle] = useState<Article | null>(initialArticle);
   const [relatedProducts, setRelatedProducts] = useState<Plant[]>([]);
   const [loading, setLoading] = useState(!initialArticle);
+  const [isImageZoomed, setIsImageZoomed] = useState(false);
 
   useEffect(() => {
     if (!initialArticle) {
@@ -75,13 +76,47 @@ export default function ArticleClient({ initialArticle, slug }: { initialArticle
 
         {/* Featured Image */}
         {article.featuredImage && (
-          <div className="w-full h-64 md:h-[400px] rounded-[var(--radius-leaf)] overflow-hidden mb-10 shadow-md">
-            <img 
-              src={article.featuredImage} 
-              alt={article.title} 
-              className="w-full h-full object-cover"
-            />
-          </div>
+          <>
+            <div 
+              className="w-full rounded-[var(--radius-leaf)] overflow-hidden mb-10 shadow-md cursor-pointer group relative"
+              onClick={() => setIsImageZoomed(true)}
+            >
+              <img 
+                src={article.featuredImage} 
+                alt={article.title} 
+                className="w-full h-auto max-h-[600px] object-contain bg-gray-50"
+              />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                <div className="bg-white/80 backdrop-blur-sm text-[#1a4a28] px-4 py-2 rounded-full font-bold opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0">
+                  <span className="material-symbols-outlined text-sm">zoom_in</span>
+                  Click to Zoom
+                </div>
+              </div>
+            </div>
+
+            {/* Image Zoom Modal */}
+            {isImageZoomed && (
+              <div 
+                className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 cursor-zoom-out"
+                onClick={() => setIsImageZoomed(false)}
+              >
+                <div className="relative max-w-[95vw] max-h-[95vh]">
+                  <button 
+                    className="absolute -top-12 right-0 text-white hover:text-gray-300 flex items-center gap-2"
+                    onClick={(e) => { e.stopPropagation(); setIsImageZoomed(false); }}
+                  >
+                    <span className="material-symbols-outlined">close</span>
+                    Close
+                  </button>
+                  <img 
+                    src={article.featuredImage} 
+                    alt={article.title} 
+                    className="max-w-full max-h-[90vh] object-contain rounded-lg"
+                  />
+                </div>
+              </div>
+            )}
+          </>
         )}
 
         {/* Content */}
