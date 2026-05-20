@@ -10,9 +10,11 @@ export const Cart = () => {
   const { t } = useLanguage();
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
+  const [contactNumber, setContactNumber] = useState("");
+  const [orderNote, setOrderNote] = useState("");
 
   const handleCheckout = () => {
-    if (!name || !address) {
+    if (!name || !address || !contactNumber) {
       alert(t("pleaseEnterDetails"));
       return;
     }
@@ -21,7 +23,8 @@ export const Cart = () => {
       .map((item) => `${item.name} (x${item.quantity}) - LKR ${(item.price * item.quantity).toLocaleString()}`)
       .join("%0A");
 
-    const message = `Hello Urban Leaf! I would like to place an order:%0A%0A*Order Details:*%0A${orderDetails}%0A%0A*Total:* LKR ${cartTotal.toLocaleString()}%0A%0A*Customer Details:*%0AName: ${name}%0AAddress: ${address}`;
+    const noteText = orderNote ? `%0AOrder Note: ${orderNote}` : "";
+    const message = `Hello Urban Leaf! I would like to place an order:%0A%0A*Order Details:*%0A${orderDetails}%0A%0A*Total:* LKR ${cartTotal.toLocaleString()}%0A%0A*Customer Details:*%0AName: ${name}%0AContact Number: ${contactNumber}%0AAddress: ${address}${noteText}`;
     
     // Configured Seller WhatsApp number
     const whatsappUrl = `https://wa.me/94718546219?text=${message}`;
@@ -150,10 +153,24 @@ export const Cart = () => {
                     onChange={(e) => setName(e.target.value)}
                     className="w-full px-4 py-3 rounded-xl border border-[#002115]/20 focus:outline-none focus:ring-1 focus:ring-[#002115]/30 bg-white text-[#003314] font-sans text-sm placeholder:text-gray-400 transition-all duration-300 font-light"
                   />
+                  <input
+                    type="tel"
+                    placeholder="Contact Number"
+                    value={contactNumber}
+                    onChange={(e) => setContactNumber(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl border border-[#002115]/20 focus:outline-none focus:ring-1 focus:ring-[#002115]/30 bg-white text-[#003314] font-sans text-sm placeholder:text-gray-400 transition-all duration-300 font-light"
+                  />
                   <textarea
                     placeholder={t("deliveryAddress")}
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
+                    rows={2}
+                    className="w-full px-4 py-3 rounded-xl border border-[#002115]/20 focus:outline-none focus:ring-1 focus:ring-[#002115]/30 bg-white text-[#003314] font-sans text-sm placeholder:text-gray-400 transition-all duration-300 resize-none font-light"
+                  />
+                  <textarea
+                    placeholder="Order Note (Optional)"
+                    value={orderNote}
+                    onChange={(e) => setOrderNote(e.target.value)}
                     rows={2}
                     className="w-full px-4 py-3 rounded-xl border border-[#002115]/20 focus:outline-none focus:ring-1 focus:ring-[#002115]/30 bg-white text-[#003314] font-sans text-sm placeholder:text-gray-400 transition-all duration-300 resize-none font-light"
                   />
