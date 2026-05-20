@@ -171,7 +171,7 @@ export const PlantGrid = () => {
                 variants={itemVariants}
                 whileHover={{ y: -6 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="md:col-span-8 group relative rounded-[var(--radius-leaf)] overflow-hidden bg-white dark:bg-surface flex flex-col md:flex-row shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(0,38,26,0.1)] transition-all duration-700 cursor-pointer border-t-2 border-t-[var(--color-accent)] border border-[#002115]/5 dark:border-white/5"
+                className="md:col-span-8 group relative rounded-[var(--radius-leaf)] overflow-hidden bg-white dark:bg-[#0c1810] flex flex-col md:flex-row shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(0,38,26,0.1)] transition-all duration-700 cursor-pointer border-t-2 border-t-[var(--color-accent)] border border-[#002115]/5 dark:border-white/5"
                 onClick={() => setSelectedPlant(largePlant)}
               >
                 {/* Image with Ken Burns effect */}
@@ -194,7 +194,7 @@ export const PlantGrid = () => {
                 </div>
 
                 {/* Info panel */}
-                <div className="w-full md:w-2/5 p-8 md:p-14 flex flex-col justify-center relative bg-white dark:bg-surface">
+                <div className="w-full md:w-2/5 p-6 md:p-10 flex flex-col justify-center relative bg-white dark:bg-transparent">
                   {/* Decorative corner accent */}
                   <div className="absolute top-8 right-8 w-12 h-12 border-t-2 border-r-2 border-[var(--color-accent)]/50 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
@@ -202,7 +202,7 @@ export const PlantGrid = () => {
                     {largePlant.name}
                   </motion.h3>
 
-                  <motion.p variants={itemVariants} className="text-body-lg font-sans text-on-surface-variant mb-10 line-clamp-4 font-light leading-relaxed">
+                  <motion.p variants={itemVariants} className="text-sm md:text-base font-sans text-on-surface-variant mb-10 line-clamp-4 font-light leading-relaxed">
                     {largePlant.description}
                   </motion.p>
 
@@ -237,18 +237,18 @@ export const PlantGrid = () => {
             );
 
             const smallCardsCol = smallPlants.length > 0 && (
-              <div className="md:col-span-4 flex flex-col gap-gutter">
+              <div className="md:col-span-4 flex flex-col gap-4 md:gap-6">
                 {smallPlants.map((plant) => (
                   <motion.div
                     key={plant.id}
                     variants={itemVariants}
                     whileHover={{ y: -6 }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    className="flex-1 group relative rounded-[var(--radius-leaf-reverse)] overflow-hidden bg-white dark:bg-surface shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(0,38,26,0.1)] transition-all duration-700 cursor-pointer flex flex-col border-t-2 border-t-[var(--color-accent)] border border-[#002115]/5 dark:border-white/5"
+                    className="flex-1 group relative rounded-[var(--radius-leaf-reverse)] overflow-hidden bg-white dark:bg-[#0c1810] shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(0,38,26,0.1)] transition-all duration-700 cursor-pointer flex flex-col border-t-2 border-t-[var(--color-accent)] border border-[#002115]/5 dark:border-white/5"
                     onClick={() => setSelectedPlant(plant)}
                   >
                     {/* Image with zoom */}
-                    <div className="h-[320px] md:h-[400px] relative overflow-hidden bg-surface-container shrink-0">
+                    <div className="h-[280px] md:h-[320px] relative overflow-hidden bg-surface-container shrink-0">
                       <motion.img
                         src={plant.images[0] || "/placeholder.jpg"}
                         alt={plant.name}
@@ -266,12 +266,12 @@ export const PlantGrid = () => {
                       )}
                     </div>
 
-                    <div className="p-8 flex flex-col grow justify-between bg-white dark:bg-surface">
-                      <motion.h4 variants={itemVariants} className="text-[20px] font-serif text-primary dark:text-on-surface font-medium mb-4 leading-tight">
+                    <div className="p-6 flex flex-col grow justify-between bg-white dark:bg-transparent">
+                      <motion.h4 variants={itemVariants} className="text-[22px] font-serif text-primary dark:text-on-surface font-semibold mb-3 leading-tight">
                         {plant.name}
                       </motion.h4>
                       <motion.div variants={itemVariants} className="flex items-center justify-between mt-auto">
-                        <span className={`text-[16px] font-sans font-medium tracking-wide ${plant.isSold ? "text-on-surface-variant/50 line-through" : "text-primary/90 dark:text-on-surface"}`}>
+                        <span className={`text-[18px] font-sans font-medium tracking-wide ${plant.isSold ? "text-on-surface-variant/50 line-through" : "text-primary/90 dark:text-on-surface"}`}>
                           Rs. {plant.price.toLocaleString()}
                         </span>
                         <motion.span
@@ -295,7 +295,7 @@ export const PlantGrid = () => {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-80px" }}
-                className="grid grid-cols-1 md:grid-cols-12 gap-gutter"
+                className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8"
               >
                 {isEvenRow ? (
                   <>

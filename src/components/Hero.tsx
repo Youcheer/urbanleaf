@@ -81,7 +81,7 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-display-lg-mobile md:text-display-lg font-serif text-primary dark:text-on-surface mb-6 leading-tight"
+            className="text-4xl md:text-5xl lg:text-6xl font-serif text-primary dark:text-on-surface mb-6 leading-tight font-bold"
           >
             {t("heroHeadline")}
           </motion.h1>
@@ -90,7 +90,7 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-body-lg font-sans text-on-surface-variant mb-8 max-w-lg leading-relaxed"
+            className="text-lg md:text-xl lg:text-2xl font-sans text-on-surface-variant mb-8 max-w-lg leading-relaxed"
           >
             {t("heroSubheadline")}
           </motion.p>
