@@ -2,9 +2,11 @@ import { Metadata } from 'next';
 import { getArticles } from '../../../lib/db';
 import ArticleClient from './ArticleClient';
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const slug = resolvedParams.slug;
   const articles = await getArticles();
-  const article = articles.find(a => a.slug === params.slug);
+  const article = articles.find(a => a.slug === slug);
 
   if (!article) {
     return { title: 'Article Not Found | Urban Leaf' };
@@ -27,9 +29,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function ArticlePage({ params }: { params: { slug: string } }) {
+export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await params;
+  const slug = resolvedParams.slug;
   const articles = await getArticles();
-  const article = articles.find(a => a.slug === params.slug);
+  const article = articles.find(a => a.slug === slug);
 
-  return <ArticleClient initialArticle={article || null} slug={params.slug} />;
+  return <ArticleClient initialArticle={article || null} slug={slug} />;
 }
