@@ -75,7 +75,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.0, ease: "easeOut" }}
-          className="max-w-2xl glass-panel p-8 md:p-12 rounded-xl"
+          className="max-w-2xl glass-panel p-8 md:p-12 rounded-[var(--radius-leaf)] border-t-4 border-t-[var(--color-accent)]"
         >
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -102,7 +102,7 @@ export const Hero = () => {
           >
             <a
               href="#collection"
-              className="inline-block bg-primary text-on-primary px-8 py-4 rounded-default hover:bg-surface-tint active:scale-95 transition-all duration-300 text-label-md font-sans font-semibold uppercase tracking-widest shadow-[0_8px_32px_rgba(0,38,26,0.15)]"
+              className="inline-block bg-[var(--color-primary)] text-white px-8 py-4 rounded-[var(--radius-leaf-reverse)] hover:bg-[var(--color-accent)] active:scale-95 transition-all duration-300 text-label-md font-sans font-semibold uppercase tracking-widest shadow-[0_8px_32px_rgba(0,38,26,0.15)]"
             >
               {t("heroCta")}
             </a>

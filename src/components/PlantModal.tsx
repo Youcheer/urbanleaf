@@ -118,12 +118,12 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
           exit={{ y: 50, opacity: 0, scale: 0.95 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-[#f7faf7] rounded-[1.5rem] shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col md:flex-row relative max-h-[90vh] border border-[#002115]/10"
+          className="bg-[#f7faf7] rounded-[var(--radius-leaf)] shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col md:flex-row relative max-h-[90vh] border-t-4 border-t-[var(--color-accent)] border-[#002115]/10"
         >
           {/* Circular Outline Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-50 bg-[#f7faf7]/85 backdrop-blur-sm w-10 h-10 rounded-full border border-[#002115]/10 text-[#002115]/70 hover:text-[#002115] hover:border-[#002115]/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
+            className="absolute top-4 right-4 z-50 bg-[#f7faf7]/85 backdrop-blur-sm w-10 h-10 rounded-[var(--radius-full)] border border-[#002115]/10 text-[#002115]/70 hover:text-[var(--color-accent)] hover:border-[var(--color-accent)]/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
           >
             <span className="material-symbols-outlined block text-[20px] font-light" style={{ fontVariationSettings: "'FILL' 0" }}>
               close
@@ -188,8 +188,8 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                       onClick={() => handleDotClick(idx)}
                       className={`rounded-full transition-all duration-500 cursor-pointer ${
                         currentImage === idx
-                          ? "bg-[#002115] w-6 h-2.5 shadow-[0_0_8px_rgba(0,33,21,0.3)]"
-                          : "bg-[#002115]/30 w-2.5 h-2.5 hover:bg-[#002115]/50"
+                          ? "bg-[var(--color-accent)] w-6 h-2.5 shadow-[0_0_8px_rgba(212,63,94,0.3)]"
+                          : "bg-[#002115]/30 w-2.5 h-2.5 hover:bg-[var(--color-accent)]/50"
                       }`}
                     />
                   ))}
@@ -199,11 +199,11 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
           </div>
 
           {/* Right: Premium Light Cream Info Panel */}
-          <div className="w-full md:w-1/2 p-8 md:p-12 overflow-y-auto flex flex-col bg-[#f7faf7] max-h-[90vh] text-[#002115] scrollbar-thin">
+          <div className="w-full md:w-1/2 p-6 md:p-12 overflow-y-auto flex flex-col bg-[#f7faf7] max-h-[90vh] text-[#002115] scrollbar-thin">
             
             {/* Headline tag & names */}
             <div className="mb-2">
-              <span className="inline-block px-4 py-1.5 bg-[#ecefec] text-[#002115] font-sans text-[10px] font-semibold rounded-full tracking-widest uppercase mb-4 border border-[#002115]/15">
+              <span className="inline-block px-4 py-1.5 bg-[var(--color-accent-container)] text-[var(--color-on-accent-container)] font-sans text-[10px] font-semibold rounded-[var(--radius-leaf)] tracking-widest uppercase mb-4 border border-[var(--color-accent)]/15">
                 {tag}
               </span>
               {plant.isSold && (
@@ -211,7 +211,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                   SOLD OUT
                 </span>
               )}
-              <h2 className="font-serif text-3xl md:text-[38px] font-bold text-[#002115] mb-2 leading-tight uppercase tracking-wide">
+              <h2 className="font-serif text-3xl md:text-[38px] font-bold text-[var(--color-primary)] mb-2 leading-tight uppercase tracking-wide">
                 {plant.name}
               </h2>
             </div>
@@ -221,7 +221,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
 
             {/* Pricing block */}
             <div className="py-2">
-              <p className="font-serif text-2xl md:text-3xl font-bold text-[#002115] tracking-wide">
+              <p className="font-serif text-2xl md:text-3xl font-bold text-[var(--color-accent)] tracking-wide">
                 LKR {plant.price.toLocaleString()}
               </p>
               <p className="text-[11px] font-sans text-[#002115]/60 mt-1.5 tracking-wide font-light">
@@ -251,7 +251,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                   onClick={() => setActiveAccordion(activeAccordion === "care" ? null : "care")}
                   className="w-full flex justify-between items-center text-left cursor-pointer border-none bg-transparent p-0 focus:outline-none"
                 >
-                  <h3 className="font-serif text-[#002115] text-lg font-medium transition-transform duration-300">
+                  <h3 className="font-serif text-[#002115] text-lg font-medium transition-transform duration-300 hover:text-[var(--color-accent)]">
                     {labels.careGuide}
                   </h3>
                   <span className={`material-symbols-outlined text-[#002115] transition-transform duration-300 ${activeAccordion === "care" ? "rotate-180" : ""}`}>
@@ -268,9 +268,9 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="pt-4 space-y-4 font-sans text-xs">
+                      <div className="pt-4 space-y-4 font-sans text-xs pb-2">
                         <div className="flex items-center gap-4">
-                          <div className="w-8 h-8 rounded-full border border-[#002115]/15 flex items-center justify-center text-[#002115] shrink-0">
+                          <div className="w-8 h-8 rounded-[var(--radius-leaf)] border border-[#002115]/15 flex items-center justify-center text-[var(--color-accent)] shrink-0 bg-[var(--color-accent-container)]">
                             <span className="material-symbols-outlined text-base">sunny</span>
                           </div>
                           <div>
@@ -279,7 +279,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
-                          <div className="w-8 h-8 rounded-full border border-[#002115]/15 flex items-center justify-center text-[#002115] shrink-0">
+                          <div className="w-8 h-8 rounded-[var(--radius-leaf)] border border-[#002115]/15 flex items-center justify-center text-[var(--color-accent)] shrink-0 bg-[var(--color-accent-container)]">
                             <span className="material-symbols-outlined text-base">water_drop</span>
                           </div>
                           <div>
@@ -288,7 +288,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
-                          <div className="w-8 h-8 rounded-full border border-[#002115]/15 flex items-center justify-center text-[#002115] shrink-0">
+                          <div className="w-8 h-8 rounded-[var(--radius-leaf)] border border-[#002115]/15 flex items-center justify-center text-[var(--color-accent)] shrink-0 bg-[var(--color-accent-container)]">
                             <span className="material-symbols-outlined text-base">thermostat</span>
                           </div>
                           <div>
@@ -308,7 +308,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                   onClick={() => setActiveAccordion(activeAccordion === "shipping" ? null : "shipping")}
                   className="w-full flex justify-between items-center text-left cursor-pointer border-none bg-transparent p-0 focus:outline-none"
                 >
-                  <h3 className="font-serif text-[#002115] text-lg font-medium transition-transform duration-300">
+                  <h3 className="font-serif text-[#002115] text-lg font-medium transition-transform duration-300 hover:text-[var(--color-accent)]">
                     {labels.shippingReturns}
                   </h3>
                   <span className={`material-symbols-outlined text-[#002115] transition-transform duration-300 ${activeAccordion === "shipping" ? "rotate-180" : ""}`}>
@@ -325,7 +325,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="pt-4 text-xs font-sans text-[#002115]/80 leading-relaxed font-light">
+                      <div className="pt-4 pb-2 text-xs font-sans text-[#002115]/80 leading-relaxed font-light">
                         {labels.shippingDetails}
                       </div>
                     </motion.div>
@@ -336,7 +336,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
             </div>
 
             {/* SECURE PURCHASE Button */}
-            <div className="mt-auto pt-2">
+            <div className="mt-auto pt-2 pb-6 md:pb-0">
               <button
                 disabled={plant.isSold}
                 onClick={() => {
@@ -345,10 +345,10 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                     onClose();
                   }
                 }}
-                className={`w-full py-4 rounded-default font-sans font-bold transition-all duration-300 flex justify-center items-center gap-3 text-[12px] uppercase tracking-[0.1em] border-none ${
+                className={`w-full py-4 rounded-[var(--radius-leaf-reverse)] font-sans font-bold transition-all duration-300 flex justify-center items-center gap-3 text-[12px] uppercase tracking-[0.1em] border-none ${
                   plant.isSold
                     ? "bg-[#002115]/10 text-[#002115]/40 cursor-not-allowed"
-                    : "bg-[#002115] hover:bg-[#003823] text-white hover:scale-[1.01] active:scale-[0.98] shadow-[0_8px_32px_rgba(0,33,20,0.12)] cursor-pointer"
+                    : "bg-[var(--color-primary)] hover:bg-[var(--color-accent)] text-white hover:scale-[1.01] active:scale-[0.98] shadow-[0_8px_32px_rgba(0,33,20,0.12)] cursor-pointer"
                 }`}
               >
                 <span className="material-symbols-outlined text-lg font-light">

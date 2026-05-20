@@ -338,17 +338,30 @@ export default function AdminPage() {
           </div>
         </header>
 
+        {/* Mobile FAB */}
+        {!isFormOpen && (
+          <button
+            onClick={() => {
+              resetForm();
+              setIsFormOpen(true);
+            }}
+            className="md:hidden fixed bottom-6 right-6 w-14 h-14 bg-[var(--color-primary)] text-white rounded-[var(--radius-full)] shadow-xl flex items-center justify-center z-40 active:scale-95 transition-transform"
+          >
+            <Plus className="w-6 h-6" />
+          </button>
+        )}
+
         {/* Admin Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* List of Plants */}
           <div className="lg:col-span-2 space-y-6">
-            <h2 className="font-playfair text-2xl font-bold">Plants Inventory ({plantsList.length})</h2>
+            <h2 className="font-playfair text-2xl font-bold text-[var(--color-primary)]">Plants Inventory ({plantsList.length})</h2>
             {loading ? (
-              <div className="flex justify-center items-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100">
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#1a4a28]"></div>
+              <div className="flex justify-center items-center py-20 bg-white rounded-[var(--radius-leaf)] shadow-sm border border-gray-100">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[var(--color-primary)]"></div>
               </div>
             ) : plantsList.length === 0 ? (
-              <div className="bg-white p-12 rounded-3xl text-center shadow-sm border border-gray-100">
+              <div className="bg-white p-12 rounded-[var(--radius-leaf)] text-center shadow-sm border border-gray-100">
                 <p className="text-gray-500">No plants in the inventory. Click "Add Plant" to create one.</p>
               </div>
             ) : (
@@ -356,20 +369,20 @@ export default function AdminPage() {
                 {plantsList.map((plant) => {
                   const mainImg = plant.images && plant.images.length > 0 ? plant.images[0] : (plant as any).image;
                   return (
-                    <div key={plant.id} className="bg-white p-5 rounded-3xl shadow-sm hover:shadow-md border border-gray-100 flex gap-4 transition-all">
-                      <img src={mainImg} alt={plant.name} className="w-24 h-24 object-cover rounded-2xl flex-shrink-0" />
+                    <div key={plant.id} className="bg-white p-5 rounded-[var(--radius-leaf-reverse)] shadow-sm hover:shadow-md border border-gray-100 flex gap-4 transition-all">
+                      <img src={mainImg} alt={plant.name} className="w-24 h-24 object-cover rounded-[var(--radius-leaf)] flex-shrink-0" />
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-lg truncate uppercase">{plant.name}</h3>
+                        <h3 className="font-bold text-lg truncate uppercase text-[var(--color-primary)]">{plant.name}</h3>
                         <p className="text-xs text-gray-400 italic truncate mb-2">{plant.scientificName}</p>
-                        <p className="font-semibold text-[#3b8554]">LKR {plant.price.toLocaleString()}</p>
-                        <div className="flex gap-2 mt-1">
+                        <p className="font-semibold text-[var(--color-accent)]">LKR {plant.price.toLocaleString()}</p>
+                        <div className="flex gap-2 mt-1 flex-wrap">
                           {plant.isSold && <span className="text-[10px] font-bold bg-red-100 text-red-600 px-2 py-0.5 rounded-full uppercase tracking-wider">Sold Out</span>}
                           {plant.order !== undefined && plant.order !== 999 && <span className="text-[10px] font-bold bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full uppercase tracking-wider">Order: {plant.order}</span>}
                         </div>
                         <div className="flex gap-2 mt-4">
                           <button
                             onClick={() => handleEdit(plant)}
-                            className="p-2 bg-gray-100 hover:bg-[#e2e8e4] rounded-lg transition-colors"
+                            className="p-2 bg-gray-100 hover:bg-[var(--color-accent-container)] hover:text-[var(--color-accent)] rounded-lg transition-colors"
                             title="Edit"
                           >
                             <Edit className="w-4 h-4" />
@@ -398,11 +411,16 @@ export default function AdminPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 20 }}
-                  className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 sticky top-6"
+                  className="fixed inset-0 z-50 bg-[#f4f7f4] overflow-y-auto p-6 md:p-8 md:relative md:inset-auto md:z-auto md:bg-white md:rounded-[var(--radius-leaf)] md:shadow-xl md:border md:border-gray-100 md:sticky md:top-6"
                 >
-                  <h2 className="font-playfair text-2xl font-bold mb-6">
-                    {editingPlant ? "Edit Plant Details" : "Add New Plant"}
-                  </h2>
+                  <div className="flex justify-between items-center mb-6 mt-4 md:mt-0">
+                    <h2 className="font-playfair text-2xl font-bold text-[var(--color-primary)]">
+                      {editingPlant ? "Edit Plant Details" : "Add New Plant"}
+                    </h2>
+                    <button onClick={resetForm} className="md:hidden p-2 bg-white shadow-sm border border-gray-200 rounded-full active:scale-95">
+                      <X className="w-5 h-5 text-gray-600" />
+                    </button>
+                  </div>
                   <form onSubmit={handleSave} className="space-y-6">
                     <div>
                       <label className="block text-sm font-semibold mb-2">Plant Name *</label>

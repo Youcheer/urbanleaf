@@ -171,7 +171,7 @@ export const PlantGrid = () => {
                 variants={itemVariants}
                 whileHover={{ y: -6 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="md:col-span-8 group relative rounded-[32px] overflow-hidden bg-white flex flex-col md:flex-row shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(0,38,26,0.1)] transition-all duration-700 cursor-pointer border border-[#002115]/5"
+                className="md:col-span-8 group relative rounded-[var(--radius-leaf)] overflow-hidden bg-white flex flex-col md:flex-row shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(0,38,26,0.1)] transition-all duration-700 cursor-pointer border-t-2 border-t-[var(--color-accent)] border border-[#002115]/5"
                 onClick={() => setSelectedPlant(largePlant)}
               >
                 {/* Image with Ken Burns effect */}
@@ -196,9 +196,9 @@ export const PlantGrid = () => {
                 {/* Info panel */}
                 <div className="w-full md:w-2/5 p-8 md:p-14 flex flex-col justify-center relative bg-white">
                   {/* Decorative corner accent */}
-                  <div className="absolute top-8 right-8 w-12 h-12 border-t-2 border-r-2 border-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <div className="absolute top-8 right-8 w-12 h-12 border-t-2 border-r-2 border-[var(--color-accent)]/50 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-                  <motion.h3 variants={itemVariants} className="text-[28px] md:text-[36px] leading-tight font-serif text-primary mb-6">
+                  <motion.h3 variants={itemVariants} className="text-[28px] md:text-[36px] leading-tight font-serif text-[var(--color-primary)] mb-6 hover:text-[var(--color-accent)] transition-colors duration-300">
                     {largePlant.name}
                   </motion.h3>
 
@@ -208,7 +208,7 @@ export const PlantGrid = () => {
 
                   <motion.div variants={itemVariants} className="mt-auto flex items-center justify-between">
                     <div>
-                      <span className="text-[22px] font-sans text-primary font-semibold tracking-wide">
+                      <span className="text-[22px] font-sans text-[var(--color-accent)] font-semibold tracking-wide">
                         Rs. {largePlant.price.toLocaleString()}
                       </span>
                     </div>
@@ -220,7 +220,7 @@ export const PlantGrid = () => {
                       className={`w-12 h-12 rounded-full border flex items-center justify-center transition-colors duration-300 ${
                         largePlant.isSold 
                           ? "border-outline-variant/30 text-outline-variant cursor-not-allowed" 
-                          : "border-primary/30 text-primary hover:bg-primary hover:text-white hover:border-primary cursor-pointer"
+                          : "border-[var(--color-accent)]/30 text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white hover:border-[var(--color-accent)] cursor-pointer"
                       }`}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -244,7 +244,7 @@ export const PlantGrid = () => {
                     variants={itemVariants}
                     whileHover={{ y: -6 }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    className="flex-1 group relative rounded-[28px] overflow-hidden bg-white shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(0,38,26,0.1)] transition-all duration-700 cursor-pointer flex flex-col border border-[#002115]/5"
+                    className="flex-1 group relative rounded-[var(--radius-leaf-reverse)] overflow-hidden bg-white shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(0,38,26,0.1)] transition-all duration-700 cursor-pointer flex flex-col border-t-2 border-t-[var(--color-accent)] border border-[#002115]/5"
                     onClick={() => setSelectedPlant(plant)}
                   >
                     {/* Image with zoom */}
