@@ -241,6 +241,48 @@ export const getArticles = async (): Promise<import("./data").Article[]> => {
           relatedProductIds: data.relatedProductIds || [],
         });
       });
+
+      // --- AUTOMATIC FIRST-TIME MIGRATION FROM LOCALSTORAGE TO FIRESTORE ---
+      if (list.length === 0) {
+        const localArticles = getLocalArticles();
+        const customLocalArticles = localArticles.filter(
+          (a) => !a.id.startsWith("a1") && !a.id.startsWith("a2")
+        );
+
+        if (customLocalArticles.length > 0) {
+          console.log("Found custom articles in LocalStorage. Migrating to Firestore...", customLocalArticles);
+          
+          const migratedSlugs = new Set<string>();
+          for (const localArticle of customLocalArticles) {
+            const articleSlug = localArticle.slug.trim().toLowerCase();
+            // Prevent migrating duplicates
+            if (!migratedSlugs.has(articleSlug)) {
+              migratedSlugs.add(articleSlug);
+              const { id, ...articleData } = localArticle;
+              await addDoc(collection(db!, "articles"), articleData);
+            }
+          }
+
+          const newSnapshot = await getDocs(q);
+          const newList: import("./data").Article[] = [];
+          newSnapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            newList.push({
+              id: docSnap.id,
+              slug: data.slug || "",
+              title: data.title || "",
+              content: data.content || "",
+              author: data.author || "",
+              featuredImage: data.featuredImage || "",
+              createdAt: data.createdAt || 0,
+              relatedProductIds: data.relatedProductIds || [],
+            });
+          });
+          return newList;
+        }
+      }
+      // -------------------------------------------------------------
+
       return list;
     } catch (error) {
       console.error("Error fetching articles from Firestore:", error);
