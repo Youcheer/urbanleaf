@@ -45,8 +45,8 @@ export default function ArticleClient({ initialArticle, slug }: { initialArticle
     return (
       <main className="min-h-screen bg-[#f4f7f4] dark:bg-surface flex flex-col items-center justify-center px-4">
         <Navbar />
-        <h1 className="text-3xl font-playfair font-bold text-[#1a4a28] dark:text-primary mb-4 mt-20">Article Not Found</h1>
-        <p className="text-gray-500 mb-6">The care guide you are looking for does not exist.</p>
+        <h1 className="text-3xl font-playfair font-bold text-[#1a4a28] dark:text-on-surface mb-4 mt-20">Article Not Found</h1>
+        <p className="text-gray-500 dark:text-gray-400 mb-6">The care guide you are looking for does not exist.</p>
         <Link href="/care-guides" className="bg-[#1a4a28] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#3b8554] transition-colors">
           Browse All Guides
         </Link>
@@ -64,11 +64,11 @@ export default function ArticleClient({ initialArticle, slug }: { initialArticle
           <Link href="/care-guides" className="text-sm font-bold text-accent uppercase tracking-wider hover:underline mb-4 inline-block">
             ← Back to Guides
           </Link>
-          <h1 className="text-3xl md:text-5xl font-playfair font-bold text-primary leading-tight mb-4">
+          <h1 className="text-3xl md:text-5xl font-playfair font-bold text-primary dark:text-on-surface leading-tight mb-4">
             {article.title}
           </h1>
-          <div className="flex items-center gap-4 text-sm text-gray-500 font-sans">
-            <span className="font-semibold text-primary">{article.author || "Urban Leaf Expert"}</span>
+          <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 font-sans">
+            <span className="font-semibold text-primary dark:text-on-surface">{article.author || "Urban Leaf Expert"}</span>
             <span>•</span>
             <span>{new Date(article.createdAt).toLocaleDateString()}</span>
           </div>
@@ -130,8 +130,8 @@ export default function ArticleClient({ initialArticle, slug }: { initialArticle
 
         {/* Related Products CTA */}
         {relatedProducts.length > 0 && (
-          <div className="mt-16 pt-10 border-t border-gray-200">
-            <h3 className="font-playfair text-2xl font-bold text-primary mb-6">
+          <div className="mt-16 pt-10 border-t border-gray-200 dark:border-white/10">
+            <h3 className="font-playfair text-2xl font-bold text-primary dark:text-on-surface mb-6">
               Shop Plants from this Guide
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -143,7 +143,7 @@ export default function ArticleClient({ initialArticle, slug }: { initialArticle
                       {imgUrl && <img src={imgUrl} alt={product.name} className="w-full h-full object-cover" />}
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-bold text-primary line-clamp-1">{product.name}</h4>
+                      <h4 className="font-bold text-primary dark:text-on-surface line-clamp-1">{product.name}</h4>
                       <p className="text-accent font-semibold text-sm mb-2">LKR {product.price.toLocaleString()}</p>
                       <Link 
                         href="/#shop" 

@@ -31,7 +31,7 @@ export default function CareGuidesPage() {
       
       <div className="pt-24 md:pt-32 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
         <div className="mb-12 text-center md:text-left">
-          <h1 className="font-playfair text-display-md md:text-display-lg text-primary mb-4">
+          <h1 className="font-playfair text-display-md md:text-display-lg text-primary dark:text-on-surface mb-4">
             Plant Care Guides
           </h1>
           <p className="font-sans text-body-lg text-on-surface-variant max-w-2xl">
@@ -45,7 +45,7 @@ export default function CareGuidesPage() {
           </div>
         ) : articles.length === 0 ? (
           <div className="text-center py-20 bg-white dark:bg-surface rounded-3xl border border-gray-100 dark:border-white/10 shadow-sm">
-            <p className="text-gray-500 font-sans">No guides published yet. Check back soon!</p>
+            <p className="text-gray-500 dark:text-gray-400 font-sans">No guides published yet. Check back soon!</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -66,8 +66,8 @@ export default function CareGuidesPage() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                        <span className="text-gray-400">No Image</span>
+                      <div className="w-full h-full bg-gray-200 dark:bg-surface-container flex items-center justify-center">
+                        <span className="text-gray-400 dark:text-gray-500">No Image</span>
                       </div>
                     )}
                   </div>
@@ -75,13 +75,13 @@ export default function CareGuidesPage() {
                     <span className="text-xs font-bold text-accent tracking-wider uppercase mb-3">
                       Guide
                     </span>
-                    <h2 className="font-playfair text-xl font-bold text-primary mb-3 line-clamp-2">
+                    <h2 className="font-playfair text-xl font-bold text-primary dark:text-on-surface mb-3 line-clamp-2">
                       {article.title}
                     </h2>
                     
                     {/* Extract a small snippet from HTML content if possible, or leave it blank. We just show title to keep it clean */}
                     
-                    <div className="mt-auto pt-4 flex justify-between items-center text-sm font-sans text-gray-500">
+                    <div className="mt-auto pt-4 flex justify-between items-center text-sm font-sans text-gray-500 dark:text-gray-400">
                       <span>{article.author || "Urban Leaf"}</span>
                       <span>{new Date(article.createdAt).toLocaleDateString()}</span>
                     </div>
