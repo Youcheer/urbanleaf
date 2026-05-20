@@ -89,3 +89,37 @@ export const plants: Plant[] = [
     },
   },
 ];
+
+export interface Article {
+  id: string;
+  slug: string;
+  title: string;
+  content: string;
+  author: string;
+  featuredImage: string;
+  createdAt: number;
+  relatedProductIds?: string[];
+}
+
+export const articles: Article[] = [
+  {
+    id: "a1",
+    slug: "how-to-care-for-anthuriums",
+    title: "How to Care for Anthuriums: A Complete Guide",
+    content: "<p>Anthuriums are stunning tropical plants known for their bright, heart-shaped \"flowers\" (which are actually spathes). To keep them thriving, they need bright, indirect sunlight, high humidity, and well-draining soil.</p><br><h3>Watering</h3><p>Water your Anthurium when the top inch of soil feels dry. Overwatering can lead to root rot, so ensure the pot has good drainage.</p>",
+    author: "Urban Leaf Expert",
+    featuredImage: "https://lh3.googleusercontent.com/aida-public/AB6AXuBZgqW4-S_YxJ6a7ZZgAAhkiSNKsB8qdNzgs1LyaYgFSOYohXkPDhDA9-tGrbD99mxAjrOgGIrFknx0rkIQpXHKRuQXOdQrObeWm52RJbiXbX7gCjKIt0wtklSlwjzXCsuT-taSWEZ2Txw1rpHwOqsjeUdD4LLuHNik4rVBJIdL7ixZV59tJJR_ZukmraT1HfGszx3_wQgVTcC6hvHUx9JWoi-EfPDfo6BSr4AGz8N4kfxLQGRrYjVnlUw1WeypLlK9Un9TlufbfDhP",
+    createdAt: 1700000000000,
+    relatedProductIds: ["p1", "p5"],
+  },
+  {
+    id: "a2",
+    slug: "top-5-indoor-plants-for-clean-air",
+    title: "Top 5 Indoor Plants for Clean Air",
+    content: "<p>Indoor plants don't just look good; they can also improve your air quality. Here are our top 5 picks for purifying your indoor environment...</p><ul><li>Monstera Deliciosa</li><li>Ficus Elastica</li><li>Snake Plant</li><li>Peace Lily</li><li>Spider Plant</li></ul>",
+    author: "Urban Leaf Expert",
+    featuredImage: "https://lh3.googleusercontent.com/aida-public/AB6AXuDZ9Z1jOyq682XUwchB1kMAnJN99UFqzsrZmIaYEuGpRzMbSGZgM5JTg2Q7du1HjDEJIbKaRINe1Vbqs16VGIxio5DECRJz9hJVV11eCk-GB18SoM1eiXcm1X_xNOi5L_L5Y8YOdUOFlyV7pVzyul3re6PhOzfn_8Rfnu0IBavP6b752IPi3OfOhBNW5RwF78OuCWZx9hJCoTqQ2bSSLLfLRM9fFyUt-AIOAHQeu-77UUZ0vEXetaRbIUmRMROQiMO89I0zm-FxBf99",
+    createdAt: 1700000050000,
+    relatedProductIds: ["p3", "p4"],
+  }
+];

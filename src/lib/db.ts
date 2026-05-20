@@ -9,7 +9,7 @@ import {
   query,
   orderBy 
 } from "firebase/firestore";
-import { Plant, plants as mockPlants } from "./data";
+import { Plant, plants as mockPlants, articles as mockArticles } from "./data";
 
 const LOCAL_STORAGE_KEY = "urbanleaf_plants";
 
@@ -202,3 +202,102 @@ export const deletePlant = async (id: string): Promise<void> => {
     saveLocalPlants(filtered);
   }
 };
+
+// --- ARTICLES DB LOGIC ---
+
+const LOCAL_ARTICLES_KEY = "urbanleaf_articles";
+
+const getLocalArticles = (): import("./data").Article[] => {
+  if (typeof window === "undefined") return mockArticles;
+  const local = localStorage.getItem(LOCAL_ARTICLES_KEY);
+  if (!local) {
+    localStorage.setItem(LOCAL_ARTICLES_KEY, JSON.stringify(mockArticles));
+    return mockArticles;
+  }
+  return JSON.parse(local);
+};
+
+const saveLocalArticles = (articles: import("./data").Article[]) => {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(LOCAL_ARTICLES_KEY, JSON.stringify(articles));
+};
+
+export const getArticles = async (): Promise<import("./data").Article[]> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      const q = query(collection(db, "articles"), orderBy("createdAt", "desc"));
+      const querySnapshot = await getDocs(q);
+      const list: import("./data").Article[] = [];
+      querySnapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        list.push({
+          id: docSnap.id,
+          slug: data.slug || "",
+          title: data.title || "",
+          content: data.content || "",
+          author: data.author || "",
+          featuredImage: data.featuredImage || "",
+          createdAt: data.createdAt || 0,
+          relatedProductIds: data.relatedProductIds || [],
+        });
+      });
+      return list;
+    } catch (error) {
+      console.error("Error fetching articles from Firestore:", error);
+      return getLocalArticles();
+    }
+  } else {
+    return getLocalArticles().sort((a, b) => b.createdAt - a.createdAt);
+  }
+};
+
+export const addArticle = async (article: Omit<import("./data").Article, "id">): Promise<string> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      const docRef = await addDoc(collection(db!, "articles"), article);
+      return docRef.id;
+    } catch (error) {
+      console.error("Error adding article to Firestore:", error);
+      throw error;
+    }
+  } else {
+    const local = getLocalArticles();
+    const newId = "a_" + Date.now();
+    const newArticle = { ...article, id: newId };
+    saveLocalArticles([...local, newArticle]);
+    return newId;
+  }
+};
+
+export const updateArticle = async (id: string, article: Omit<import("./data").Article, "id">): Promise<void> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      const docRef = doc(db!, "articles", id);
+      await updateDoc(docRef, article as any);
+    } catch (error) {
+      console.error("Error updating article in Firestore:", error);
+      throw error;
+    }
+  } else {
+    const local = getLocalArticles();
+    const updated = local.map((a) => (a.id === id ? { ...article, id } : a));
+    saveLocalArticles(updated);
+  }
+};
+
+export const deleteArticle = async (id: string): Promise<void> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      const docRef = doc(db!, "articles", id);
+      await deleteDoc(docRef);
+    } catch (error) {
+      console.error("Error deleting article from Firestore:", error);
+      throw error;
+    }
+  } else {
+    const local = getLocalArticles();
+    const filtered = local.filter((a) => a.id !== id);
+    saveLocalArticles(filtered);
+  }
+};
+
