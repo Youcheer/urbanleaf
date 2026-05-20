@@ -40,7 +40,7 @@ const translations = {
     deliveryAddress: "Delivery Address",
     pleaseEnterDetails: "Please enter your name and address.",
     aboutThisPlant: "About this plant",
-    footerSubheadline: "Cultivating serenity in the urban landscape. Elevate your space with our curated botanical collections.",
+    footerSubheadline: "Cultivating serenity in the urban landscape. Elevate your space with our premium plants.",
   },
   si: {
     home: "මුල් පිටුව",

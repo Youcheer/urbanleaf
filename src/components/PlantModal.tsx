@@ -79,7 +79,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
     if (language === "si") {
       return {
         rareCollection: "දුර්ලභ එකතුව",
-        botanicalCollection: "BOTANICAL COLLECTION",
+        botanicalCollection: "PREMIUM PLANTS",
         freeShippingText: "Complimentary nationwide overnight shipping included.",
         careGuide: "Care Guide",
         shippingReturns: "Shipping & Returns",
@@ -89,7 +89,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
     }
     return {
       rareCollection: "RARE COLLECTION",
-      botanicalCollection: "BOTANICAL COLLECTION",
+      botanicalCollection: "PREMIUM PLANTS",
       freeShippingText: "Complimentary nationwide overnight shipping included.",
       careGuide: "Care Guide",
       shippingReturns: "Shipping & Returns",

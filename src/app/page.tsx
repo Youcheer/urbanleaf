@@ -23,7 +23,7 @@ const jsonLd = {
   },
   telephone: "+94718546219",
   priceRange: "$$",
-  sameAs: ["https://www.facebook.com/urbanleafsl/"],
+  sameAs: ["https://www.facebook.com/urbanleafsl", "https://share.google/6YkrYLRMocU7ARqmi"],
   hasMap: "https://maps.google.com/?q=Ganemulla,+Gampaha,+Sri+Lanka",
   areaServed: {
     "@type": "Country",
@@ -114,8 +114,11 @@ export default function Home() {
             <h4 className="text-label-sm font-sans uppercase tracking-widest text-primary font-semibold mb-2">
               {footer.connect}
             </h4>
-            <a className="text-body-md font-sans text-on-surface-variant hover:text-primary underline-offset-4 hover:underline transition-all duration-300 font-light" href="#">
-              {footer.privacy}
+            <a className="text-body-md font-sans text-on-surface-variant hover:text-primary underline-offset-4 hover:underline transition-all duration-300 font-light" href="https://www.facebook.com/urbanleafsl" target="_blank" rel="noopener noreferrer">
+              Facebook
+            </a>
+            <a className="text-body-md font-sans text-on-surface-variant hover:text-primary underline-offset-4 hover:underline transition-all duration-300 font-light" href="https://share.google/6YkrYLRMocU7ARqmi" target="_blank" rel="noopener noreferrer">
+              Google Profile
             </a>
             <a className="text-body-md font-sans text-on-surface-variant hover:text-primary underline-offset-4 hover:underline transition-all duration-300 font-light" href="#">
               {footer.contact}

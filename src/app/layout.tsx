@@ -9,7 +9,7 @@ const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfa
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://urbanleaf.vercel.app"),
-  title: "Urban Leaf | Premium Anthurium Nursery Gampaha, Sri Lanka",
+  title: "Urban Leaf - Anthurium Plant Nursery Ganemulla",
   description:
     "Discover high-quality, beautiful Anthuriums and garden plants at Urban Leaf in Ganemulla, Gampaha. Island-wide courier delivery available across Sri Lanka. Bring nature home.",
   alternates: {
@@ -22,19 +22,21 @@ export const metadata: Metadata = {
     type: "website",
     url: "https://urbanleaf.vercel.app/",
     siteName: "Urban Leaf",
-    title: "Urban Leaf | Premium Anthurium Nursery Gampaha, Sri Lanka",
+    title: "Urban Leaf - Anthurium Plant Nursery Ganemulla",
     description:
       "Discover high-quality, beautiful Anthuriums and garden plants at Urban Leaf in Ganemulla, Gampaha. Island-wide courier delivery available across Sri Lanka. Bring nature home.",
     locale: "en_LK",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Urban Leaf | Premium Anthurium Nursery Gampaha, Sri Lanka",
+    title: "Urban Leaf - Anthurium Plant Nursery Ganemulla",
     description:
       "Discover high-quality Anthuriums and garden plants at Urban Leaf, Ganemulla, Gampaha. Island-wide delivery across Sri Lanka.",
   },
   keywords: [
-    "Urban Leaf",
+    "Urban Leaf - Anthurium Plant Nursery",
+    "Urban Leaf - Ganemulla",
+    "Urban Leaf - Anthurium Plant Nursery Ganemulla",
     "Urban Leaf Sri Lanka",
     "Anthurium nursery Sri Lanka",
     "Anthuriums Gampaha",
@@ -43,9 +45,7 @@ export const metadata: Metadata = {
     "garden plants Gampaha",
     "plant nursery Ganemulla",
     "anthurium delivery Sri Lanka",
-    "garden plants Sri Lanka",
     "premium anthurium plants",
-    "Ganemulla nursery",
   ],
 };
 

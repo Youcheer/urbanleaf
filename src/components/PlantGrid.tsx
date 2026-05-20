@@ -41,7 +41,7 @@ export const PlantGrid = () => {
     }
     return {
       viewAll: "View All",
-      curatedBotanicals: "Curated Botanicals",
+      curatedBotanicals: "Premium Collection",
       subtext: "Exceptional specimens for the modern interior.",
       add: "Add to Cart",
     };
