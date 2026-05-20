@@ -76,7 +76,7 @@ export const AboutStory = () => {
   };
 
   return (
-    <section id="about" className="py-24 bg-[#f7faf7] relative overflow-hidden">
+    <section id="about" className="py-24 bg-[#f7faf7] dark:bg-surface relative overflow-hidden">
       {/* Subtle background glow */}
       <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_#1f6c3d_0%,_transparent_60%)] pointer-events-none" />
 
@@ -117,7 +117,7 @@ export const AboutStory = () => {
               },
             },
           }}
-          className="w-full lg:w-1/2 flex flex-col text-[#002115]"
+          className="w-full lg:w-1/2 flex flex-col text-[#002115] dark:text-on-surface"
         >
           {/* Main Headline */}
           <motion.h2 variants={{
@@ -131,17 +131,17 @@ export const AboutStory = () => {
           <motion.div variants={{
             hidden: { opacity: 0, width: 0 },
             visible: { opacity: 1, width: 64, transition: { duration: 0.8, ease: "easeOut" } }
-          }} className="border-t border-[#002115]/10 mb-8" />
+          }} className="border-t border-[#002115]/10 dark:border-white/10 mb-8" />
 
           {/* Section: Our Story */}
           <motion.div variants={{
             hidden: { opacity: 0, y: 30 },
             visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
           }} className="mb-6">
-            <h3 className="font-serif text-lg font-bold uppercase tracking-wider mb-2 text-[#002115]">
+            <h3 className="font-serif text-lg font-bold uppercase tracking-wider mb-2 text-[#002115] dark:text-on-surface">
               {content.storyTitle}
             </h3>
-            <p className="font-sans text-sm md:text-base leading-relaxed text-[#002115]/80 font-light">
+            <p className="font-sans text-sm md:text-base leading-relaxed text-[#002115]/80 dark:text-on-surface/80 font-light">
               {content.storyPara}
             </p>
           </motion.div>
@@ -151,10 +151,10 @@ export const AboutStory = () => {
             hidden: { opacity: 0, y: 30 },
             visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
           }} className="mb-8">
-            <h3 className="font-serif text-lg font-bold uppercase tracking-wider mb-2 text-[#002115]">
+            <h3 className="font-serif text-lg font-bold uppercase tracking-wider mb-2 text-[#002115] dark:text-on-surface">
               {content.collectionTitle}
             </h3>
-            <p className="font-sans text-sm md:text-base leading-relaxed text-[#002115]/80 font-light">
+            <p className="font-sans text-sm md:text-base leading-relaxed text-[#002115]/80 dark:text-on-surface/80 font-light">
               {content.collectionPara}
             </p>
           </motion.div>
@@ -163,23 +163,23 @@ export const AboutStory = () => {
           <motion.div variants={{
             hidden: { opacity: 0, y: 30 },
             visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
-          }} className="mb-8 py-6 border-t border-b border-[#002115]/10">
-            <h3 className="font-serif text-lg font-bold uppercase tracking-wider mb-4 text-[#002115]">
+          }} className="mb-8 py-6 border-t border-b border-[#002115]/10 dark:border-white/10">
+            <h3 className="font-serif text-lg font-bold uppercase tracking-wider mb-4 text-[#002115] dark:text-on-surface">
               {content.whyTitle}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {content.benefits.map((benefit, idx) => (
                 <div key={idx} className="flex items-start gap-3">
                   <div className="w-5 h-5 rounded-full bg-[#1f6c3d]/15 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="material-symbols-outlined text-xs text-[#002115] font-bold">
+                    <span className="material-symbols-outlined text-xs text-[#002115] dark:text-on-surface font-bold">
                       check
                     </span>
                   </div>
                   <div>
-                    <h4 className="font-sans font-bold text-xs uppercase tracking-wide text-[#002115]">
+                    <h4 className="font-sans font-bold text-xs uppercase tracking-wide text-[#002115] dark:text-on-surface">
                       {benefit.title}
                     </h4>
-                    <p className="font-sans text-xs leading-relaxed text-[#002115]/70 mt-1 font-light">
+                    <p className="font-sans text-xs leading-relaxed text-[#002115]/70 dark:text-on-surface/70 mt-1 font-light">
                       {benefit.desc}
                     </p>
                   </div>

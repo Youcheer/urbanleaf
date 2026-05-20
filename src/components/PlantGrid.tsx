@@ -106,7 +106,7 @@ export const PlantGrid = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.9, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="text-headline-lg font-serif text-primary mb-3"
+            className="text-headline-lg font-serif text-primary dark:text-on-surface mb-3"
           >
             {labels.curatedBotanicals}
           </motion.h2>
@@ -136,7 +136,7 @@ export const PlantGrid = () => {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="hidden md:flex items-center text-label-sm font-sans uppercase tracking-widest text-primary hover:opacity-80 transition-opacity gap-2 group"
+          className="hidden md:flex items-center text-label-sm font-sans uppercase tracking-widest text-primary dark:text-on-surface hover:opacity-80 transition-opacity gap-2 group"
           href="#"
         >
           {labels.viewAll}
@@ -171,7 +171,7 @@ export const PlantGrid = () => {
                 variants={itemVariants}
                 whileHover={{ y: -6 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="md:col-span-8 group relative rounded-[var(--radius-leaf)] overflow-hidden bg-white flex flex-col md:flex-row shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(0,38,26,0.1)] transition-all duration-700 cursor-pointer border-t-2 border-t-[var(--color-accent)] border border-[#002115]/5"
+                className="md:col-span-8 group relative rounded-[var(--radius-leaf)] overflow-hidden bg-white dark:bg-surface flex flex-col md:flex-row shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(0,38,26,0.1)] transition-all duration-700 cursor-pointer border-t-2 border-t-[var(--color-accent)] border border-[#002115]/5 dark:border-white/5"
                 onClick={() => setSelectedPlant(largePlant)}
               >
                 {/* Image with Ken Burns effect */}
@@ -194,11 +194,11 @@ export const PlantGrid = () => {
                 </div>
 
                 {/* Info panel */}
-                <div className="w-full md:w-2/5 p-8 md:p-14 flex flex-col justify-center relative bg-white">
+                <div className="w-full md:w-2/5 p-8 md:p-14 flex flex-col justify-center relative bg-white dark:bg-surface">
                   {/* Decorative corner accent */}
                   <div className="absolute top-8 right-8 w-12 h-12 border-t-2 border-r-2 border-[var(--color-accent)]/50 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-                  <motion.h3 variants={itemVariants} className="text-[28px] md:text-[36px] leading-tight font-serif text-[var(--color-primary)] mb-6 hover:text-[var(--color-accent)] transition-colors duration-300">
+                  <motion.h3 variants={itemVariants} className="text-[28px] md:text-[36px] leading-tight font-serif text-[var(--color-primary)] dark:text-on-surface mb-6 hover:text-[var(--color-accent)] transition-colors duration-300">
                     {largePlant.name}
                   </motion.h3>
 
@@ -244,7 +244,7 @@ export const PlantGrid = () => {
                     variants={itemVariants}
                     whileHover={{ y: -6 }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    className="flex-1 group relative rounded-[var(--radius-leaf-reverse)] overflow-hidden bg-white shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(0,38,26,0.1)] transition-all duration-700 cursor-pointer flex flex-col border-t-2 border-t-[var(--color-accent)] border border-[#002115]/5"
+                    className="flex-1 group relative rounded-[var(--radius-leaf-reverse)] overflow-hidden bg-white dark:bg-surface shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(0,38,26,0.1)] transition-all duration-700 cursor-pointer flex flex-col border-t-2 border-t-[var(--color-accent)] border border-[#002115]/5 dark:border-white/5"
                     onClick={() => setSelectedPlant(plant)}
                   >
                     {/* Image with zoom */}
@@ -266,12 +266,12 @@ export const PlantGrid = () => {
                       )}
                     </div>
 
-                    <div className="p-8 flex flex-col grow justify-between bg-white">
-                      <motion.h4 variants={itemVariants} className="text-[20px] font-serif text-primary font-medium mb-4 leading-tight">
+                    <div className="p-8 flex flex-col grow justify-between bg-white dark:bg-surface">
+                      <motion.h4 variants={itemVariants} className="text-[20px] font-serif text-primary dark:text-on-surface font-medium mb-4 leading-tight">
                         {plant.name}
                       </motion.h4>
                       <motion.div variants={itemVariants} className="flex items-center justify-between mt-auto">
-                        <span className={`text-[16px] font-sans font-medium tracking-wide ${plant.isSold ? "text-on-surface-variant/50 line-through" : "text-primary/90"}`}>
+                        <span className={`text-[16px] font-sans font-medium tracking-wide ${plant.isSold ? "text-on-surface-variant/50 line-through" : "text-primary/90 dark:text-on-surface"}`}>
                           Rs. {plant.price.toLocaleString()}
                         </span>
                         <motion.span
