@@ -58,6 +58,7 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
   const [activeTab, setActiveTab] = useState<"plants" | "articles">("plants");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Plant State
   const [plantsList, setPlantsList] = useState<Plant[]>([]);
@@ -250,6 +251,7 @@ export default function AdminPage() {
       order: order === "" ? 999 : Number(order),
     };
 
+    setIsSubmitting(true);
     try {
       if (editingPlant) {
         await updatePlant(editingPlant.id, plantData);
@@ -260,6 +262,8 @@ export default function AdminPage() {
       fetchPlants();
     } catch (err) {
       alert("Failed to save plant.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -325,6 +329,7 @@ export default function AdminPage() {
       createdAt: editingArticle ? editingArticle.createdAt : Date.now()
     };
 
+    setIsSubmitting(true);
     try {
       if (editingArticle) {
         await updateArticle(editingArticle.id, articleData);
@@ -335,6 +340,8 @@ export default function AdminPage() {
       fetchArticles();
     } catch (err) {
       alert("Failed to save article.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -612,8 +619,14 @@ export default function AdminPage() {
                     </div>
 
                     <div className="flex gap-4 pt-4">
-                      <button type="submit" className="flex-1 bg-[#1a4a28] hover:bg-[#3b8554] text-white py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2"><Save className="w-5 h-5" /> Save</button>
-                      <button type="button" onClick={resetForm} className="px-6 py-3.5 bg-gray-100 hover:bg-[#e2e8e4] rounded-xl font-bold transition-all">Cancel</button>
+                      <button type="submit" disabled={isSubmitting} className="flex-1 bg-[#1a4a28] hover:bg-[#3b8554] disabled:bg-gray-400 text-white py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2">
+                        {isSubmitting ? (
+                          <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div> Saving...</>
+                        ) : (
+                          <><Save className="w-5 h-5" /> Save</>
+                        )}
+                      </button>
+                      <button type="button" onClick={resetForm} disabled={isSubmitting} className="px-6 py-3.5 bg-gray-100 hover:bg-[#e2e8e4] disabled:opacity-50 rounded-xl font-bold transition-all">Cancel</button>
                     </div>
                   </form>
                 </motion.div>
@@ -693,8 +706,14 @@ export default function AdminPage() {
                     </div>
 
                     <div className="flex gap-4 pt-4">
-                      <button type="submit" className="flex-1 bg-[#1a4a28] hover:bg-[#3b8554] text-white py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2"><Save className="w-5 h-5" /> Publish</button>
-                      <button type="button" onClick={resetArticleForm} className="px-6 py-3.5 bg-gray-100 hover:bg-[#e2e8e4] rounded-xl font-bold transition-all">Cancel</button>
+                      <button type="submit" disabled={isSubmitting} className="flex-1 bg-[#1a4a28] hover:bg-[#3b8554] disabled:bg-gray-400 text-white py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2">
+                        {isSubmitting ? (
+                          <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div> Publishing...</>
+                        ) : (
+                          <><Save className="w-5 h-5" /> Publish</>
+                        )}
+                      </button>
+                      <button type="button" onClick={resetArticleForm} disabled={isSubmitting} className="px-6 py-3.5 bg-gray-100 hover:bg-[#e2e8e4] disabled:opacity-50 rounded-xl font-bold transition-all">Cancel</button>
                     </div>
                   </form>
                 </motion.div>
