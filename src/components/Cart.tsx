@@ -51,6 +51,7 @@ export const Cart = () => {
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 26, stiffness: 220 }}
             className="fixed top-0 right-0 h-full w-full max-w-md bg-[#f7faf7] dark:bg-surface shadow-2xl z-50 flex flex-col border-l border-[#002115]/10 dark:border-white/10 text-[#002115] dark:text-on-surface"
+          >
             {/* Header */}
             <div className="p-6 border-b border-[#002115]/10 dark:border-white/10 flex items-center justify-between">
               <h2 className="font-serif text-2xl font-bold text-[#002115] dark:text-on-surface flex items-center gap-3">
