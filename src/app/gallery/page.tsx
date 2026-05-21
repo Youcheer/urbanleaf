@@ -41,14 +41,23 @@ export default function GalleryPage() {
       <Navbar />
 
       <div className="pt-24 md:pt-32 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
-        <div className="mb-12 text-center md:text-left">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="mb-16 text-center md:text-left relative"
+        >
+          {/* Decorative blur blob */}
+          <div className="absolute -top-10 -left-10 w-40 h-40 bg-primary/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
+          
           <h1 className="font-playfair text-display-md md:text-display-lg text-primary dark:text-on-surface mb-4">
-            Media Gallery
+            Our <span className="italic font-light">Living</span> Canvas
           </h1>
           <p className="font-sans text-body-lg text-on-surface-variant max-w-2xl">
-            A high-quality visual collection showcasing our premium plants in various stages.
+            A curated visual journey through our premium botanical collection. 
+            Discover the vibrant textures, colors, and life stages of our beautiful plants.
           </p>
-        </div>
+        </motion.div>
 
         {loading ? (
           <LeafLoader />
@@ -57,54 +66,90 @@ export default function GalleryPage() {
             <p className="text-gray-500 dark:text-gray-400 font-sans">No images available yet.</p>
           </div>
         ) : (
-          <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-            {images.map((img, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: (idx % 10) * 0.1 }}
-                className="relative break-inside-avoid overflow-hidden rounded-[var(--radius-leaf)] group cursor-pointer"
-                onClick={() => setSelectedImage(img.url)}
-              >
-                <img
-                  src={img.url}
-                  alt={img.plantName}
-                  className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                  <span className="text-white font-sans text-sm font-semibold truncate drop-shadow-md">
-                    {img.plantName}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
+          <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6 space-y-6">
+            {images.map((img, idx) => {
+              // Alternate border radius for a more dynamic "Bento/Scattered" look
+              const isEven = idx % 2 === 0;
+              const isDivisibleBy3 = idx % 3 === 0;
+              const radiusClass = isEven 
+                ? "rounded-[var(--radius-leaf)]" // Leaf shape
+                : isDivisibleBy3 ? "rounded-full" : "rounded-3xl"; // Mix of pills/circles and standard rounded
+
+              return (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 50, scale: 0.95 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ 
+                    duration: 0.7, 
+                    delay: (idx % 8) * 0.1, 
+                    ease: [0.25, 0.46, 0.45, 0.94] 
+                  }}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  className={`relative break-inside-avoid overflow-hidden group cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500 bg-surface ${radiusClass}`}
+                  onClick={() => setSelectedImage(img.url)}
+                  // Add slightly varying aspect ratios to force a true masonry look even if source images are square
+                  style={{ minHeight: isEven ? '300px' : '250px' }}
+                >
+                  <img
+                    src={img.url}
+                    alt={img.plantName}
+                    className="w-full h-full object-cover absolute inset-0 group-hover:scale-110 group-hover:rotate-1 transition-transform duration-700 ease-out"
+                    loading="lazy"
+                  />
+                  
+                  {/* Elegant Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6">
+                    <motion.div 
+                      initial={{ y: 20, opacity: 0 }}
+                      whileHover={{ y: 0, opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <span className="inline-block px-3 py-1 mb-2 text-[10px] font-bold uppercase tracking-widest text-primary bg-white/90 backdrop-blur-md rounded-full">
+                        View
+                      </span>
+                      <h3 className="text-white font-playfair text-xl md:text-2xl font-medium drop-shadow-md leading-tight">
+                        {img.plantName}
+                      </h3>
+                    </motion.div>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         )}
       </div>
 
       {/* Lightbox Modal */}
       {selectedImage && (
-        <div 
-          className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 cursor-pointer"
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 sm:p-8 cursor-pointer"
           onClick={() => setSelectedImage(null)}
         >
-          <button 
-            className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors"
+          <motion.button 
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="absolute top-6 right-6 text-white/50 hover:text-white hover:rotate-90 transition-all duration-300 bg-white/10 hover:bg-white/20 p-2 rounded-full"
             onClick={() => setSelectedImage(null)}
           >
-            <span className="material-symbols-outlined text-4xl">close</span>
-          </button>
+            <span className="material-symbols-outlined text-3xl block">close</span>
+          </motion.button>
+          
           <motion.img 
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
+            initial={{ scale: 0.8, y: 50, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
             src={selectedImage}
             alt="Expanded view"
-            className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl cursor-default"
+            className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] cursor-default"
             onClick={(e) => e.stopPropagation()}
           />
-        </div>
+        </motion.div>
       )}
     </main>
   );
