@@ -14,6 +14,9 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
   const [direction, setDirection] = useState(1); // 1 = forward, -1 = backward
   const [activeAccordion, setActiveAccordion] = useState<"care" | "shipping" | "reviews" | null>("care"); // Care guide open by default
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  
+  // Ref for reviews accordion
+  const reviewsRef = React.useRef<HTMLDivElement>(null);
 
   // Reviews State
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -261,6 +264,31 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
               <h2 className="font-serif text-3xl md:text-[38px] font-bold text-[var(--color-primary)] dark:text-on-surface mb-2 leading-tight uppercase tracking-wide">
                 {plant.name}
               </h2>
+              
+              {/* Quick Reviews Link */}
+              <div 
+                className="flex items-center gap-1.5 cursor-pointer group w-fit"
+                onClick={() => {
+                  setActiveAccordion("reviews");
+                  setTimeout(() => {
+                    reviewsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }, 100);
+                }}
+              >
+                <div className="flex text-[var(--color-accent)] text-sm">
+                  {[...Array(5)].map((_, i) => {
+                    const avgRating = reviews.length > 0 
+                      ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length 
+                      : 5; // Default 5 stars if no reviews
+                    return (
+                      <span key={i} className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: "16px", color: i < Math.round(avgRating) ? "inherit" : "rgba(0,33,20,0.1)" }}>star</span>
+                    );
+                  })}
+                </div>
+                <span className="text-xs font-sans font-medium text-[#002115]/60 group-hover:text-[var(--color-accent)] transition-colors">
+                  {reviews.length > 0 ? `(${reviews.length} reviews)` : "(Write a review)"}
+                </span>
+              </div>
             </div>
 
             {/* Divider */}
@@ -381,7 +409,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
               </div>
 
               {/* Accordion: Customer Reviews */}
-              <div className="border-b border-[#002115]/10 py-3.5">
+              <div className="border-b border-[#002115]/10 py-3.5" ref={reviewsRef}>
                 <button
                   onClick={() => setActiveAccordion(activeAccordion === "reviews" ? null : "reviews")}
                   className="w-full flex justify-between items-center text-left cursor-pointer border-none bg-transparent p-0 focus:outline-none"
