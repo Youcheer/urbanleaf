@@ -9,7 +9,7 @@ import {
   query,
   orderBy 
 } from "firebase/firestore";
-import { Plant, plants as mockPlants, articles as mockArticles } from "./data";
+import { Plant, plants as mockPlants, articles as mockArticles, mockReviews, Review, Article } from "./data";
 
 const LOCAL_STORAGE_KEY = "urbanleaf_plants";
 
@@ -207,7 +207,7 @@ export const deletePlant = async (id: string): Promise<void> => {
 
 const LOCAL_ARTICLES_KEY = "urbanleaf_articles";
 
-const getLocalArticles = (): import("./data").Article[] => {
+const getLocalArticles = (): Article[] => {
   if (typeof window === "undefined") return mockArticles;
   const local = localStorage.getItem(LOCAL_ARTICLES_KEY);
   if (!local) {
@@ -217,17 +217,17 @@ const getLocalArticles = (): import("./data").Article[] => {
   return JSON.parse(local);
 };
 
-const saveLocalArticles = (articles: import("./data").Article[]) => {
+const saveLocalArticles = (articles: Article[]) => {
   if (typeof window === "undefined") return;
   localStorage.setItem(LOCAL_ARTICLES_KEY, JSON.stringify(articles));
 };
 
-export const getArticles = async (): Promise<import("./data").Article[]> => {
+export const getArticles = async (): Promise<Article[]> => {
   if (isFirebaseConfigured && db) {
     try {
       const q = query(collection(db, "articles"), orderBy("createdAt", "desc"));
       const querySnapshot = await getDocs(q);
-      const list: import("./data").Article[] = [];
+      const list: Article[] = [];
       querySnapshot.forEach((docSnap) => {
         const data = docSnap.data();
         list.push({
@@ -264,7 +264,7 @@ export const getArticles = async (): Promise<import("./data").Article[]> => {
           }
 
           const newSnapshot = await getDocs(q);
-          const newList: import("./data").Article[] = [];
+          const newList: Article[] = [];
           newSnapshot.forEach((docSnap) => {
             const data = docSnap.data();
             newList.push({
@@ -293,7 +293,7 @@ export const getArticles = async (): Promise<import("./data").Article[]> => {
   }
 };
 
-export const addArticle = async (article: Omit<import("./data").Article, "id">): Promise<string> => {
+export const addArticle = async (article: Omit<Article, "id">): Promise<string> => {
   if (isFirebaseConfigured && db) {
     try {
       const docRef = await addDoc(collection(db!, "articles"), article);
@@ -311,7 +311,7 @@ export const addArticle = async (article: Omit<import("./data").Article, "id">):
   }
 };
 
-export const updateArticle = async (id: string, article: Omit<import("./data").Article, "id">): Promise<void> => {
+export const updateArticle = async (id: string, article: Omit<Article, "id">): Promise<void> => {
   if (isFirebaseConfigured && db) {
     try {
       const docRef = doc(db!, "articles", id);
@@ -347,28 +347,28 @@ export const deleteArticle = async (id: string): Promise<void> => {
 
 const LOCAL_REVIEWS_KEY = "urbanleaf_reviews";
 
-const getLocalReviews = (): import("./data").Review[] => {
-  if (typeof window === "undefined") return import("./data").mockReviews;
+const getLocalReviews = (): Review[] => {
+  if (typeof window === "undefined") return mockReviews;
   const local = localStorage.getItem(LOCAL_REVIEWS_KEY);
   if (!local) {
-    localStorage.setItem(LOCAL_REVIEWS_KEY, JSON.stringify(import("./data").mockReviews));
-    return import("./data").mockReviews;
+    localStorage.setItem(LOCAL_REVIEWS_KEY, JSON.stringify(mockReviews));
+    return mockReviews;
   }
   return JSON.parse(local);
 };
 
-const saveLocalReviews = (reviews: import("./data").Review[]) => {
+const saveLocalReviews = (reviews: Review[]) => {
   if (typeof window === "undefined") return;
   localStorage.setItem(LOCAL_REVIEWS_KEY, JSON.stringify(reviews));
 };
 
-export const getReviewsForPlant = async (plantId: string): Promise<import("./data").Review[]> => {
+export const getReviewsForPlant = async (plantId: string): Promise<Review[]> => {
   if (isFirebaseConfigured && db) {
     try {
       // Simplified query without complex index for now
       const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
       const querySnapshot = await getDocs(q);
-      const list: import("./data").Review[] = [];
+      const list: Review[] = [];
       querySnapshot.forEach((docSnap) => {
         const data = docSnap.data();
         if (data.plantId === plantId) {
@@ -392,7 +392,7 @@ export const getReviewsForPlant = async (plantId: string): Promise<import("./dat
   }
 };
 
-export const addReview = async (review: Omit<import("./data").Review, "id">): Promise<string> => {
+export const addReview = async (review: Omit<Review, "id">): Promise<string> => {
   if (isFirebaseConfigured && db) {
     try {
       const docRef = await addDoc(collection(db!, "reviews"), review);
