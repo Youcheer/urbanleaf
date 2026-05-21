@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
 import { getReviewsForPlant, addReview } from "../lib/db";
-import { Review } from "../lib/data";
+import { Review, Plant } from "../lib/data";
 
 const AUTO_SLIDE_INTERVAL = 4000; // 4 seconds per image
 
