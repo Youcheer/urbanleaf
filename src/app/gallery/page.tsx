@@ -5,6 +5,7 @@ import { Navbar } from "../../components/Navbar";
 import { getPlants } from "../../lib/db";
 import { Plant } from "../../lib/data";
 import { motion } from "framer-motion";
+import { LeafLoader } from "../../components/LeafLoader";
 
 export default function GalleryPage() {
   const [images, setImages] = useState<{ url: string; plantName: string }[]>([]);
@@ -50,9 +51,7 @@ export default function GalleryPage() {
         </div>
 
         {loading ? (
-          <div className="flex justify-center items-center py-32">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-          </div>
+          <LeafLoader />
         ) : images.length === 0 ? (
           <div className="text-center py-20 bg-white dark:bg-surface rounded-3xl border border-gray-100 dark:border-white/10 shadow-sm">
             <p className="text-gray-500 dark:text-gray-400 font-sans">No images available yet.</p>

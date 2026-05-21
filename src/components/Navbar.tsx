@@ -4,33 +4,51 @@ import React, { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
 import { useTheme } from "next-themes";
+import { usePathname } from "next/navigation";
 
 export const Navbar = () => {
   const { cart, setIsCartOpen } = useCart();
   const { language, setLanguage, t } = useLanguage();
   const { theme, setTheme, resolvedTheme } = useTheme();
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
+  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     setMounted(true);
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
       
-      // Determine which section is currently active
-      const sections = ["home", "collection", "about"];
-      const scrollPosition = window.scrollY + 100;
-      
-      for (const section of sections) {
-        const el = document.getElementById(section);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(section);
-            break;
+      // Only do scroll spy on the home page
+      if (pathname === "/") {
+        const sections = ["home", "collection", "about"];
+        const scrollPosition = window.scrollY + 100;
+        
+        let found = false;
+        for (const section of sections) {
+          const el = document.getElementById(section);
+          if (el) {
+            const top = el.offsetTop;
+            const height = el.offsetHeight;
+            if (scrollPosition >= top && scrollPosition < top + height) {
+              setActiveSection(section);
+              found = true;
+              break;
+            }
           }
+        }
+        // If we scrolled past everything somehow, fallback
+        if (!found && scrollPosition < 500) {
+           setActiveSection("home");
+        }
+      } else {
+        if (pathname.includes("/care-guides")) {
+          setActiveSection("care-guides");
+        } else if (pathname.includes("/gallery")) {
+          setActiveSection("gallery");
+        } else {
+          setActiveSection("");
         }
       }
     };
@@ -83,15 +101,21 @@ export const Navbar = () => {
             </a>
             <a
               href="/care-guides"
-              className="text-label-md font-sans uppercase tracking-widest relative py-1 transition-colors duration-300 scale-98 active:scale-95 ease-out font-medium text-on-surface/60 hover:text-on-surface"
+              className={`text-label-md font-sans uppercase tracking-widest relative py-1 transition-colors duration-300 scale-98 active:scale-95 ease-out font-medium ${activeSection === "care-guides" ? "text-on-surface" : "text-on-surface/60 hover:text-on-surface"}`}
             >
               {t("careGuides")}
+              {activeSection === "care-guides" && (
+                <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-on-surface" />
+              )}
             </a>
             <a
               href="/gallery"
-              className="text-label-md font-sans uppercase tracking-widest relative py-1 transition-colors duration-300 scale-98 active:scale-95 ease-out font-medium text-on-surface/60 hover:text-on-surface"
+              className={`text-label-md font-sans uppercase tracking-widest relative py-1 transition-colors duration-300 scale-98 active:scale-95 ease-out font-medium ${activeSection === "gallery" ? "text-on-surface" : "text-on-surface/60 hover:text-on-surface"}`}
             >
               {t("gallery")}
+              {activeSection === "gallery" && (
+                <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-on-surface" />
+              )}
             </a>
             <a
               href="/#about"
@@ -166,17 +190,17 @@ export const Navbar = () => {
         <a
           href="/care-guides"
           className="flex flex-col items-center gap-1 transition-colors w-16"
-          style={{ color: "var(--color-outline)" }}
+          style={{ color: activeSection === "care-guides" ? "var(--color-primary)" : "var(--color-outline)" }}
         >
-          <span className="material-symbols-outlined text-[22px]" style={{ fontVariationSettings: "'FILL' 0" }}>menu_book</span>
+          <span className="material-symbols-outlined text-[22px]" style={{ fontVariationSettings: activeSection === "care-guides" ? "'FILL' 1" : "'FILL' 0" }}>menu_book</span>
           <span className="text-[10px] font-semibold uppercase tracking-wider text-center leading-tight">Blog &<br/>Guides</span>
         </a>
         <a
           href="/gallery"
           className="flex flex-col items-center gap-1 transition-colors w-16"
-          style={{ color: "var(--color-outline)" }}
+          style={{ color: activeSection === "gallery" ? "var(--color-primary)" : "var(--color-outline)" }}
         >
-          <span className="material-symbols-outlined text-[22px]" style={{ fontVariationSettings: "'FILL' 0" }}>photo_library</span>
+          <span className="material-symbols-outlined text-[22px]" style={{ fontVariationSettings: activeSection === "gallery" ? "'FILL' 1" : "'FILL' 0" }}>photo_library</span>
           <span className="text-[10px] font-semibold uppercase tracking-wider">{t("gallery")}</span>
         </a>
         <a

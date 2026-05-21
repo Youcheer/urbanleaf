@@ -6,6 +6,7 @@ import { getArticles } from "../../lib/db";
 import { Article } from "../../lib/data";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { LeafLoader } from "../../components/LeafLoader";
 
 export default function CareGuidesPage() {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -40,9 +41,7 @@ export default function CareGuidesPage() {
         </div>
 
         {loading ? (
-          <div className="flex justify-center items-center py-32">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-          </div>
+          <LeafLoader />
         ) : articles.length === 0 ? (
           <div className="text-center py-20 bg-white dark:bg-surface rounded-3xl border border-gray-100 dark:border-white/10 shadow-sm">
             <p className="text-gray-500 dark:text-gray-400 font-sans">No guides published yet. Check back soon!</p>
