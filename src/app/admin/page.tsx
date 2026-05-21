@@ -597,6 +597,38 @@ export default function AdminPage() {
                     </div>
 
                     <div>
+                      <label className="block text-sm font-semibold mb-2">Category (Comma separated)</label>
+                      <input type="text" value={categories.join(", ")} onChange={(e) => setCategories(e.target.value.split(",").map(c => c.trim()))} placeholder="e.g. Indoor Spaces, Rare Finds" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#3b8554]" />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold mb-2">Sunlight</label>
+                      <input type="text" value={sunlight} onChange={(e) => setSunlight(e.target.value)} placeholder="e.g. Bright, indirect light" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#3b8554]" />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold mb-2">Watering</label>
+                      <input type="text" value={watering} onChange={(e) => setWatering(e.target.value)} placeholder="e.g. Every 1-2 weeks" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#3b8554]" />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold mb-2">Environment</label>
+                      <input type="text" value={environment} onChange={(e) => setEnvironment(e.target.value)} placeholder="e.g. Warm & humid" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#3b8554]" />
+                    </div>
+
+                    <div>
+                      <label className="flex items-center gap-2 cursor-pointer text-sm font-semibold">
+                        <input type="checkbox" checked={isSold} onChange={(e) => setIsSold(e.target.checked)} className="w-5 h-5 accent-[#1a4a28]" />
+                        Sold Out
+                      </label>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold mb-2">Order (Optional)</label>
+                      <input type="number" value={order} onChange={(e) => setOrder(e.target.value === "" ? "" : Number(e.target.value))} placeholder="e.g. 1" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#3b8554]" />
+                    </div>
+
+                    <div>
                       <label className="block text-sm font-semibold mb-2">Images (Max 3) *</label>
                       <div className="flex gap-3 mb-4 overflow-x-auto pb-2">
                         {images.map((imgUrl, idx) => (

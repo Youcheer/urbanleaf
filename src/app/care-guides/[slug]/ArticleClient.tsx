@@ -15,9 +15,9 @@ export default function ArticleClient({ initialArticle, slug }: { initialArticle
 
   useEffect(() => {
     if (!initialArticle) {
-      // Try to fetch on client (reads localStorage)
       getArticles().then(articles => {
-        const found = articles.find(a => a.slug === slug);
+        const decodedSlug = decodeURIComponent(slug);
+        const found = articles.find(a => a.slug === slug || a.slug === decodedSlug);
         setArticle(found || null);
         setLoading(false);
       });
