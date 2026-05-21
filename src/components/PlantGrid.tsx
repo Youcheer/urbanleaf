@@ -13,6 +13,11 @@ export const PlantGrid = () => {
   const [loading, setLoading] = useState(true);
   const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
 
+  // Advanced Search States
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [sortOption, setSortOption] = useState("default");
+
   const { language } = useLanguage();
   const { addToCart } = useCart();
 
@@ -37,6 +42,12 @@ export const PlantGrid = () => {
         curatedBotanicals: "සුවිශේෂී පැලෑටි එකතුව",
         subtext: "ඔබේ අභ්‍යන්තර අලංකරණය සඳහා තෝරාගත් අලංකාරවත් ශාක.",
         add: "එකතු කරන්න",
+        searchPlaceholder: "ශාක සොයන්න...",
+        categoryAll: "සියලු වර්ග",
+        sortDefault: "සාමාන්‍ය",
+        sortPriceAsc: "මිල: අඩුවෙන් වැඩි",
+        sortPriceDesc: "මිල: වැඩියෙන් අඩු",
+        sortName: "නම අනුව",
       };
     }
     return {
@@ -44,6 +55,12 @@ export const PlantGrid = () => {
       curatedBotanicals: "Premium Collection",
       subtext: "Exceptional specimens for the modern interior.",
       add: "Add to Cart",
+      searchPlaceholder: "Search plants...",
+      categoryAll: "All Categories",
+      sortDefault: "Default",
+      sortPriceAsc: "Price: Low to High",
+      sortPriceDesc: "Price: High to Low",
+      sortName: "Name: A to Z",
     };
   };
 
@@ -56,7 +73,31 @@ export const PlantGrid = () => {
     );
   };
 
-  const plantChunks = chunkArray(plantsList, 3);
+  // Derive all unique categories from plants
+  const allCategories = Array.from(new Set(plantsList.flatMap(p => p.category || []))).filter(Boolean);
+
+  // Apply filters and sorting
+  let filteredPlants = plantsList.filter(plant => {
+    const matchesSearch = plant.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          plant.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === "All" || (plant.category && plant.category.includes(selectedCategory));
+    return matchesSearch && matchesCategory;
+  });
+
+  if (sortOption === "price-asc") {
+    filteredPlants.sort((a, b) => a.price - b.price);
+  } else if (sortOption === "price-desc") {
+    filteredPlants.sort((a, b) => b.price - a.price);
+  } else if (sortOption === "name") {
+    filteredPlants.sort((a, b) => a.name.localeCompare(b.name));
+  } else {
+    // Keep default order (which is fetched order)
+    // To properly reset, we'd need to keep the original index or fallback to it
+    // but typically `plantsList` is the source of truth sorted correctly initially.
+    // So sorting a copied array above is fine, here we do nothing or just map.
+  }
+
+  const plantChunks = chunkArray(filteredPlants, 3);
 
   // Stagger animation variants
   const containerVariants = {
@@ -148,6 +189,44 @@ export const PlantGrid = () => {
             arrow_forward
           </motion.span>
         </motion.a>
+      </div>
+
+      {/* Advanced Search & Filter Bar */}
+      <div className="mb-12 flex flex-col md:flex-row gap-4 z-20 relative bg-white/50 dark:bg-black/20 p-4 rounded-2xl backdrop-blur-sm border border-outline-variant/20 shadow-sm">
+        <div className="flex-1 relative">
+          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant">search</span>
+          <input
+            type="text"
+            placeholder={labels.searchPlaceholder}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-3 rounded-xl bg-white dark:bg-surface-container border border-outline-variant/30 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm font-sans"
+          />
+        </div>
+        <div className="flex flex-col sm:flex-row gap-4">
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="w-full sm:w-auto px-4 py-3 rounded-xl bg-white dark:bg-surface-container border border-outline-variant/30 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm font-sans appearance-none pr-10 cursor-pointer"
+            style={{ backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23002115%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem top 50%', backgroundSize: '0.65rem auto' }}
+          >
+            <option value="All">{labels.categoryAll}</option>
+            {allCategories.map(cat => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+          <select
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
+            className="w-full sm:w-auto px-4 py-3 rounded-xl bg-white dark:bg-surface-container border border-outline-variant/30 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm font-sans appearance-none pr-10 cursor-pointer"
+            style={{ backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23002115%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem top 50%', backgroundSize: '0.65rem auto' }}
+          >
+            <option value="default">{labels.sortDefault}</option>
+            <option value="price-asc">{labels.sortPriceAsc}</option>
+            <option value="price-desc">{labels.sortPriceDesc}</option>
+            <option value="name">{labels.sortName}</option>
+          </select>
+        </div>
       </div>
 
       {loading ? (

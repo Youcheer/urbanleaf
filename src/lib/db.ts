@@ -343,3 +343,71 @@ export const deleteArticle = async (id: string): Promise<void> => {
   }
 };
 
+// --- REVIEWS DB LOGIC ---
+
+const LOCAL_REVIEWS_KEY = "urbanleaf_reviews";
+
+const getLocalReviews = (): import("./data").Review[] => {
+  if (typeof window === "undefined") return import("./data").mockReviews;
+  const local = localStorage.getItem(LOCAL_REVIEWS_KEY);
+  if (!local) {
+    localStorage.setItem(LOCAL_REVIEWS_KEY, JSON.stringify(import("./data").mockReviews));
+    return import("./data").mockReviews;
+  }
+  return JSON.parse(local);
+};
+
+const saveLocalReviews = (reviews: import("./data").Review[]) => {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(LOCAL_REVIEWS_KEY, JSON.stringify(reviews));
+};
+
+export const getReviewsForPlant = async (plantId: string): Promise<import("./data").Review[]> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      // Simplified query without complex index for now
+      const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
+      const querySnapshot = await getDocs(q);
+      const list: import("./data").Review[] = [];
+      querySnapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        if (data.plantId === plantId) {
+          list.push({
+            id: docSnap.id,
+            plantId: data.plantId,
+            author: data.author || "Anonymous",
+            rating: data.rating || 5,
+            comment: data.comment || "",
+            createdAt: data.createdAt || 0,
+          });
+        }
+      });
+      return list;
+    } catch (error) {
+      console.error("Error fetching reviews from Firestore:", error);
+      return getLocalReviews().filter(r => r.plantId === plantId).sort((a, b) => b.createdAt - a.createdAt);
+    }
+  } else {
+    return getLocalReviews().filter(r => r.plantId === plantId).sort((a, b) => b.createdAt - a.createdAt);
+  }
+};
+
+export const addReview = async (review: Omit<import("./data").Review, "id">): Promise<string> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      const docRef = await addDoc(collection(db!, "reviews"), review);
+      return docRef.id;
+    } catch (error) {
+      console.error("Error adding review to Firestore:", error);
+      throw error;
+    }
+  } else {
+    const local = getLocalReviews();
+    const newId = "r_" + Date.now();
+    const newReview = { ...review, id: newId };
+    saveLocalReviews([...local, newReview]);
+    return newId;
+  }
+};
+
+

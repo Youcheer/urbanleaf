@@ -32,10 +32,10 @@ export default function CareGuidesPage() {
       <div className="pt-24 md:pt-32 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
         <div className="mb-12 text-center md:text-left">
           <h1 className="font-playfair text-display-md md:text-display-lg text-primary dark:text-on-surface mb-4">
-            Plant Care Guides
+            Blog & Guides
           </h1>
           <p className="font-sans text-body-lg text-on-surface-variant max-w-2xl">
-            Discover expert tips and comprehensive guides to help your indoor jungle thrive.
+            Discover expert tips, successful gardening experiences, and comprehensive guides to help your indoor jungle thrive.
           </p>
         </div>
 

@@ -123,3 +123,31 @@ export const articles: Article[] = [
     relatedProductIds: ["p3", "p4"],
   }
 ];
+
+export interface Review {
+  id: string;
+  plantId: string;
+  author: string;
+  rating: number;
+  comment: string;
+  createdAt: number;
+}
+
+export const mockReviews: Review[] = [
+  {
+    id: "r1",
+    plantId: "p1",
+    author: "Kamal Perera",
+    rating: 5,
+    comment: "Absolutely beautiful plant! Arrived in perfect condition.",
+    createdAt: 1700000000000,
+  },
+  {
+    id: "r2",
+    plantId: "p3",
+    author: "Nimali Silva",
+    rating: 4,
+    comment: "Very healthy Monstera, but took a bit long to deliver.",
+    createdAt: 1700005000000,
+  }
+];

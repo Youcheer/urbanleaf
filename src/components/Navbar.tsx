@@ -88,6 +88,12 @@ export const Navbar = () => {
               {t("careGuides")}
             </a>
             <a
+              href="/gallery"
+              className="text-label-md font-sans uppercase tracking-widest relative py-1 transition-colors duration-300 scale-98 active:scale-95 ease-out font-medium text-on-surface/60 hover:text-on-surface"
+            >
+              {t("gallery")}
+            </a>
+            <a
               href="/#about"
               className={`text-label-md font-sans uppercase tracking-widest relative py-1 transition-colors duration-300 scale-98 active:scale-95 ease-out font-medium ${activeSection === "about" ? "text-on-surface" : "text-on-surface/60"}`}
             >
@@ -163,7 +169,15 @@ export const Navbar = () => {
           style={{ color: "var(--color-outline)" }}
         >
           <span className="material-symbols-outlined text-[22px]" style={{ fontVariationSettings: "'FILL' 0" }}>menu_book</span>
-          <span className="text-[10px] font-semibold uppercase tracking-wider">{t("careGuides")}</span>
+          <span className="text-[10px] font-semibold uppercase tracking-wider text-center leading-tight">Blog &<br/>Guides</span>
+        </a>
+        <a
+          href="/gallery"
+          className="flex flex-col items-center gap-1 transition-colors w-16"
+          style={{ color: "var(--color-outline)" }}
+        >
+          <span className="material-symbols-outlined text-[22px]" style={{ fontVariationSettings: "'FILL' 0" }}>photo_library</span>
+          <span className="text-[10px] font-semibold uppercase tracking-wider">{t("gallery")}</span>
         </a>
         <a
           href="/#about"

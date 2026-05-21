@@ -2,17 +2,62 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plant } from "../lib/data";
 import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
+import { getReviewsForPlant, addReview } from "../lib/db";
+import { Review } from "../lib/data";
 
 const AUTO_SLIDE_INTERVAL = 4000; // 4 seconds per image
 
 export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => void }) => {
   const [currentImage, setCurrentImage] = useState(0);
   const [direction, setDirection] = useState(1); // 1 = forward, -1 = backward
-  const [activeAccordion, setActiveAccordion] = useState<"care" | "shipping" | null>("care"); // Care guide open by default
+  const [activeAccordion, setActiveAccordion] = useState<"care" | "shipping" | "reviews" | null>("care"); // Care guide open by default
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+
+  // Reviews State
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loadingReviews, setLoadingReviews] = useState(true);
+  const [reviewName, setReviewName] = useState("");
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState("");
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoadingReviews(true);
+    getReviewsForPlant(plant.id).then((data) => {
+      if (isMounted) {
+        setReviews(data);
+        setLoadingReviews(false);
+      }
+    });
+    return () => { isMounted = false; };
+  }, [plant.id]);
+
+  const handleReviewSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reviewName || !reviewComment) return;
+    setIsSubmittingReview(true);
+    try {
+      const newReview = {
+        plantId: plant.id,
+        author: reviewName,
+        rating: reviewRating,
+        comment: reviewComment,
+        createdAt: Date.now()
+      };
+      await addReview(newReview);
+      setReviews(prev => [ { ...newReview, id: Date.now().toString() } as Review, ...prev ]);
+      setReviewName("");
+      setReviewComment("");
+      setReviewRating(5);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsSubmittingReview(false);
+    }
+  };
 
   const { addToCart } = useCart();
   const { language } = useLanguage();
@@ -83,6 +128,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
         freeShippingText: "Complimentary nationwide overnight shipping included.",
         careGuide: "Care Guide",
         shippingReturns: "Shipping & Returns",
+        customerReviews: "Customer Reviews",
         securePurchase: "SECURE PURCHASE",
         shippingDetails: "නොමිලේ දිවයින පුරා එදිනම ශීතකරණ පහසුකම් සහිත විශේෂිත කුරියර් සේවාව මඟින් බෙදා හැරීම සිදු කෙරේ. පැළෑටිවල නැවුම් බව සහ ප්‍රකෘතිමත්භාවය උපරිමයෙන් ආරක්ෂා වන සේ ඉතා ප්‍රවේශමෙන් ඇසුරුම් කරනු ලැබේ. කිසියම් හානියක් සිදුවුවහොත් දින 7ක් ඇතුළත ආපසු භාරගෙන නව පැළයක් හෝ මුදල් ආපසු ලබාදේ.",
       };
@@ -93,6 +139,7 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
       freeShippingText: "Complimentary nationwide overnight shipping included.",
       careGuide: "Care Guide",
       shippingReturns: "Shipping & Returns",
+      customerReviews: "Customer Reviews",
       securePurchase: "SECURE PURCHASE",
       shippingDetails: "Complimentary climate-controlled overnight transport directly to your door. Packaged meticulously in our custom thermal eco-sleeves to ensure pristine structural health and moisture retention. If your specimen arrives with any structural damage, notify us within 7 days for a complimentary replacement or full refund.",
     };
@@ -327,6 +374,86 @@ export const PlantModal = ({ plant, onClose }: { plant: Plant; onClose: () => vo
                     >
                       <div className="pt-4 pb-2 text-xs font-sans text-[#002115]/80 dark:text-on-surface/80 leading-relaxed font-light">
                         {labels.shippingDetails}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Accordion: Customer Reviews */}
+              <div className="border-b border-[#002115]/10 py-3.5">
+                <button
+                  onClick={() => setActiveAccordion(activeAccordion === "reviews" ? null : "reviews")}
+                  className="w-full flex justify-between items-center text-left cursor-pointer border-none bg-transparent p-0 focus:outline-none"
+                >
+                  <h3 className="font-serif text-[#002115] dark:text-on-surface text-lg font-medium transition-transform duration-300 hover:text-[var(--color-accent)] dark:hover:text-[var(--color-accent)]">
+                    {labels.customerReviews} {reviews.length > 0 && `(${reviews.length})`}
+                  </h3>
+                  <span className={`material-symbols-outlined text-[#002115] dark:text-on-surface transition-transform duration-300 ${activeAccordion === "reviews" ? "rotate-180" : ""}`}>
+                    expand_more
+                  </span>
+                </button>
+
+                <AnimatePresence initial={false}>
+                  {activeAccordion === "reviews" && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pt-4 pb-2">
+                        {loadingReviews ? (
+                          <div className="text-center text-sm font-sans text-[#002115]/60">Loading reviews...</div>
+                        ) : (
+                          <>
+                            <div className="max-h-48 overflow-y-auto pr-2 scrollbar-thin mb-4 space-y-4">
+                              {reviews.length === 0 ? (
+                                <p className="text-xs font-sans text-[#002115]/60 dark:text-on-surface/60 font-light">No reviews yet. Be the first to review!</p>
+                              ) : (
+                                reviews.map((review) => (
+                                  <div key={review.id} className="bg-[#002115]/5 dark:bg-white/5 p-3 rounded-xl">
+                                    <div className="flex justify-between items-center mb-1">
+                                      <span className="font-bold text-sm text-[#002115] dark:text-on-surface">{review.author}</span>
+                                      <div className="flex text-[var(--color-accent)] text-xs">
+                                        {[...Array(5)].map((_, i) => (
+                                          <span key={i} className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: "14px", color: i < review.rating ? "inherit" : "rgba(0,33,20,0.1)" }}>star</span>
+                                        ))}
+                                      </div>
+                                    </div>
+                                    <p className="text-xs font-sans text-[#002115]/80 dark:text-on-surface/80 font-light">{review.comment}</p>
+                                  </div>
+                                ))
+                              )}
+                            </div>
+                            
+                            <div className="border-t border-[#002115]/10 pt-4 mt-2">
+                              <h4 className="font-serif text-sm font-bold text-[var(--color-primary)] dark:text-on-surface mb-3">Write a Review</h4>
+                              <form onSubmit={handleReviewSubmit} className="space-y-3">
+                                <div>
+                                  <input type="text" placeholder="Your Name" required value={reviewName} onChange={(e) => setReviewName(e.target.value)} className="w-full px-3 py-2 text-xs rounded-lg border border-[#002115]/10 bg-white dark:bg-surface-container focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]" />
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs font-semibold text-[#002115]/80">Rating:</span>
+                                  <div className="flex gap-1">
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                      <button type="button" key={star} onClick={() => setReviewRating(star)} className="focus:outline-none">
+                                        <span className="material-symbols-outlined transition-colors" style={{ fontVariationSettings: "'FILL' 1", fontSize: "18px", color: star <= reviewRating ? "var(--color-accent)" : "rgba(0,33,20,0.2)" }}>star</span>
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                                <div>
+                                  <textarea placeholder="Your Review" required rows={3} value={reviewComment} onChange={(e) => setReviewComment(e.target.value)} className="w-full px-3 py-2 text-xs rounded-lg border border-[#002115]/10 bg-white dark:bg-surface-container focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)] resize-none" />
+                                </div>
+                                <button type="submit" disabled={isSubmittingReview} className="px-4 py-2 bg-[var(--color-primary)] text-white text-xs font-bold rounded-lg hover:bg-[var(--color-accent)] transition-colors disabled:opacity-50">
+                                  {isSubmittingReview ? "Submitting..." : "Submit Review"}
+                                </button>
+                              </form>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </motion.div>
                   )}
