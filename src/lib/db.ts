@@ -43,7 +43,6 @@ export const getPlants = async (): Promise<Plant[]> => {
       const querySnapshot = await getDocs(q);
       const plantsList: Plant[] = [];
       const seenKeys = new Set<string>();
-      const duplicatesToDelete: string[] = [];
 
       querySnapshot.forEach((docSnap) => {
         const data = docSnap.data();
@@ -51,10 +50,8 @@ export const getPlants = async (): Promise<Plant[]> => {
         const price = data.price || 0;
         const key = `${name}_${price}`;
 
-        if (seenKeys.has(key)) {
-          // Duplicate found! Keep track of it so we can delete it from Firestore
-          duplicatesToDelete.push(docSnap.id);
-        } else {
+        // Keep local in-memory deduplication if desired, but do NOT delete from Firestore!
+        if (!seenKeys.has(key)) {
           seenKeys.add(key);
           plantsList.push({
             id: docSnap.id,
@@ -71,18 +68,6 @@ export const getPlants = async (): Promise<Plant[]> => {
           });
         }
       });
-
-      // Automatically clean up duplicate documents from Firestore in the background
-      if (duplicatesToDelete.length > 0) {
-        console.log("Cleaning up duplicate plant IDs from Firestore:", duplicatesToDelete);
-        duplicatesToDelete.forEach(async (dupId) => {
-          try {
-            await deleteDoc(doc(db!, "plants", dupId));
-          } catch (e) {
-            console.error("Failed to delete duplicate document:", dupId, e);
-          }
-        });
-      }
 
       // --- AUTOMATIC FIRST-TIME MIGRATION FROM LOCALSTORAGE TO FIRESTORE ---
       if (plantsList.length === 0) {
@@ -140,10 +125,12 @@ export const getPlants = async (): Promise<Plant[]> => {
         return (b.createdAt ?? 0) - (a.createdAt ?? 0);
       });
     } catch (error) {
-      console.error("Error fetching from Firestore, falling back to LocalStorage:", error);
+      console.error("CRITICAL: Error fetching from Firestore. Falling back to LocalStorage.", error);
+      console.warn("Please check your Firestore Security Rules (they may have expired) and ensure that your Environment Variables are configured on your hosting provider.");
       return getLocalPlants();
     }
   } else {
+    console.warn("Firebase is not configured. Falling back to LocalStorage.");
     return getLocalPlants().sort((a, b) => {
       const orderA = a.order ?? 999;
       const orderB = b.order ?? 999;
