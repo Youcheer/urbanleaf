@@ -272,7 +272,8 @@ export const getArticles = async (): Promise<Article[]> => {
 
       return list;
     } catch (error) {
-      console.error("Error fetching articles from Firestore:", error);
+      console.error("CRITICAL: Error fetching articles from Firestore. Falling back to LocalStorage.", error);
+      console.warn("Please check your Firestore Security Rules (they may have expired) and ensure that your Environment Variables are configured on your hosting provider.");
       return getLocalArticles();
     }
   } else {
@@ -371,7 +372,8 @@ export const getReviewsForPlant = async (plantId: string): Promise<Review[]> => 
       });
       return list;
     } catch (error) {
-      console.error("Error fetching reviews from Firestore:", error);
+      console.error("CRITICAL: Error fetching reviews from Firestore. Falling back to LocalStorage.", error);
+      console.warn("Please check your Firestore Security Rules (they may have expired) and ensure that your Environment Variables are configured on your hosting provider.");
       return getLocalReviews().filter(r => r.plantId === plantId).sort((a, b) => b.createdAt - a.createdAt);
     }
   } else {
